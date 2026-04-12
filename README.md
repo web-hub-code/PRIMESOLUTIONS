@@ -2,11 +2,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Muhammad Nazim | Prime Solutions Master Agency</title>
+    <title>Muhammad Nazim | Prime Solutions Master</title>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
         :root {
@@ -16,160 +17,127 @@
         [data-theme="dark"] {
             --bg: #010204; --text: #ffffff; --card: rgba(255, 255, 255, 0.05); --border: rgba(255, 255, 255, 0.1);
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; transition: 0.3s; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; }
         body { background-color: var(--bg); color: var(--text); overflow-x: hidden; }
 
-        /* Premium Image Slider */
-        .swiper { width: 100%; height: 250px; border-radius: 0 0 40px 40px; }
-        .swiper-slide img { width: 100%; height: 100%; object-fit: cover; }
+        .container { width: 100%; max-width: 500px; margin: 0 auto; padding: 20px 15px 120px; }
 
-        .container { width: 100%; max-width: 500px; margin: 0 auto; padding: 30px 15px 120px; }
+        /* Floating Modern Nav */
+        .glass-nav { position: sticky; top: 15px; z-index: 1000; background: var(--card); backdrop-filter: blur(15px); border-radius: 25px; padding: 15px; border: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+
+        /* Hero Glitch Effect */
+        .hero-title { font-size: 2.2rem; font-weight: 800; background: linear-gradient(45deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; }
 
         .card { 
             background: var(--card); backdrop-filter: blur(20px); border: 1px solid var(--border); 
             border-radius: 30px; padding: 25px; margin-bottom: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.03);
         }
 
-        /* Form Styling */
-        .input-group { margin-bottom: 15px; }
-        .input-group label { display: block; font-size: 0.8rem; margin-bottom: 5px; font-weight: 600; }
-        .input-group input, .input-group textarea, .input-group select { 
-            width: 100%; padding: 12px; border-radius: 12px; border: 1px solid var(--border); 
-            background: rgba(0,0,0,0.02); color: var(--text); outline: none;
-        }
+        /* Animated Stats */
+        .stat-box { text-align: center; padding: 15px; background: rgba(79, 172, 254, 0.1); border-radius: 20px; }
+        .stat-number { font-size: 1.8rem; font-weight: 800; color: var(--primary); }
 
-        /* Service Grid */
-        .service-box { 
-            display: flex; align-items: center; gap: 15px; padding: 15px; 
-            background: rgba(79, 172, 254, 0.05); border-radius: 20px; margin-bottom: 10px; cursor: pointer;
-        }
-        .service-box:hover { background: var(--primary); color: white; transform: scale(1.02); }
+        /* Timeline Feature */
+        .timeline { border-left: 2px dashed var(--primary); margin: 20px 0 20px 20px; padding-left: 20px; }
+        .timeline-item { position: relative; margin-bottom: 25px; }
+        .timeline-item::before { content: ''; position: absolute; left: -31px; top: 5px; width: 20px; height: 20px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); }
 
-        /* Floating Theme Switch */
-        .theme-toggle { position: fixed; top: 20px; right: 20px; z-index: 5000; background: white; padding: 10px; border-radius: 50%; box-shadow: 0 5px 15px rgba(0,0,0,0.1); color: var(--primary); }
+        /* Glowing Quote Form */
+        .premium-input { width: 100%; padding: 15px; border-radius: 15px; border: 1px solid var(--border); background: rgba(0,0,0,0.02); color: var(--text); margin-bottom: 15px; }
+        .btn-glow { width: 100%; padding: 18px; border-radius: 20px; border: none; background: linear-gradient(45deg, var(--primary), var(--secondary)); color: white; font-weight: 800; cursor: pointer; box-shadow: 0 10px 20px rgba(79, 172, 254, 0.3); }
 
-        .btn-send { 
-            width: 100%; padding: 18px; border-radius: 20px; border: none; 
-            background: linear-gradient(45deg, var(--primary), var(--secondary)); 
-            color: white; font-weight: 800; cursor: pointer; margin-top: 10px;
-        }
-
-        .bottom-nav { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); width: 90%; background: var(--card); backdrop-filter: blur(15px); border-radius: 40px; display: flex; justify-content: space-around; padding: 15px; border: 1px solid var(--border); z-index: 4000; }
+        .service-tag { display: inline-block; padding: 8px 15px; background: rgba(79, 172, 254, 0.1); border-radius: 50px; font-size: 0.7rem; margin: 5px; font-weight: 600; color: var(--primary); }
     </style>
 </head>
 <body data-theme="light">
 
-    <div class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></div>
-
-    <div class="swiper mySwiper">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80"></div>
-            <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=800&q=80"></div>
-            <div class="swiper-slide"><img src="https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=800&q=80"></div>
-        </div>
-        <div class="swiper-pagination"></div>
-    </div>
-
     <div class="container">
         
-        <section class="card" style="text-align: center;">
-            <h1 style="font-size: 2rem; font-weight: 800; background: linear-gradient(to right, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Prime Solutions</h1>
-            <p style="font-size: 0.9rem; opacity: 0.7;">Modern Digital Agency by Muhammad Nazim</p>
+        <nav class="glass-nav">
+            <span style="font-weight: 800; color: var(--primary);">PRIME SOLUTIONS</span>
+            <div onclick="toggleTheme()" style="cursor: pointer;"><i class="fas fa-adjust"></i></div>
+        </nav>
+
+        <section class="card" data-aos="zoom-in">
+            <div style="text-align: center;">
+                <div style="background: #25d366; color: white; padding: 5px 15px; border-radius: 50px; font-size: 0.6rem; display: inline-block; margin-bottom: 10px; font-weight: 800;">ACTIVE NOW</div>
+                <h1 class="hero-title">Muhammad Nazim</h1>
+                <p style="opacity: 0.6; font-size: 0.85rem; margin-top: 5px;">Creative Web Developer & Agency Owner</p>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px;">
+                <div class="stat-box"><div class="stat-number">150+</div><p style="font-size: 0.6rem;">PROJECTS</p></div>
+                <div class="stat-box"><div class="stat-number">99%</div><p style="font-size: 0.6rem;">SUCCESS</p></div>
+            </div>
         </section>
 
-        <div class="card">
-            <h3><i class="fas fa-briefcase"></i> Unlimited Services</h3>
-            <p style="font-size: 0.7rem; opacity: 0.5; margin-bottom: 15px;">We build everything for your business</p>
-            
-            <div class="service-box">
-                <i class="fas fa-shopping-cart"></i>
-                <div><h4>E-Commerce Stores</h4><p style="font-size: 0.7rem;">Sell products online globally.</p></div>
-            </div>
-            <div class="service-box">
-                <i class="fas fa-chart-pie"></i>
-                <div><h4>Investment Portals</h4><p style="font-size: 0.7rem;">Manage deposits & daily profits.</p></div>
-            </div>
-            <div class="service-box">
-                <i class="fas fa-hospital"></i>
-                <div><h4>Hospital Systems</h4><p style="font-size: 0.7rem;">Patient records & appointments.</p></div>
-            </div>
-            <div class="service-box">
-                <i class="fas fa-school"></i>
-                <div><h4>School/Academy Apps</h4><p style="font-size: 0.7rem;">Fee management & results.</p></div>
+        <div class="card" data-aos="fade-up">
+            <h3><i class="fas fa-stream"></i> Our Working Process</h3>
+            <div class="timeline">
+                <div class="timeline-item"><h4>Discussion</h4><p style="font-size: 0.7rem; opacity: 0.6;">Understanding your business needs.</p></div>
+                <div class="timeline-item"><h4>Design UI</h4><p style="font-size: 0.7rem; opacity: 0.6;">Creating a mobile-first attractive look.</p></div>
+                <div class="timeline-item"><h4>Development</h4><p style="font-size: 0.7rem; opacity: 0.6;">Coding with high security & speed.</p></div>
+                <div class="timeline-item"><h4>Launch</h4><p style="font-size: 0.7rem; opacity: 0.6;">Live on your custom domain.</p></div>
             </div>
         </div>
 
-        <div class="card">
-            <h3><i class="fas fa-paper-plane"></i> Get a Free Quote</h3>
-            <form id="quoteForm">
-                <div class="input-group">
-                    <label>Your Name</label>
-                    <input type="text" id="userName" placeholder="Enter your name" required>
-                </div>
-                <div class="input-group">
-                    <label>Project Type</label>
-                    <select id="projectType">
-                        <option>Business Website</option>
-                        <option>Investment Site</option>
-                        <option>E-commerce Store</option>
-                        <option>Custom App</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Contact Via</label>
-                    <select id="contactMethod">
-                        <option value="whatsapp">Send to WhatsApp</option>
-                        <option value="email">Send to Email</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Message</label>
-                    <textarea id="userMsg" rows="3" placeholder="Tell us about your project..."></textarea>
-                </div>
-                <button type="button" class="btn-send" onclick="sendInquiry()">SEND INQUIRY NOW</button>
-            </form>
+        <div class="card" data-aos="fade-up">
+            <h3><i class="fas fa-laptop-code"></i> Industry Solutions</h3>
+            <p style="font-size: 0.7rem; opacity: 0.5; margin-bottom: 15px;">We build for every business type</p>
+            <div style="display: flex; wrap: wrap;">
+                <span class="service-tag">Real Estate</span>
+                <span class="service-tag">E-Commerce</span>
+                <span class="service-tag">Crypto/Forex</span>
+                <span class="service-tag">Educational</span>
+                <span class="service-tag">Personal Portfolio</span>
+                <span class="service-tag">Investment</span>
+            </div>
         </div>
 
-        <div class="card" style="border-left: 5px solid #25d366;">
-            <h3><i class="fas fa-check-double" style="color: #25d366;"></i> Trusted Partnership</h3>
-            <p style="font-size: 0.8rem; margin-top: 10px; opacity: 0.7;">Prime Solutions ensures 100% privacy, lifelong support, and modern UI that attracts more customers to your brand.</p>
+        <div class="card" data-aos="fade-up">
+            <h3><i class="fas fa-file-invoice-dollar"></i> Request a Project</h3>
+            <div style="margin-top: 15px;">
+                <input type="text" id="clientName" class="premium-input" placeholder="Your Full Name">
+                <select id="serviceType" class="premium-input">
+                    <option>Standard Business Site</option>
+                    <option>Investment Platform (Pakgold Style)</option>
+                    <option>E-commerce Web App</option>
+                    <option>UI/UX Design Only</option>
+                </select>
+                <textarea id="projectDetails" class="premium-input" rows="3" placeholder="Briefly describe your project idea..."></textarea>
+                <button class="btn-glow" onclick="submitRequest()"><i class="fab fa-whatsapp"></i> SUBMIT TO WHATSAPP</button>
+            </div>
         </div>
+
+        <footer style="text-align: center; font-size: 0.7rem; opacity: 0.4; margin-top: 20px;">
+            VERIFIED PRIME SOLUTIONS PORTAL 2026<br>
+            SECURE | TRUSTED | FAST
+        </footer>
 
     </div>
 
-    <nav class="bottom-nav">
-        <a href="tel:03705519562" style="color: var(--text);"><i class="fas fa-phone"></i></a>
+    <div style="position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 85%; background: var(--card); backdrop-filter: blur(15px); border-radius: 50px; border: 1px solid var(--border); display: flex; justify-content: space-around; padding: 15px; z-index: 2000; box-shadow: 0 15px 30px rgba(0,0,0,0.1);">
+        <a href="tel:03705519562" style="color: var(--text);"><i class="fas fa-phone-alt"></i></a>
         <a href="https://wa.me/923332637235" style="color: #25d366; font-size: 1.5rem;"><i class="fab fa-whatsapp"></i></a>
-        <a href="mailto:webhub262@gmail.com" style="color: var(--text);"><i class="fas fa-envelope"></i></a>
-    </nav>
+        <a href="https://www.facebook.com/profile.php?id=100084218946114" style="color: #1877F2;"><i class="fab fa-facebook-f"></i></a>
+        <a href="mailto:webhub262@gmail.com" style="color: #ea4335;"><i class="fas fa-envelope"></i></a>
+    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        var swiper = new Swiper(".mySwiper", {
-            pagination: { el: ".swiper-pagination", dynamicBullets: true },
-            autoplay: { delay: 3000 },
-            loop: true
-        });
+        AOS.init({ duration: 1000, once: true });
 
         function toggleTheme() {
             const body = document.body;
-            const current = body.getAttribute('data-theme');
-            body.setAttribute('data-theme', current === 'light' ? 'dark' : 'light');
+            body.setAttribute('data-theme', body.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
         }
 
-        function sendInquiry() {
-            const name = document.getElementById('userName').value;
-            const type = document.getElementById('projectType').value;
-            const method = document.getElementById('contactMethod').value;
-            const msg = document.getElementById('userMsg').value;
-            
-            const fullMsg = `Hello Prime Solutions! My name is ${name}. I am interested in a ${type}. Details: ${msg}`;
-            
-            if(method === 'whatsapp') {
-                window.location.href = `https://wa.me/923332637235?text=${encodeURIComponent(fullMsg)}`;
-            } else {
-                window.location.href = `mailto:webhub262@gmail.com?subject=New Quote Request&body=${encodeURIComponent(fullMsg)}`;
-            }
+        function submitRequest() {
+            const name = document.getElementById('clientName').value;
+            const type = document.getElementById('serviceType').value;
+            const detail = document.getElementById('projectDetails').value;
+            const text = `Hello Nazim! I am ${name}. I need a ${type}. Project Detail: ${detail}`;
+            window.location.href = `https://wa.me/923332637235?text=${encodeURIComponent(text)}`;
         }
     </script>
 </body>
