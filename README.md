@@ -11,165 +11,146 @@
     <style>
         :root {
             --primary: #4facfe; --secondary: #00f2fe; --accent: #f093fb;
-            --bg: #fdfdfd; --text: #1d1d1f; --glass: rgba(255, 255, 255, 0.8); --border: rgba(0, 0, 0, 0.08);
+            --bg: #fdfdfd; --text: #1d1d1f; --card-bg: rgba(255, 255, 255, 0.8); --border: rgba(0, 0, 0, 0.08);
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; scroll-behavior: smooth; }
+        [data-theme="dark"] {
+            --bg: #010204; --text: #ffffff; --card-bg: rgba(255, 255, 255, 0.04); --border: rgba(255, 255, 255, 0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; scroll-behavior: smooth; transition: background 0.3s, color 0.3s; }
         body { background-color: var(--bg); color: var(--text); overflow-x: hidden; }
 
-        .bg-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 0% 0%, #e0f7fa 0%, #ffffff 50%, #f3e5f5 100%); }
+        /* Theme Toggle Button */
+        .theme-switch { position: fixed; top: 20px; right: 20px; z-index: 2000; background: var(--card-bg); border: 1px solid var(--border); padding: 12px; border-radius: 50%; cursor: pointer; backdrop-filter: blur(10px); color: var(--primary); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+
         #progress-bar { position: fixed; top: 0; left: 0; width: 0%; height: 4px; background: linear-gradient(to right, var(--primary), var(--accent)); z-index: 9999; }
 
-        .container { width: 100%; max-width: 500px; margin: 0 auto; padding: 40px 15px 120px; }
+        .container { width: 100%; max-width: 500px; margin: 0 auto; padding: 60px 15px 120px; }
 
-        /* Premium Luxury Card System */
+        /* Unlimited Extra Feature: Glass Cards */
         .card { 
-            background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            background: var(--card-bg); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             border: 1px solid var(--border); border-radius: 35px; 
             padding: 30px; margin-bottom: 25px; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.04); cursor: pointer;
         }
-        .card:hover { transform: translateY(-10px); border-color: var(--primary); box-shadow: 0 25px 50px rgba(79, 172, 254, 0.12); }
+        .card:hover { transform: translateY(-10px) scale(1.02); border-color: var(--primary); box-shadow: 0 25px 50px rgba(79, 172, 254, 0.15); }
 
-        /* Hero Styling */
-        .hero { text-align: center; }
-        .profile-pic { width: 140px; height: 140px; border-radius: 50%; border: 4px solid #fff; box-shadow: 0 15px 35px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .gradient-text { background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; font-size: 2.5rem; letter-spacing: -1px; }
-        
-        /* Interactive Stats */
-        .stats-row { display: flex; justify-content: space-between; margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px; }
-        .stat-box h2 { color: var(--primary); font-size: 1.6rem; font-weight: 800; }
-        .stat-box p { font-size: 0.6rem; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.5; }
+        /* Extra Details: Interactive Badges */
+        .badge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+        .mini-badge { background: rgba(79, 172, 254, 0.1); padding: 10px; border-radius: 15px; font-size: 0.7rem; font-weight: 600; display: flex; align-items: center; gap: 8px; color: var(--primary); }
 
-        /* Skill Bars */
-        .skill-box { margin-bottom: 15px; }
-        .skill-info { display: flex; justify-content: space-between; font-size: 0.75rem; margin-bottom: 5px; font-weight: 600; }
-        .bar-bg { background: rgba(0,0,0,0.05); height: 8px; border-radius: 10px; }
-        .bar-fill { height: 100%; border-radius: 10px; background: linear-gradient(to right, var(--primary), var(--secondary)); box-shadow: 0 0 10px rgba(79, 172, 254, 0.3); }
+        /* Professional Stats */
+        .stat-line { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.8rem; }
+        .stat-bar { height: 6px; background: rgba(0,0,0,0.05); border-radius: 10px; overflow: hidden; margin-bottom: 15px; }
+        .stat-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--secondary)); }
 
-        /* Service Badges */
-        .badge-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
-        .badge { background: #f0f3f6; color: #444; padding: 8px 16px; border-radius: 50px; font-size: 0.75rem; font-weight: 600; border: 1px solid var(--border); transition: 0.3s; }
-        .badge:hover { background: var(--primary); color: white; }
+        /* Trusted Features: Testimonials & Security */
+        .trust-box { border-left: 4px solid #25d366; background: rgba(37, 211, 102, 0.05); padding: 15px; border-radius: 0 20px 20px 0; margin-top: 15px; font-size: 0.8rem; }
 
-        /* Multi-Step Process */
-        .step { display: flex; gap: 15px; margin-bottom: 20px; }
-        .step-num { min-width: 32px; height: 32px; border-radius: 50%; background: var(--primary); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.9rem; }
+        /* Floating Nav */
+        .bottom-nav { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 85%; max-width: 400px; background: var(--card-bg); backdrop-filter: blur(20px); border-radius: 50px; border: 1px solid var(--border); display: flex; justify-content: space-around; padding: 18px; z-index: 1000; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .nav-icon { color: var(--text); opacity: 0.6; font-size: 1.4rem; transition: 0.3s; text-decoration: none; }
+        .nav-icon:hover { color: var(--primary); opacity: 1; transform: translateY(-5px); }
 
-        /* Professional Buttons */
-        .btn-action { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 20px; border-radius: 25px; font-weight: 800; font-size: 1rem; text-decoration: none; transition: 0.4s; margin-top: 15px; border: none; width: 100%; cursor: pointer; }
-        .btn-whatsapp { background: #25d366; color: white; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2); }
-        .btn-call { background: var(--text); color: white; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .btn-action:hover { transform: scale(1.03); filter: brightness(1.1); }
-
-        /* Floating Navigation Bar */
-        .bottom-nav { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 85%; max-width: 400px; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); border-radius: 50px; border: 1px solid var(--border); display: flex; justify-content: space-around; padding: 18px; z-index: 1000; box-shadow: 0 20px 40px rgba(0,0,0,0.06); }
-        .nav-icon { color: #8e8e93; font-size: 1.4rem; transition: 0.3s; }
-        .nav-icon:hover { color: var(--primary); transform: scale(1.25); }
-
-        footer { text-align: center; font-size: 0.75rem; opacity: 0.4; margin-top: 30px; line-height: 1.5; }
+        .btn-main { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 20px; border-radius: 25px; font-weight: 800; text-decoration: none; margin-top: 15px; color: white; transition: 0.4s; }
+        .btn-wa { background: #25d366; box-shadow: 0 10px 20px rgba(37, 211, 102, 0.2); }
     </style>
 </head>
-<body>
+<body data-theme="light">
 
-    <div class="bg-canvas"></div>
+    <div class="theme-switch" onclick="toggleTheme()"><i class="fas fa-moon"></i></div>
     <div id="progress-bar"></div>
 
     <div class="container">
-        <section class="card hero" data-aos="zoom-in">
-            <div style="background: rgba(79, 172, 254, 0.1); padding: 6px 15px; border-radius: 50px; display: inline-block; margin-bottom: 20px; font-size: 0.65rem; font-weight: 800; color: var(--primary); letter-spacing: 1px;">OFFICIAL PRIME SOLUTIONS PORTAL</div>
-            <img src="Screenshot_2026-04-12-10-02-54-39.png" alt="Muhammad Nazim" class="profile-pic">
-            <h1 class="gradient-text">Muhammad Nazim</h1>
-            <p style="font-size: 1.1rem; opacity: 0.7; font-weight: 300;">Founder & CEO | Prime Solutions</p>
+        <section class="card" data-aos="zoom-in" style="text-align: center;">
+            <img src="Screenshot_2026-04-12-10-02-54-39.png" alt="Muhammad Nazim" style="width: 130px; border-radius: 50%; border: 3px solid var(--primary); padding: 5px; margin-bottom: 15px;">
+            <h1 style="font-size: 2.2rem; font-weight: 800; background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Muhammad Nazim</h1>
+            <p style="opacity: 0.7; font-size: 0.9rem;">Founder | Prime Solutions Official</p>
             
-            <div class="stats-row">
-                <div class="stat-box"><h2>50+</h2><p>Projects</p></div>
-                <div class="stat-box"><h2>15+</h2><p>Global Clients</p></div>
-                <div class="stat-box"><h2>100%</h2><p>Trusted</p></div>
+            <div class="badge-grid">
+                <div class="mini-badge"><i class="fas fa-check-circle"></i> Verified Dev</div>
+                <div class="mini-badge"><i class="fas fa-shield-alt"></i> Secure Code</div>
+                <div class="mini-badge"><i class="fas fa-clock"></i> 24/7 Active</div>
+                <div class="mini-badge"><i class="fas fa-star"></i> Top Rated</div>
             </div>
         </section>
 
         <div class="card" data-aos="fade-up">
-            <h3 style="margin-bottom: 20px;"><i class="fas fa-code" style="color: var(--primary);"></i> Technical Expertise</h3>
-            <div class="skill-box">
-                <div class="skill-info"><span>Full-Stack Development</span><span>98%</span></div>
-                <div class="bar-bg"><div class="bar-fill" style="width: 98%;"></div></div>
+            <h3 style="margin-bottom: 20px;"><i class="fas fa-chart-line" style="color: var(--primary);"></i> Mastery & Accuracy</h3>
+            <div class="stat-line"><span>Web Architecture</span><span>98%</span></div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 98%;"></div></div>
+            <div class="stat-line"><span>Firebase / Database</span><span>95%</span></div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 95%;"></div></div>
+            <div class="stat-line"><span>SEO Ranking</span><span>90%</span></div>
+            <div class="stat-bar"><div class="stat-fill" style="width: 90%;"></div></div>
+        </div>
+
+        <div class="card" data-aos="fade-up">
+            <h3><i class="fas fa-heart" style="color: var(--accent);"></i> Trusted by Millions</h3>
+            <div class="trust-box">
+                "Nazim built our business site (Web-Hub) in record time. Professionalism at its peak!"
             </div>
-            <div class="skill-box">
-                <div class="skill-info"><span>UI/UX Architecture</span><span>95%</span></div>
-                <div class="bar-bg"><div class="bar-fill" style="width: 95%;"></div></div>
-            </div>
-            <div class="skill-box">
-                <div class="skill-info"><span>Firebase & Database</span><span>92%</span></div>
-                <div class="bar-bg"><div class="bar-fill" style="width: 92%;"></div></div>
+            <div class="trust-box" style="border-left-color: var(--primary);">
+                "Pakgold platform deployment was seamless. Highly recommended for investment sites."
             </div>
         </div>
 
         <div class="card" data-aos="fade-up">
-            <h3 style="margin-bottom: 15px;"><i class="fas fa-gem" style="color: var(--primary);"></i> Unlimited Solutions</h3>
-            <div class="badge-container">
-                <div class="badge">E-commerce Stores</div>
-                <div class="badge">Professional Portfolios</div>
-                <div class="badge">Google SEO Mastery</div>
-                <div class="badge">App Interface Design</div>
-                <div class="badge">Real-time Chat Systems</div>
-                <div class="badge">Investment Platforms</div>
+            <h3><i class="fas fa-th-large"></i> Elite Services</h3>
+            <p style="font-size: 0.8rem; opacity: 0.6; margin-bottom: 15px;">(Click to inquire via WhatsApp)</p>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <a href="https://wa.me/923332637235?text=I'm interested in Web Development" class="mini-badge" style="text-decoration: none; cursor: pointer;"><i class="fas fa-code"></i> Full-Stack Web Dev</a>
+                <a href="https://wa.me/923332637235?text=I'm interested in UI/UX Design" class="mini-badge" style="text-decoration: none; cursor: pointer;"><i class="fas fa-paint-brush"></i> Premium UI/UX Design</a>
+                <a href="https://wa.me/923332637235?text=I'm interested in SEO Services" class="mini-badge" style="text-decoration: none; cursor: pointer;"><i class="fas fa-search"></i> Advanced SEO Ranking</a>
             </div>
         </div>
 
-        <div class="card" data-aos="fade-up">
-            <h3 style="margin-bottom: 20px;"><i class="fas fa-stream"></i> Elite Strategy</h3>
-            <div class="step">
-                <div class="step-num">1</div>
-                <div><h4 style="font-size: 0.9rem;">Analysis</h4><p style="font-size: 0.75rem; opacity: 0.6;">Aapke vision ko real business metrics mein convert karna.</p></div>
-            </div>
-            <div class="step">
-                <div class="step-num">2</div>
-                <div><h4 style="font-size: 0.9rem;">Modern Dev</h4><p style="font-size: 0.75rem; opacity: 0.6;">High-speed coding with zero-security risks.</p></div>
-            </div>
-            <div class="step">
-                <div class="step-num">3</div>
-                <div><h4 style="font-size: 0.9rem;">Deployment</h4><p style="font-size: 0.75rem; opacity: 0.6;">Final testing ke baad duniya ke liye live launch.</p></div>
-            </div>
-        </div>
+        <div class="card" data-aos="fade-up" style="background: linear-gradient(135deg, var(--card-bg), rgba(79, 172, 254, 0.05));">
+            <h3 style="text-align: center;">Let's Talk Business</h3>
+            <p style="text-align: center; font-size: 0.8rem; opacity: 0.7; margin-top: 10px;">Secure your digital future with Prime Solutions.</p>
+            
+            <a href="https://wa.me/923332637235" class="btn-main btn-wa" target="_blank">
+                <i class="fab fa-whatsapp"></i> Get Free Consultation
+            </a>
+            
+            <a href="tel:03705519562" class="btn-main" style="background: var(--text); color: var(--bg); border: 1px solid var(--border);">
+                <i class="fas fa-phone-alt"></i> Direct Call: 0370 5519562
+            </a>
 
-        <div class="card" data-aos="fade-up" style="border-left: 5px solid var(--primary);">
-            <h3><i class="fas fa-shield-alt" style="color: var(--primary);"></i> Trusted Partnership</h3>
-            <p style="font-size: 0.8rem; line-height: 1.6; opacity: 0.7; margin-top: 10px;">
-                Prime Solutions 100% money-back guarantee aur professional NDA support ke sath kaam karta hai. Hamara har project lifelong maintenance ke sath aata hai.
+            <p style="text-align: center; font-size: 0.7rem; margin-top: 15px; opacity: 0.5;">
+                <i class="fas fa-envelope"></i> webhub262@gmail.com
             </p>
         </div>
 
-        <div class="card" data-aos="fade-up" style="background: linear-gradient(135deg, #ffffff, #f7fcff);">
-            <h3 style="text-align: center; margin-bottom: 20px;">Start Your Journey</h3>
-            <a href="https://wa.me/923332637235" class="btn-action btn-whatsapp" target="_blank">
-                <i class="fab fa-whatsapp"></i> Chat on WhatsApp
-            </a>
-            <a href="tel:03705519562" class="btn-action btn-call">
-                <i class="fas fa-phone-alt"></i> Call: 0370 5519562
-            </a>
-            <a href="mailto:webhub262@gmail.com" style="display: block; text-align: center; margin-top: 15px; font-size: 0.8rem; color: var(--primary); text-decoration: none; font-weight: 600;">
-                <i class="fas fa-envelope-open"></i> webhub262@gmail.com
-            </a>
-        </div>
-
-        <footer>
+        <footer style="text-align: center; font-size: 0.75rem; opacity: 0.4;">
             © 2026 PRIME SOLUTIONS | ALL RIGHTS RESERVED<br>
-            Designed & Developed by Muhammad Nazim
+            Powered by Nazim's Innovation
         </footer>
     </div>
 
     <nav class="bottom-nav">
         <a href="#" class="nav-icon"><i class="fas fa-home"></i></a>
-        <a href="https://wa.me/923332637235" target="_blank" class="nav-icon"><i class="fab fa-whatsapp"></i></a>
-        <a href="https://www.facebook.com/profile.php?id=100084218946114" target="_blank" class="nav-icon"><i class="fab fa-facebook-f"></i></a>
-        <a href="mailto:webhub262@gmail.com" class="nav-icon"><i class="fas fa-envelope"></i></a>
+        <a href="https://wa.me/923332637235" class="nav-icon"><i class="fab fa-whatsapp"></i></a>
+        <a href="https://www.facebook.com/profile.php?id=100084218946114" class="nav-icon"><i class="fab fa-facebook-f"></i></a>
+        <a href="mailto:webhub262@gmail.com" class="nav-icon"><i class="fas fa-envelope-open"></i></a>
     </nav>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({ duration: 1000, once: true });
 
-        // Scroll Progress
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.querySelector('.theme-switch i');
+            if(body.getAttribute('data-theme') === 'light') {
+                body.setAttribute('data-theme', 'dark');
+                icon.className = 'fas fa-sun';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                icon.className = 'fas fa-moon';
+            }
+        }
+
         window.onscroll = () => {
             let winScroll = document.body.scrollTop || document.documentElement.scrollTop;
             let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
