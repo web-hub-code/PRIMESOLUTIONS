@@ -83,7 +83,7 @@
             <p style="opacity: 0.5; font-size: 0.75rem; letter-spacing: 2px;">GLOBAL IT ENTERPRISE AGENCY</p>
             
             <div class="social-row">
-                <a href="https://www.facebook.com/profile.php?id=100084218946114" target="_blank" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.facebook.com/profile.php?id=61590925586953" target="_blank" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
                 <a href="https://www.instagram.com/mr_nazim073?igsh=MXd4d2hmcWNvNjVsdQ==" target="_blank" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                 <a href="https://www.linkedin.com/in/muhammad-nazim-7401b6310" target="_blank" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
                 <a href="https://youtube.com/@crazykhantv" target="_blank" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
@@ -166,7 +166,7 @@
                     <i class="fab fa-whatsapp"></i>
                     <div>
                         <p style="font-size:0.6rem; opacity:0.5;">WHATSAPP SUPPORT</p>
-                        <a href="https://wa.me/923332637235" style="color:white; text-decoration:none; font-weight:600;">0333 2637235</a>
+                        <a href="https://wa.me/923379827882" style="color:white; text-decoration:none; font-weight:600;">0337 9827882</a>
                     </div>
                 </div>
 
