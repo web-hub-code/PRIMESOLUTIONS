@@ -4,13 +4,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <title>Prime Solutions | Premier Web Architecture & IT Agency by M Nazim</title>
-    <meta name="description" content="Prime Solutions by Muhammad Nazim provides high-end web development, AI automation, and secure Fintech systems. Expert IT solutions for global enterprises.[span_1](start_span)"[span_1](end_span)>
-    <meta name="keywords" content="Prime Solutions, Muhammad Nazim, Web Developer Pakistan, Software Agency, AI Automation, Fintech Development, Custom Web Architecture, IT Solutions[span_2](start_span)"[span_2](end_span)>
-    <meta name="author" content="Muhammad Nazim[span_3](start_span)"[span_3](end_span)>
+    <meta name="description" content="Prime Solutions by Muhammad Nazim provides high-end web development, AI automation, and secure Fintech systems. Expert IT solutions for global enterprises.[span_3](start_span)"[span_3](end_span)>
+    <meta name="keywords" content="Prime Solutions, Muhammad Nazim, Web Developer Pakistan, Software Agency, AI Automation, Fintech Development, Custom Web Architecture, IT Solutions[span_4](start_span)"[span_4](end_span)>
+    <meta name="author" content="Muhammad Nazim[span_5](start_span)"[span_5](end_span)>
     
-    <meta property="og:title" content="Prime Solutions | Digital Excellence by M Nazim[span_4](start_span)"[span_4](end_span)>
-    <meta property="og:description" content="Transforming complex ideas into scalable digital realities. Explore our portfolio.[span_5](start_span)"[span_5](end_span)>
-    <meta property="og:url" content="https://web-hub-code.github.io/PRIMESOLUTIONS/[span_6](start_span)"[span_6](end_span)>
+    <meta property="og:title" content="Prime Solutions | Digital Excellence by M Nazim">
+    <meta property="og:description" content="Transforming complex ideas into scalable digital realities. Explore our portfolio.">
+    <meta property="og:url" content="https://web-hub-code.github.io/PRIMESOLUTIONS/">
     <meta property="og:image" content="Screenshot_2026-04-12-10-02-54-39.png">
     <meta property="og:type" content="website">
 
@@ -131,7 +131,7 @@
         </div>
 
         <header class="agency-header" data-aos="zoom-in">
-            <img src="Screenshot_2026-04-12-10-02-54-39.png" class="pfp-ceo" id="eagleLogo" alt="Muhammad Nazim CEO of Prime Solutions[span_7](start_span)"[span_7](end_span)>
+            <img src="Screenshot_2026-04-12-10-02-54-39.png" class="pfp-ceo" id="eagleLogo" alt="Muhammad Nazim CEO of Prime Solutions">
             <h1 class="brand-name">PRIME SOLUTIONS</h1>
             <p style="opacity: 0.5; font-size: 0.75rem; letter-spacing: 2px;">GLOBAL IT ENTERPRISE AGENCY</p>
             
@@ -155,10 +155,10 @@
                 <span class="tag-badge">EXECUTIVE STATEMENT</span>
                 <h2 style="color:var(--primary); margin-bottom:15px; font-size: 1.5rem;">Leading the Digital Frontier</h2>
                 <p style="font-size: 0.85rem; opacity: 0.7; line-height: 1.8; margin-bottom: 15px;">
-                    Under the leadership of <strong>Muhammad Nazim</strong>, Prime Solutions has emerged as a premier <strong>Global IT Enterprise Agency</strong>[span_8](start_span)[span_8](end_span). We specialize in building high-performance <strong>custom web architectures</strong>[span_9](start_span)[span_9](end_span), AI-integrated systems, and scalable digital products for modern businesses.
+                    Under the leadership of <strong>Muhammad Nazim</strong>, Prime Solutions has emerged as a premier <strong>Global IT Enterprise Agency</strong>. We specialize in building high-performance <strong>custom web architectures</strong>, AI-integrated systems, and scalable digital products for modern businesses.
                 </p>
                 <p style="font-size: 0.85rem; opacity: 0.7; line-height: 1.8;">
-                    Our expertise lies in bridging the gap between imagination and execution. Whether it is secure Fintech systems like ROI trackers or real-time communication suites, we ensure <strong>technical excellence</strong>[span_10](start_span)[span_10](end_span) and measurable market growth.
+                    Our expertise lies in bridging the gap between imagination and execution. Whether it is secure Fintech systems like ROI trackers or real-time communication suites, we ensure <strong>technical excellence</strong> and measurable market growth.
                 </p>
                 <a href="https://wa.me/923379827882" class="btn-action">Direct Strategy Call <i class="fab fa-whatsapp"></i></a>
             </div>
@@ -245,121 +245,141 @@
 
                 <div class="contact-info">
                     <i class="fas fa-envelope"></i>
-<div>
-<p style="font-size:0.6rem; opacity:0.5;">OFFICIAL EMAIL</p>
-<a href="mailto:webhub262@gmail.com" style="color:var(--text-color); text-decoration:none; font-weight:600;">webhub262@gmail.com</a>
-</div>
-</div>
-<button class="btn-action" onclick="window.location.href='mailto:webhub262@gmail.com'">Email Headquarters</button>
-</div>
-</section>
-<section id="pane-calculator" class="view-pane">
-<div class="feature-card" data-aos="fade-up">
-<h2 style="font-size: 1.5rem; margin-bottom: 10px;">Project Value Estimator</h2>
-<p style="font-size: 0.7rem; opacity: 0.5; margin-bottom: 20px;">AI-calculated baseline with multi-currency converter.</p>
-<div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 15px;">
-<button class="filter-btn active" onclick="setCurrency('USD', this)">USD ($)</button>
-<button class="filter-btn" onclick="setCurrency('PKR', this)">PKR (₨)</button>
-</div>
-<div style="background:rgba(0,242,254,0.05); border:1px dashed var(--primary); padding:30px; border-radius:25px; text-align:center; margin-bottom:20px;">
-<p style="font-size: 0.6rem; letter-spacing: 2px; opacity: 0.5;">ESTIMATED STARTING COST</p>
-<p id="quote-display" style="font-size:2.2rem; font-weight:800; color:var(--primary);">$0.00</p>
-</div>
-<p style="font-size: 0.7rem; opacity: 0.5; text-align: center; margin-bottom: 15px;">*Note: Final pricing depends on specific technical requirements and architecture scope.</p>
-<button class="btn-action" onclick="navTo('contact', document.querySelectorAll('.nav-icon')[2])">Get Official Quote</button>
-</div>
-</section>
-<footer style="text-align: center; margin-top: 40px; opacity: 0.2; font-size: 0.6rem; letter-spacing: 1px;">
-PRIME SOLUTIONS GLOBAL © 2026 | DESIGNED BY M NAZIM ENTERPRISE
-</footer>
-</div>
-<!-- Live Support Chat -->
-<div class="support-float" onclick="toggleChatPopup()" title="Live Chat Support">
-<i class="fas fa-headset"></i>
-</div>
-<div class="chat-box-popup" id="chatPopup">
-<div class="chat-header">
-<span style="font-size: 0.8rem; font-weight: bold; color: var(--primary);">Prime Solutions Support</span>
-<i class="fas fa-times" style="cursor:pointer;" onclick="toggleChatPopup()"></i>
-</div>
-<div class="chat-body" id="chatBody">
-<p style="opacity: 0.7; margin-bottom: 8px;">Hello sweetie! 👋 How can our IT agency help your project today?</p>
-</div>
-<div class="chat-footer">
-<input type="text" id="chatInput" placeholder="Type message..." onkeypress="handleChatEnter(event)">
-<button style="background:var(--primary); border:none; padding:8px 12px; border-radius:12px; cursor:pointer;" onclick="sendChatMessage()"><i class="fas fa-paper-plane" style="font-size:0.7rem; color:#000;"></i></button>
-</div>
-</div>
-<!-- Eagle Eye Security -->
-<div id="eagle-eye-modal">
-<div class="eagle-box">
-<h3 style="color: var(--primary); margin-bottom: 15px;"><i class="fas fa-shield-alt"></i> Eagle Eye Security</h3>
-<p style="font-size: 0.75rem; opacity: 0.6; margin-bottom: 15px;">Enter Access Key (5426) to Open Admin Panel</p>
-<input type="password" id="eagleKeyInput" placeholder="Enter Key" maxlength="4">
-<button class="btn-action" onclick="verifyEagleKey()">Authorize Access</button>
-<button style="background:transparent; border:none; color:var(--text-color); opacity:0.5; margin-top:15px; cursor:pointer;" onclick="closeEagleModal()">Cancel</button>
-</div>
-</div>
-<nav class="bottom-nav">
-<div class="nav-icon active" onclick="navTo('home', this)" title="Home"><i class="fas fa-university"></i></div>
-<div class="nav-icon" onclick="navTo('works', this)" title="Portfolio"><i class="fas fa-briefcase"></i></div>
-<div class="nav-icon" onclick="navTo('contact', this)" title="Contact"><i class="fas fa-address-book"></i></div>
-<div class="nav-icon" onclick="navTo('calculator', this)" title="Price"><i class="fas fa-calculator"></i></div>
-</nav>
-<script src="[https://unpkg.com/aos@2.3.1/dist/aos.js](https://unpkg.com/aos@2.3.1/dist/aos.js)"></script>
-<script>
-AOS.init({ duration: 800, once: true });
-function navTo(paneId, btn) {
-document.querySelectorAll('.view-pane').forEach(p => p.classList.remove('active'));
-document.getElementById('pane-' + paneId).classList.add('active');
-document.querySelectorAll('.tab-trigger, .nav-icon').forEach(b => b.classList.remove('active'));
-btn.classList.add('active');
-window.scrollTo(0,0);
-if(paneId === 'calculator') runCalculator();
-}
-function toggleTheme() {
-document.body.classList.toggle('light-mode');
-}
-function filterWorks(category, btn) {
-document.querySelectorAll('.work-item').forEach(item => {
-item.style.display = (category === 'all' || item.getAttribute('data-category') === category) ? 'block' : 'none';
-});
-}
-function runCalculator() {
-let price = 0;
-const target = 2500;
-const interval = setInterval(() => {
-price += 50;
-document.getElementById('quote-display').innerText = '$' + price + '.00';
-if(price >= target) clearInterval(interval);
-}, 30);
-}
-function toggleChatPopup() {
-const popup = document.getElementById('chatPopup');
-popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
-}
-function sendChatMessage() {
-const input = document.getElementById('chatInput');
-if(input.value.trim() !== '') {
-document.getElementById('chatBody').innerHTML += <p style="text-align:right; color:var(--primary);">You: ${input.value}</p>;
-input.value = '';
-}
-}
-function verifyEagleKey() {
-const key = document.getElementById('eagleKeyInput').value;
-if(key === '5426') {
-alert('Access Granted. Welcome, Admin.');
-document.getElementById('eagle-eye-modal').style.display = 'none';
-} else {
-alert('Invalid Key!');
-}
-}
-function closeEagleModal() {
-document.getElementById('eagle-eye-modal').style.display = 'none';
-}
-document.getElementById('eagleLogo').addEventListener('click', () => {
-document.getElementById('eagle-eye-modal').style.display = 'flex';
-});
-</script>
+                    <div>
+                        <p style="font-size:0.6rem; opacity:0.5;">OFFICIAL EMAIL</p>
+                        <a href="mailto:webhub262@gmail.com" style="color:var(--text-color); text-decoration:none; font-weight:600;">webhub262@gmail.com</a>
+                    </div>
+                </div>
+
+                <button class="btn-action" onclick="window.location.href='mailto:webhub262@gmail.com'">Email Headquarters</button>
+            </div>
+        </section>
+
+        <section id="pane-calculator" class="view-pane">
+            <div class="feature-card" data-aos="fade-up">
+                <h2 style="font-size: 1.5rem; margin-bottom: 10px;">Project Value Estimator</h2>
+                <p style="font-size: 0.7rem; opacity: 0.5; margin-bottom: 20px;">AI-calculated baseline with multi-currency converter.</p>
+                
+                <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 15px;">
+                    <button class="filter-btn active" onclick="setCurrency('USD', this)">USD ($)</button>
+                    <button class="filter-btn" onclick="setCurrency('PKR', this)">PKR (₨)</button>
+                </div>
+
+                <div style="background:rgba(0,242,254,0.05); border:1px dashed var(--primary); padding:30px; border-radius:25px; text-align:center; margin-bottom:20px;">
+                    <p style="font-size: 0.6rem; letter-spacing: 2px; opacity: 0.5;">ESTIMATED STARTING COST</p>
+                    <p id="quote-display" style="font-size:2.2rem; font-weight:800; color:var(--primary);">$0.00</p>
+                </div>
+                
+                <p style="font-size: 0.7rem; opacity: 0.5; text-align: center; margin-bottom: 15px;">*Note: Final pricing depends on specific technical requirements and architecture scope.</p>
+                <button class="btn-action" onclick="navTo('contact', document.querySelectorAll('.nav-icon')[2])">Get Official Quote</button>
+            </div>
+        </section>
+
+        <footer style="text-align: center; margin-top: 40px; opacity: 0.2; font-size: 0.6rem; letter-spacing: 1px;">
+            PRIME SOLUTIONS GLOBAL &copy; 2026 | DESIGNED BY M NAZIM ENTERPRISE
+        </footer>
+    </div>
+
+    <!-- Live Support Chat -->
+    <div class="support-float" onclick="toggleChatPopup()" title="Live Chat Support">
+        <i class="fas fa-headset"></i>
+    </div>
+
+    <div class="chat-box-popup" id="chatPopup">
+        <div class="chat-header">
+            <span style="font-size: 0.8rem; font-weight: bold; color: var(--primary);">Prime Solutions Support</span>
+            <i class="fas fa-times" style="cursor:pointer;" onclick="toggleChatPopup()"></i>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <p style="opacity: 0.7; margin-bottom: 8px;">Hello sweetie! 👋 How can our IT agency help your project today?</p>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="chatInput" placeholder="Type message..." onkeypress="handleChatEnter(event)">
+            <button style="background:var(--primary); border:none; padding:8px 12px; border-radius:12px; cursor:pointer;" onclick="sendChatMessage()"><i class="fas fa-paper-plane" style="font-size:0.7rem; color:#000;"></i></button>
+        </div>
+    </div>
+
+    <!-- Eagle Eye Security -->
+    <div id="eagle-eye-modal">
+        <div class="eagle-box">
+            <h3 style="color: var(--primary); margin-bottom: 15px;"><i class="fas fa-shield-alt"></i> Eagle Eye Security</h3>
+            <p style="font-size: 0.75rem; opacity: 0.6; margin-bottom: 15px;">Enter Access Key (5426) to Open Admin Panel</p>
+            <input type="password" id="eagleKeyInput" placeholder="Enter Key" maxlength="4">
+            <button class="btn-action" onclick="verifyEagleKey()">Authorize Access</button>
+            <button style="background:transparent; border:none; color:var(--text-color); opacity:0.5; margin-top:15px; cursor:pointer;" onclick="closeEagleModal()">Cancel</button>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-icon active" onclick="navTo('home', this)" title="Home"><i class="fas fa-university"></i></div>
+        <div class="nav-icon" onclick="navTo('works', this)" title="Portfolio"><i class="fas fa-briefcase"></i></div>
+        <div class="nav-icon" onclick="navTo('contact', this)" title="Contact"><i class="fas fa-address-book"></i></div>
+        <div class="nav-icon" onclick="navTo('calculator', this)" title="Price"><i class="fas fa-calculator"></i></div>
+    </nav>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+        
+        function navTo(paneId, btn) {
+            document.querySelectorAll('.view-pane').forEach(p => p.classList.remove('active'));
+            document.getElementById('pane-' + paneId).classList.add('active');
+            document.querySelectorAll('.tab-trigger, .nav-icon').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            window.scrollTo(0,0);
+            if(paneId === 'calculator') runCalculator();
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+        }
+
+        function filterWorks(category, btn) {
+            document.querySelectorAll('.work-item').forEach(item => {
+                item.style.display = (category === 'all' || item.getAttribute('data-category') === category) ? 'block' : 'none';
+            });
+        }
+
+        function runCalculator() {
+            let price = 0;
+            const target = 2500;
+            const interval = setInterval(() => {
+                price += 50;
+                document.getElementById('quote-display').innerText = '$' + price + '.00';
+                if(price >= target) clearInterval(interval);
+            }, 30);
+        }
+
+        function toggleChatPopup() {
+            const popup = document.getElementById('chatPopup');
+            popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            if(input.value.trim() !== '') {
+                document.getElementById('chatBody').innerHTML += `<p style="text-align:right; color:var(--primary);">You: ${input.value}</p>`;
+                input.value = '';
+            }
+        }
+        
+        function verifyEagleKey() {
+            const key = document.getElementById('eagleKeyInput').value;
+            if(key === '5426') {
+                alert('Access Granted. Welcome, Admin.');
+                document.getElementById('eagle-eye-modal').style.display = 'none';
+            } else {
+                alert('Invalid Key!');
+            }
+        }
+        
+        function closeEagleModal() {
+            document.getElementById('eagle-eye-modal').style.display = 'none';
+        }
+        
+        document.getElementById('eagleLogo').addEventListener('click', () => {
+            document.getElementById('eagle-eye-modal').style.display = 'flex';
+        });
+    </script>
 </body>
 </html>
