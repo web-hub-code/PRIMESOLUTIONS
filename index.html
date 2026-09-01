@@ -4,8 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <title>Prime Solutions | Premier Web Architecture & IT Agency by M Nazim</title>
-    <meta name="description" content="Prime Solutions by Muhammad Nazim provides high-end web development, AI automation, and secure Fintech systems. Expert IT solutions for global enterprises.[span_0](start_span)"[span_0](end_span)>
-    <meta name="keywords" content="Prime Solutions, Muhammad Nazim, Web Developer Pakistan, Software Agency, AI Automation, Fintech Development, Custom Web Architecture, IT Solutions[span_1](start_span)"[span_1](end_span)>
+    <meta name="description" content="Prime Solutions by Muhammad Nazim provides high-end web development, AI automation, and secure Fintech systems. Expert IT solutions for global enterprises.[span_1](start_span)"[span_1](end_span)>
+    <meta name="keywords" content="Prime Solutions, Muhammad Nazim, Web Developer Pakistan, Software Agency, AI Automation, Fintech Development, Custom Web Architecture, IT Solutions[span_2](start_span)"[span_2](end_span)>
     <meta name="author" content="Muhammad Nazim">
     
     <meta property="og:title" content="Prime Solutions | Digital Excellence by M Nazim">
@@ -20,11 +20,11 @@
     <!-- jsPDF for Automated PDF Invoice Generator -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    <!-- Firebase SDKs Integration -->
+    <!-- Firebase SDKs Integration (Updated to v11 stable) -->
     <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-      import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-      import { getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+      import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+      import { getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc, serverTimestamp, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
       const firebaseConfig = {
         apiKey: "AIzaSyCMG6KG_oD8cjEk4YpbxXik-C5q8K5MDHk",
@@ -54,6 +54,9 @@
       window.getDoc = getDoc;
       window.setDoc = setDoc;
       window.serverTimestamp = serverTimestamp;
+      window.query = query;
+      window.orderBy = orderBy;
+      window.onSnapshot = onSnapshot;
     </script>
 
     <style>
@@ -151,6 +154,11 @@
 
         .tag-badge { font-size: 0.65rem; background: var(--primary); color: #000; padding: 4px 10px; border-radius: 10px; font-weight: 800; display: inline-block; margin-bottom: 10px; }
 
+        /* Custom Toast Notification System */
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 100002; display: flex; flex-direction: column; gap: 10px; }
+        .prime-toast { background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--primary); color: var(--text-color); padding: 12px 20px; border-radius: 15px; font-size: 0.8rem; box-shadow: 0 5px 20px rgba(0,0,0,0.4); animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
         #eagle-eye-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(1,2,4,0.95); z-index: 100000; justify-content: center; align-items: center; backdrop-filter: blur(20px); }
         .eagle-box { background: var(--card-bg); border: 1px solid var(--primary); padding: 30px; border-radius: 30px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 0 40px rgba(0,242,254,0.2); }
         .eagle-box input { width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 15px; color: var(--text-color); font-size: 1.2rem; text-align: center; margin-bottom: 15px; outline: none; }
@@ -161,6 +169,7 @@
 </head>
 <body>
 
+    <div id="toast-container"></div>
     <div class="agency-aura"><div class="glow"></div></div>
 
     <div class="container">
@@ -241,7 +250,7 @@
             </div>
         </section>
 
-        <!-- Client Portal & Live Project Progress Tracker -->
+        <!-- Client Portal & Live Project Progress Tracker with Milestone Feedback -->
         <section id="pane-auth" class="view-pane">
             <div class="feature-card" data-aos="fade-up">
                 <h2 style="font-size: 1.4rem; margin-bottom: 5px;">Client Hub & Tracker</h2>
@@ -278,6 +287,13 @@
                             <div class="timeline-item completed">Frontend Architecture & Firebase Core</div>
                             <div class="timeline-item" id="t-step3">Secure Payment & API Integration (In Progress)</div>
                             <div class="timeline-item" id="t-step4">Final Deployment & SSL Handshake</div>
+                        </div>
+
+                        <!-- New Feature: Client Milestone Feedback / Rating Widget -->
+                        <div style="margin-top: 15px; border-top: 1px solid var(--border); padding-top: 12px;">
+                            <p style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 6px;">Submit Milestone Feedback / Rating:</p>
+                            <input type="text" id="clientFeedbackInput" class="auth-input" placeholder="Type comments or review..." style="margin-bottom: 8px;">
+                            <button class="btn-action" style="margin-top:0; padding:10px; font-size:0.8rem;" onclick="submitClientFeedback()">Post Feedback</button>
                         </div>
                     </div>
 
@@ -378,7 +394,7 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- Interactive AI Chatbot Assistant -->
+    <!-- Interactive Live Firestore-Synced Chatbot Assistant -->
     <div class="support-float" onclick="toggleChatPopup()" title="AI Chatbot Assistant">
         <i class="fas fa-robot"></i>
     </div>
@@ -423,7 +439,7 @@
                 <button class="btn-action" style="margin-top:0; padding:10px;" onclick="sendBroadcastNotice()">Send Global Broadcast</button>
             </div>
 
-            <p style="font-size: 0.75rem; opacity: 0.6; margin-bottom: 10px;">Registered Clients List:</p>
+            <p style="font-size: 0.75rem; opacity: 0.6; margin-bottom: 10px;">Registered Clients List & Client Feedbacks:</p>
             <div id="adminUserListContainer">
                 <p style="text-align: center; opacity: 0.5; font-size: 0.8rem;">Loading database records...</p>
             </div>
@@ -442,6 +458,29 @@
     <script>
         AOS.init({ duration: 800, once: true });
         
+        // Load Saved Theme Preference on Boot
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('prime_theme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                const icon = document.getElementById('theme-icon');
+                if(icon) icon.className = 'fas fa-sun';
+            }
+            initLiveChatSync();
+        });
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'prime-toast';
+            toast.innerText = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
         function navTo(paneId, btn) {
             document.querySelectorAll('.view-pane').forEach(p => p.classList.remove('active'));
             document.getElementById('pane-' + paneId).classList.add('active');
@@ -452,11 +491,17 @@
 
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('prime_theme', isLight ? 'light' : 'dark');
+            const icon = document.getElementById('theme-icon');
+            if(icon) icon.className = isLight ? 'fas fa-sun' : 'fas fa-adjust';
+            showToast(isLight ? "Switched to Light Mode" : "Switched to Dark Mode");
         }
 
         function setThemeAccent(primaryColor, secondaryColor) {
             document.documentElement.style.setProperty('--primary', primaryColor);
             document.documentElement.style.setProperty('--secondary', secondaryColor);
+            showToast("Accent Theme Updated!");
         }
 
         function filterWorks(category, btn) {
@@ -467,10 +512,9 @@
             });
         }
 
-        // FAQ Toggle Logic
+        // FAQ Toggle Logic with Fixed Selector
         function toggleFaq(element) {
             const answer = element.nextElementSibling;
-            const icon = element.querySelector('fa-chevron-down');
             if (answer.style.display === 'block') {
                 answer.style.display = 'none';
             } else {
@@ -519,6 +563,7 @@
             
             doc.text("Thank you for choosing Prime Solutions!", 20, 130);
             doc.save("Prime_Solutions_Quote.pdf");
+            showToast("PDF Quote Downloaded Successfully!");
         }
 
         function toggleChatPopup() {
@@ -530,23 +575,61 @@
             if(e.key === 'Enter') sendChatMessage();
         }
 
-        function sendChatMessage() {
+        // Firestore Synced Live Chat
+        async function sendChatMessage() {
             const input = document.getElementById('chatInput');
             const txt = input.value.trim();
             if(txt !== '') {
+                try {
+                    await window.addDoc(window.collection(window.db, "agency_chats"), {
+                        message: txt,
+                        sender: window.auth.currentUser ? window.auth.currentUser.email : 'Anonymous Visitor',
+                        timestamp: window.serverTimestamp()
+                    });
+                    input.value = '';
+                } catch(e) {
+                    console.error("Error sending chat", e);
+                    showToast("Failed to send message.");
+                }
+            }
+        }
+
+        function initLiveChatSync() {
+            if(!window.db) return;
+            const q = window.query(window.collection(window.db, "agency_chats"), window.orderBy("timestamp", "asc"));
+            window.onSnapshot(q, (snapshot) => {
                 const body = document.getElementById('chatBody');
-                body.innerHTML += `<p style="text-align:right; color:var(--primary); background:rgba(0,242,254,0.1); padding:6px 10px; border-radius:10px;">You: ${txt}</p>`;
-                input.value = '';
-                
-                setTimeout(() => {
-                    let reply = "That's a wonderful question sweetie! You can join our official WhatsApp group or check our estimator tab.";
-                    const lower = txt.toLowerCase();
-                    if(lower.includes('price') || lower.includes('cost')) reply = "Our web architecture projects start around $2,500 depending on scope.";
-                    if(lower.includes('nazim') || lower.includes('owner')) reply = "Muhammad Nazim is the founder and lead developer leading Prime Solutions.";
-                    if(lower.includes('whatsapp') || lower.includes('group')) reply = "You can join our official WhatsApp group using the green floating button on the screen!";
-                    body.innerHTML += `<p style="opacity:0.9; background:rgba(255,255,255,0.05); padding:6px 10px; border-radius:10px; font-size:0.75px;">AI: ${reply}</p>`;
-                    body.scrollTop = body.scrollHeight;
-                }, 600);
+                let html = '<p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello sweetie! 👋 I am Prime AI. Ask me about pricing, services, or joining our WhatsApp group!</p>';
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    html += `<p style="opacity:0.9; background:rgba(0,242,254,0.1); padding:6px 10px; border-radius:10px; font-size:0.75rem;"><strong>${data.sender}:</strong> ${data.message}</p>`;
+                });
+                body.innerHTML = html;
+                body.scrollTop = body.scrollHeight;
+            });
+        }
+
+        // Client Milestone Feedback Submission
+        async function submitClientFeedback() {
+            const feedback = document.getElementById('clientFeedbackInput').value.trim();
+            if(feedback !== "") {
+                const user = window.auth.currentUser;
+                if(!user) {
+                    showToast("Please sign in first!");
+                    return;
+                }
+                try {
+                    await window.setDoc(window.doc(window.db, "agency_users", user.uid), {
+                        lastFeedback: feedback,
+                        feedbackTime: window.serverTimestamp()
+                    }, { merge: true });
+                    showToast("Feedback submitted successfully to headquarters!");
+                    document.getElementById('clientFeedbackInput').value = "";
+                } catch(e) {
+                    showToast("Error submitting feedback.");
+                }
+            } else {
+                showToast("Please enter feedback text.");
             }
         }
 
@@ -571,7 +654,7 @@
                 document.getElementById('admin-panel-modal').style.display = 'block';
                 loadAdminUserRecords();
             } else {
-                alert('Invalid Key!');
+                showToast('Invalid Access Key!');
             }
         }
         
@@ -601,8 +684,8 @@
             try {
                 const res = await window.createUserWithEmailAndPassword(window.auth, email, pass);
                 await saveUserToFirestore(res.user);
-                alert("Account created and registered successfully!");
-            } catch(err) { alert(err.message); }
+                showToast("Account created and registered successfully!");
+            } catch(err) { showToast(err.message); }
         }
 
         async function handleEmailLogin() {
@@ -611,8 +694,8 @@
             try {
                 const res = await window.signInWithEmailAndPassword(window.auth, email, pass);
                 await saveUserToFirestore(res.user);
-                alert("Successfully logged in!");
-            } catch(err) { alert(err.message); }
+                showToast("Successfully logged in!");
+            } catch(err) { showToast(err.message); }
         }
 
         async function handleGoogleLogin() {
@@ -620,13 +703,13 @@
             try {
                 const res = await window.signInWithPopup(window.auth, provider);
                 await saveUserToFirestore(res.user);
-                alert("Google Authentication successful!");
-            } catch(err) { alert(err.message); }
+                showToast("Google Authentication successful!");
+            } catch(err) { showToast(err.message); }
         }
 
         async function handleLogout() {
             await window.signOut(window.auth);
-            alert("Signed out successfully.");
+            showToast("Signed out successfully.");
         }
 
         window.onAuthStateChanged(window.auth, (user) => {
@@ -651,7 +734,7 @@
                     count++;
                     const data = doc.data();
                     html += `<div class="user-row-admin">
-                        <div><strong>Email:</strong> ${data.email || 'N/A'} <br><span style="opacity:0.5;">Provider: ${data.provider}</span></div>
+                        <div><strong>Email:</strong> ${data.email || 'N/A'} <br><span style="opacity:0.5;">Provider: ${data.provider}</span> ${data.lastFeedback ? '<br><strong style="color:var(--primary);">Feedback: ' + data.lastFeedback + '</strong>' : ''}</div>
                         <div><i class="fas fa-check-circle" style="color:var(--primary);"></i> Active</div>
                     </div>`;
                 });
@@ -665,10 +748,10 @@
         function sendBroadcastNotice() {
             const msg = document.getElementById('broadcastMsgInput').value.trim();
             if(msg !== "") {
-                alert("Broadcast notification successfully dispatched to all active connected clients!");
+                showToast("Broadcast notification successfully dispatched to all active connected clients!");
                 document.getElementById('broadcastMsgInput').value = "";
             } else {
-                alert("Please enter a valid message text.");
+                showToast("Please enter a valid message text.");
             }
         }
     </script>
