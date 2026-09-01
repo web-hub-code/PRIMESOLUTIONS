@@ -17,14 +17,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- jsPDF for Automated PDF Invoice Generator -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
-    <!-- Firebase SDKs Integration (Updated to v11 stable) -->
+    <!-- Firebase SDKs Integration (v11 stable) -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-      import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-      import { getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc, serverTimestamp, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+      import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+      import { getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
       const firebaseConfig = {
         apiKey: "AIzaSyCMG6KG_oD8cjEk4YpbxXik-C5q8K5MDHk",
@@ -56,55 +55,31 @@
       window.serverTimestamp = serverTimestamp;
       window.query = query;
       window.orderBy = orderBy;
-      window.onSnapshot = onSnapshot;
     </script>
 
-    <!-- Vapi AI Web SDK Integration -->
+    <!-- Vapi AI Text-Assistant Integration via Fetch API -->
     <script>
-      var vapiInstance = null;
-      window.addEventListener('DOMContentLoaded', () => {
-        const vapiScript = document.createElement('script');
-        vapiScript.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
-        vapiScript.defer = true;
-        vapiScript.async = true;
-        vapiScript.onload = () => {
-          if (window.vapiSDK) {
-            vapiInstance = window.vapiSDK.run({
-              apiKey: "B1ec9c9e-09f9-4228-b908-f94e5dbc12e6",
-              assistant: "156e6ed6-dbea-47ea-8330-3749879d06e2",
-              config: {
-                position: "bottom-right",
-                offset: "40px",
-                width: "300px",
-                height: "400px",
-                title: "Prime Voice AI",
-                subtitle: "Talk to our Voice Agent",
-                color: "#00f2fe"
-              }
-            });
-
-            // Listen to Vapi messages / speech to sync with live chat if available
-            if(vapiInstance && typeof vapiInstance.on === 'function') {
-                vapiInstance.on('message', (message) => {
-                    if (message.type === 'transcript' && message.transcriptType === 'final' && message.role === 'assistant') {
-                        saveVapiAIResponseToChat(message.transcript);
-                    }
-                });
-            }
-          }
-        };
-        document.head.appendChild(vapiScript);
-      });
-
-      async function saveVapiAIResponseToChat(aiText) {
-          if(window.db && window.addExpr) return; // prevent duplicate
+      async function askVapiAIAssistant(userMessage) {
           try {
-              await window.addDoc(window.collection(window.db, "agency_chats"), {
-                  message: aiText,
-                  sender: '🤖 Vapi AI Assistant',
-                  timestamp: window.serverTimestamp()
+              const response = await fetch("https://api.vapi.ai/call", {
+                  method: "POST",
+                  headers: {
+                      "Authorization": "Bearer B1ec9c9e-09f9-4228-b908-f94e5dbc12e6",
+                      "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({
+                      assistantId: "156e6ed6-dbea-47ea-8330-3749879d06e2",
+                      input: userMessage
+                  })
               });
-          } catch(e) { console.error("Vapi Chat Sync Error", e); }
+              if(response.ok) {
+                  const data = await response.json();
+                  return data.output || "Thank you for your query. Prime Solutions team will assist you shortly.";
+              }
+          } catch(e) {
+              console.error("Vapi text sync fallback", e);
+          }
+          return "Hello! I am your Prime Solutions AI Assistant. How can Muhammad Nazim's agency help you today?";
       }
     </script>
 
@@ -123,13 +98,6 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; scroll-behavior: smooth; }
         body { background: var(--bg); color: var(--text-color); overflow-x: hidden; line-height: 1.6; transition: background 0.3s, color 0.3s; }
-
-        /* Fix Vapi Widget Container Rendering Issue */
-        iframe[src*="vapi"], div[id*="vapi"] {
-            max-width: 60px !important;
-            max-height: 60px !important;
-            border-radius: 50% !important;
-        }
 
         .agency-aura { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 50%, rgba(0, 31, 36, 0.2) 0%, var(--bg) 100%); }
         .glow { position: absolute; width: 400px; height: 400px; background: var(--primary); filter: blur(180px); opacity: 0.1; border-radius: 50%; animation: move 20s infinite alternate; }
@@ -178,16 +146,6 @@
         .contact-info { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 20px; border: 1px solid var(--border); }
         .contact-info i { color: var(--primary); font-size: 1.2rem; }
 
-        .faq-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 15px; margin-bottom: 10px; overflow: hidden; }
-        .faq-question { padding: 14px 18px; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
-        .faq-answer { padding: 0 18px 14px 18px; font-size: 0.75rem; opacity: 0.7; display: none; }
-
-        .timeline { position: relative; padding-left: 20px; margin-top: 15px; border-left: 2px dashed var(--border); }
-        .timeline-item { position: relative; margin-bottom: 15px; font-size: 0.75rem; }
-        .timeline-item::before { content: ''; position: absolute; left: -25.5px; top: 3px; width: 9px; height: 9px; border-radius: 50%; background: var(--border); }
-        .timeline-item.completed::before { background: var(--primary); box-shadow: 0 0 10px var(--primary); }
-        .timeline-item.completed { color: var(--primary); font-weight: bold; }
-
         .whatsapp-float { position: fixed; bottom: 100px; left: 20px; background: var(--whatsapp); color: #fff; width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.6rem; box-shadow: 0 5px 20px rgba(37,211,102,0.4); cursor: pointer; z-index: 9998; transition: 0.3s; text-decoration: none; }
         .whatsapp-float:hover { transform: scale(1.1); }
 
@@ -196,7 +154,7 @@
         
         .chat-box-popup { display: none; position: fixed; bottom: 170px; right: 20px; width: 310px; background: var(--bg); border: 1px solid var(--primary); border-radius: 25px; z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden; }
         .chat-header { background: var(--card-bg); padding: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .chat-body { padding: 15px; font-size: 0.8rem; height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .chat-body { padding: 15px; font-size: 0.8rem; height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
         .chat-footer { padding: 10px; border-top: 1px solid var(--border); display: flex; gap: 5px; }
         .chat-footer input { width: 100%; padding: 8px 12px; border-radius: 15px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text-color); font-size: 0.75rem; outline: none; }
 
@@ -263,41 +221,8 @@
                 <span class="tag-badge">EXECUTIVE STATEMENT</span>
                 <h2 style="color:var(--primary); margin-bottom:15px; font-size: 1.5rem;">Leading the Digital Frontier</h2>
                 <p style="font-size: 0.85rem; opacity: 0.7; line-height: 1.8; margin-bottom: 15px;">
-                    Under the leadership of <strong>Muhammad Nazim</strong>, Prime Solutions has emerged as a premier <strong>Global IT enterprise agency specializing in high-performance web architecture, AI automation, and secure custom Fintech software development. We transform complex engineering concepts into scalable realities.
+                    Under the leadership of <strong>Muhammad Nazim</strong>[span_2](start_span)[span_2](end_span), Prime Solutions has emerged as a premier <strong>Global IT Enterprise Agency</strong> specializing in high-performance web architecture, AI automation, and secure custom Fintech software development. We transform complex engineering concepts into scalable realities[span_3](start_span)[span_3](end_span)[span_4](start_span)[span_4](end_span).
                 </p>
-                
-                <div class="timeline">
-                    <div class="timeline-item completed">
-                        <strong>Global IT Enterprise Agency</strong><br>
-                        Expanding cutting-edge software solutions worldwide.
-                    </div>
-                    <div class="timeline-item completed">
-                        <strong>AI & Cloud Integration</strong><br>
-                        Implementing Vapi voice agents and Firebase cloud pipelines.
-                    </div>
-                    <div class="timeline-item">
-                        <strong>Next-Gen Fintech Security</strong><br>
-                        Building secure decentralized payment and invoice networks.
-                    </div>
-                </div>
-            </div>
-
-            <div class="feature-card" data-aos="fade-up">
-                <span class="tag-badge">CORE CAPABILITIES</span>
-                <div style="display: grid; gap: 12px; margin-top: 15px;">
-                    <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 15px; border-radius: 18px; font-size: 0.8rem;">
-                        <i class="fas fa-code" style="color:var(--primary); margin-right: 8px;"></i> <strong>Custom Web Architecture</strong>
-                        <p style="opacity: 0.6; font-size: 0.75rem; margin-top: 5px;">Progressive web apps, high-speed frontend optimization, and bespoke UI/UX designs.</p>
-                    </div>
-                    <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 15px; border-radius: 18px; font-size: 0.8rem;">
-                        <i class="fas fa-brain" style="color:var(--primary); margin-right: 8px;"></i> <strong>AI & Voice Automation</strong>
-                        <p style="opacity: 0.6; font-size: 0.75rem; margin-top: 5px;">Integrating interactive AI voice assistants and automated client communication channels.</p>
-                    </div>
-                    <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 15px; border-radius: 18px; font-size: 0.8rem;">
-                        <i class="fas fa-shield-alt" style="color:var(--primary); margin-right: 8px;"></i> <strong>Secure Fintech Systems</strong>
-                        <p style="opacity: 0.6; font-size: 0.75rem; margin-top: 5px;">Encrypted financial data management, automated PDF invoicing, and real-time ledger tracking.</p>
-                    </div>
-                </div>
             </div>
         </section>
 
@@ -312,15 +237,8 @@
                 <img src="Screenshot_2026-04-12-10-02-54-39.png" class="card-img" alt="Prime Solutions Redesign">
                 <span class="tag-badge">WEB ARCHITECTURE</span>
                 <h3 style="margin-bottom: 8px; font-size: 1.2rem;">Prime Solutions Mobile-Friendly Redesign</h3>
-                <p style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 15px;">Advanced enterprise portal built with responsive fluid grids, dynamic color schemes, and seamless Firebase authentication backend.</p>
+                <p style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 15px;">Advanced enterprise portal built with responsive fluid grids, dynamic color schemes, and seamless Firebase authentication backend[span_5](start_span)[span_5](end_span)[span_6](start_span)[span_6](end_span).</p>
                 <a href="https://web-hub-code.github.io/PRIMESOLUTIONS/" target="_blank" class="btn-action">Launch Live Preview <i class="fas fa-external-link-alt"></i></a>
-            </div>
-
-            <div class="feature-card work-item" data-category="web">
-                <span class="tag-badge">COMMUNITY HUB</span>
-                <h3 style="margin-bottom: 8px; font-size: 1.2rem;">GB Tourist Information Hub</h3>
-                <p style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 15px;">Comprehensive portal mapping out tourist destinations, cultural heritage, and resources across Gilgit-Baltistan.</p>
-                <a href="https://youtube.com/@crazykhantv" target="_blank" class="btn-action">Explore Media Content <i class="fab fa-youtube"></i></a>
             </div>
         </section>
 
@@ -331,124 +249,123 @@
                 <div id="auth-form-container">
                     <input type="email" id="auth-email" class="auth-input" placeholder="Enterprise Email Address">
                     <input type="password" id="auth-password" class="auth-input" placeholder="Secure Password">
-                    <button class="btn-action" onclick="handleEmailAuth()" style="margin-bottom: 10px;">Authenticate Session</button>
-                    <button class="control-btn" style="width: 100%; justify-content: center; padding: 12px; border-radius: 15px;" onclick="handleGoogleAuth()"><i class="fab fa-google" style="margin-right:8px;"></i> Sign in with Google</button>
+                    <button class="btn-action"                     <div style="display:flex; gap:10px; margin-top:10px;">
+                        <button class="btn-action" style="margin-top:0;" onclick="handleLogin()">Sign In</button>
+                        <button class="btn-action" style="margin-top:0; background:transparent; border:1px solid var(--primary); color:var(--text-color);" onclick="handleSignup()">Register</button>
+                    </div>
+                    <button class="btn-action" style="background:#db4437; color:#fff; margin-top:10px;" onclick="handleGoogleLogin()"><i class="fab fa-google"></i> Google Authentication</button>
                 </div>
-                <div id="auth-user-info" style="display: none; text-align: center;">
-                    <p id="user-display-email" style="font-size: 0.85rem; margin-bottom: 15px; color: var(--primary);"></p>
-                    <button class="btn-action" onclick="handleSignOut()" style="background: rgba(255,0,0,0.2); color: #ff5252; border: 1px solid rgba(255,0,0,0.4);">Terminate Secure Session</button>
+                <div id="auth-user-view" style="display:none; text-align:center;">
+                    <div id="user-display-email" style="font-weight:600; margin-bottom:15px; font-size:0.9rem;"></div>
+                    <button class="btn-action" style="background:#ef4444; color:#fff;" onclick="handleLogout()">Sign Out</button>
                 </div>
             </div>
         </section>
 
         <section id="pane-calculator" class="view-pane">
             <div class="feature-card">
-                <span class="tag-badge">COST ESTIMATOR</span>
-                <h2 style="color:var(--primary); margin-bottom:15px; font-size: 1.3rem;">Project Cost Calculator</h2>
-                
-                <label style="font-size: 0.75rem; opacity: 0.7; display: block; margin-bottom: 5px;">Select Service Type:</label>
+                <span class="tag-badge">PROJECT ESTIMATOR</span>
+                <h2 style="color:var(--primary); margin-bottom:15px; font-size: 1.3rem;">Calculate Investment</h2>
+                <label style="font-size:0.75rem; opacity:0.7; display:block; margin-bottom:5px;">Select Service Complexity</label>
                 <select id="calc-service" class="auth-input" onchange="calculateEstimate()">
-                    <option value="1200">Custom Web App Development ($1,200)</option>
-                    <option value="2500">Secure Fintech System ($2,500)</option>
-                    <option value="800">AI Voice Assistant Integration ($800)</option>
-                    <option value="500">Mobile-Friendly UI/UX Redesign ($500)</option>
+                    <option value="500">Standard Web Application ($500)</option>
+                    <option value="1200">AI Automation Integration ($1,200)</option>
+                    <option value="2500">Enterprise Fintech Architecture ($2,500)</option>
                 </select>
-
-                <label style="font-size: 0.75rem; opacity: 0.7; display: block; margin-bottom: 5px; margin-top: 10px;">Complexity Level:</label>
-                <select id="calc-tier" class="auth-input" onchange="calculateEstimate()">
-                    <option value="1">Standard Enterprise Package (1.0x)</option>
-                    <option value="1.5">Advanced Scalable Architecture (1.5x)</option>
-                    <option value="2">High-Security Global Deployment (2.0x)</option>
+                <label style="font-size:0.75rem; opacity:0.7; display:block; margin-bottom:5px; margin-top:10px;">Timeline Urgency</label>
+                <select id="calc-timeline" class="auth-input" onchange="calculateEstimate()">
+                    <option value="1">Standard Delivery</option>
+                    <option value="1.3">Express Priority (+30%)</option>
                 </select>
-
-                <div style="background: rgba(0,242,254,0.05); border: 1px solid var(--primary); padding: 20px; border-radius: 20px; text-align: center; margin-top: 20px;">
-                    <span style="font-size: 0.75rem; opacity: 0.7; display: block;">Estimated Investment</span>
-                    <h3 id="estimated-total" style="font-size: 2rem; color: var(--primary); font-weight: 800; margin-top: 5px;">$1,200</h3>
+                <div style="background:rgba(0,242,254,0.05); border:1px solid var(--primary); padding:15px; border-radius:15px; text-align:center; margin-top:15px;">
+                    <div style="font-size:0.75rem; opacity:0.7;">Estimated Investment</div>
+                    <div id="calc-total" style="font-size:1.8rem; font-weight:800; color:var(--primary);">$500</div>
                 </div>
             </div>
         </section>
 
         <section id="pane-contact" class="view-pane">
             <div class="feature-card">
-                <span class="tag-badge">GET IN TOUCH</span>
-                <h2 style="color:var(--primary); margin-bottom:15px; font-size: 1.3rem;">Connect with the Agency</h2>
+                <span class="tag-badge">DIRECT LINE</span>
+                <h2 style="color:var(--primary); margin-bottom:15px; font-size: 1.3rem;">Get in Touch</h2>
+                
+                <div class="contact-info">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <div style="font-size:0.7rem; opacity:0.6;">Direct Email</div>
+                        <div style="font-size:0.85rem; font-weight:600;">muhammadnazim740@gmail.com</div>
+                    </div>
+                </div>
                 
                 <div class="contact-info">
                     <i class="fas fa-map-marker-alt"></i>
                     <div>
-                        <strong style="font-size: 0.8rem; display: block;">Headquarters</strong>
-                        <span style="font-size: 0.75rem; opacity: 0.7;">Astore, Gilgit-Baltistan, Pakistan</span>
+                        <div style="font-size:0.7rem; opacity:0.6;">Agency Headquarters</div>
+                        <div style="font-size:0.85rem; font-weight:600;">Astore, Gilgit-Baltistan, Pakistan</div>
                     </div>
                 </div>
 
-                <div class="contact-info">
-                    <i class="fas fa-envelope"></i>
-                    <div>
-                        <strong style="font-size: 0.8rem; display: block;">Direct Inquiry</strong>
-                        <span style="font-size: 0.75rem; opacity: 0.7;">support@primesolutions.pk</span>
-                    </div>
-                </div>
-
-                <div class="contact-info">
-                    <i class="fab fa-whatsapp"></i>
-                    <div>
-                        <strong style="font-size: 0.8rem; display: block;">WhatsApp Community</strong>
-                        <a href="https://chat.whatsapp.com/D6QqMvZFBqLE4Hu4MsYEL5?s=cl&p=a&ilr=1" target="_blank" style="font-size: 0.75rem; color: var(--whatsapp); text-decoration: none;">Join Official Channel</a>
-                    </div>
-                </div>
-
-                <a href="https://wa.me/923000000000" target="_blank" class="btn-action" style="background: var(--whatsapp); color: #fff;">Open WhatsApp Chat <i class="fab fa-whatsapp"></i></a>
+                <input type="text" id="msg-name" class="auth-input" placeholder="Your Name">
+                <input type="email" id="msg-email" class="auth-input" placeholder="Your Email">
+                <textarea id="msg-text" class="auth-input" placeholder="Project Details or Inquiry..." style="height:100px; resize:none;"></textarea>
+                <button class="btn-action" onclick="sendClientMessage()">Send Secure Inquiry <i class="fas fa-paper-plane"></i></button>
             </div>
         </section>
 
     </div>
 
-    <a href="https://chat.whatsapp.com/D6QqMvZFBqLE4Hu4MsYEL5?s=cl&p=a&ilr=1" target="_blank" class="whatsapp-float" aria-label="WhatsApp Community"><i class="fab fa-whatsapp"></i></a>
-    <div class="support-float" onclick="toggleChatPopup()" title="Live Agency Chat"><i class="fas fa-headset"></i></div>
+    <a href="https://chat.whatsapp.com/D6QqMvZFBqLE4Hu4MsYEL5?s=cl&p=a&ilr=1" target="_blank" class="whatsapp-float" aria-label="Official WhatsApp Community">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <div class="support-float" onclick="toggleChatPopup()" aria-label="Open AI Assistant">
+        <i class="fas fa-robot"></i>
+    </div>
 
     <div class="chat-box-popup" id="chatPopup">
         <div class="chat-header">
-            <strong style="font-size: 0.8rem;">Prime Support AI</strong>
-            <i class="fas fa-times" style="cursor:pointer;" onclick="toggleChatPopup()"></i>
+            <span style="font-weight:700; font-size:0.8rem; color:var(--primary);">Prime AI Assistant</span>
+            <i class="fas fa-times" style="cursor:pointer; opacity:0.7;" onclick="toggleChatPopup()"></i>
         </div>
-        <div class="chat-body" id="chatMessages">
-            <div style="background: rgba(255,255,255,0.05); padding: 8px 12px; border-radius: 12px; align-self: flex-start; max-width: 85%;">
-                Hello! How can Prime Solutions assist your enterprise today?
+        <div class="chat-body" id="chatBody">
+            <div style="background:var(--card-bg); padding:8px 12px; border-radius:12px; border:1px solid var(--border); max-width:85%;">
+                Hello! I am your Prime Solutions AI Assistant. How can Muhammad Nazim's agency help you today?
             </div>
         </div>
         <div class="chat-footer">
-            <input type="text" id="chatInputMessage" placeholder="Type a message..." onkeypress="handleChatEnter(event)">
-            <button class="control-btn" onclick="sendChatMessage()" style="padding: 8px 12px;"><i class="fas fa-paper-plane"></i></button>
+            <input type="text" id="chatInput" placeholder="Ask anything..." onkeypress="handleChatEnter(event)">
+            <button style="background:var(--primary); border:none; width:32px; height:32px; border-radius:50%; cursor:pointer; color:#000;" onclick="sendChatMessage()"><i class="fas fa-paper-plane" style="font-size:0.7rem;"></i></button>
         </div>
     </div>
 
     <div class="bottom-nav">
-        <i class="fas fa-compass nav-icon active" onclick="navTo('home', null, this)"></i>
-        <i class="fas fa-layer-group nav-icon" onclick="navTo('works', null, this)"></i>
-        <i class="fas fa-user-shield nav-icon" onclick="navTo('auth', null, this)"></i>
-        <i class="fas fa-calculator nav-icon" onclick="navTo('calculator', null, this)"></i>
-        <i class="fas fa-paper-plane nav-icon" onclick="navTo('contact', null, this)"></i>
+        <i class="fas fa-home nav-icon active" onclick="navTo('home', this)"></i>
+        <i class="fas fa-layer-group nav-icon" onclick="navTo('works', this)"></i>
+        <i class="fas fa-user-shield nav-icon" onclick="navTo('auth', this)"></i>
+        <i class="fas fa-calculator nav-icon" onclick="navTo('calculator', this)"></i>
+        <i class="fas fa-envelope nav-icon" onclick="navTo('contact', this)"></i>
     </div>
 
-    <!-- Hidden Eagle Eye Code Modal for Admin -->
     <div id="eagle-eye-modal">
         <div class="eagle-box">
-            <h3 style="margin-bottom: 10px; color: var(--primary);">Admin Authentication</h3>
-            <p style="font-size: 0.75rem; opacity: 0.7; margin-bottom: 15px;">Enter executive passphrase to unlock admin panels.</p>
-            <input type="password" id="adminPassInput" placeholder="••••••••">
-            <button class="btn-action" onclick="verifyAdminPass()">Authorize Access</button>
-            <button class="control-btn" style="width:100%; justify-content:center; margin-top:10px;" onclick="closeEagleModal()">Cancel</button>
+            <h3 style="color:var(--primary); margin-bottom:10px;">Executive Authentication</h3>
+            <p style="font-size:0.75rem; opacity:0.7; margin-bottom:15px;">Enter administrative access pin to unlock agency backend telemetry.</p>
+            <input type="password" id="eaglePinInput" placeholder="••••" maxlength="6">
+            <div style="display:flex; gap:10px;">
+                <button class="btn-action" style="background:transparent; border:1px solid var(--border); color:var(--text-color);" onclick="closeEagleModal()">Cancel</button>
+                <button class="btn-action" onclick="verifyEaglePin()">Authorize</button>
+            </div>
         </div>
     </div>
 
     <div id="admin-panel-modal">
-        <div style="max-width: 600px; margin: 30px auto; background: var(--bg); border: 1px solid var(--primary); border-radius: 25px; padding: 25px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="color: var(--primary); font-size: 1.3rem;">Executive Command Center</h2>
-                <i class="fas fa-times" style="cursor:pointer; font-size: 1.2rem;" onclick="closeAdminPanel()"></i>
+        <div style="max-width:550px; margin:40px auto; background:var(--card-bg); border:1px solid var(--primary); border-radius:30px; padding:25px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h2 style="color:var(--primary); font-size:1.3rem;">Agency Master Telemetry</h2>
+                <i class="fas fa-times" style="cursor:pointer; font-size:1.2rem;" onclick="closeAdminModal()"></i>
             </div>
-            <div id="admin-data-list">
-                <p style="font-size: 0.8rem; opacity: 0.7;">Loading live telemetry and user records...</p>
+            <div id="admin-data-stream" style="max-height:350px; overflow-y:auto; display:flex; flex-direction:column; gap:8px;">
+                <div style="font-size:0.75rem; opacity:0.5; text-align:center; padding:20px;">Synchronizing Firestore records...</div>
             </div>
         </div>
     </div>
@@ -466,34 +383,30 @@
             setTimeout(() => { toast.remove(); }, 3500);
         }
 
-        function setThemeAccent(primary, secondary) {
-            document.documentElement.style.setProperty('--primary', primary);
-            document.documentElement.style.setProperty('--secondary', secondary);
-            showToast("Theme accent updated successfully!");
+        function setThemeAccent(primaryColor, secondaryColor) {
+            document.documentElement.style.setProperty('--primary', primaryColor);
+            document.documentElement.style.setProperty('--secondary', secondaryColor);
+            showToast(`Theme accent updated successfully.`);
         }
 
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
             const icon = document.getElementById('theme-icon');
             if(document.body.classList.contains('light-mode')) {
-                icon.className = "fas fa-sun";
+                icon.className = 'fas fa-sun';
             } else {
-                icon.className = "fas fa-adjust";
+                icon.className = 'fas fa-adjust';
             }
         }
 
-        function navTo(paneId, tabElement, iconElement) {
+        function navTo(paneId, element) {
             document.querySelectorAll('.view-pane').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-trigger').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-icon').forEach(n => n.classList.remove('active'));
+
             document.getElementById('pane-' + paneId).classList.add('active');
-
-            if(tabElement) {
-                document.querySelectorAll('.tab-trigger').forEach(t => t.classList.remove('active'));
-                tabElement.classList.add('active');
-            }
-
-            if(iconElement) {
-                document.querySelectorAll('.nav-icon').forEach(i => i.classList.remove('active'));
-                iconElement.classList.add('active');
+            if(element) {
+                element.classList.add('active');
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -501,8 +414,8 @@
         function filterWorks(category, btn) {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
-            document.querySelectorAll('.work-item').forEach(item => {
+            const items = document.querySelectorAll('.work-item');
+            items.forEach(item => {
                 if(category === 'all' || item.getAttribute('data-category') === category) {
                     item.style.display = 'block';
                 } else {
@@ -512,10 +425,100 @@
         }
 
         function calculateEstimate() {
-            const service = parseFloat(document.getElementById('calc-service').value);
-            const tier = parseFloat(document.getElementById('calc-tier').value);
-            const total = Math.round(service * tier);
-            document.getElementById('estimated-total').innerText = "$" + total.toLocaleString();
+            const serviceVal = parseFloat(document.getElementById('calc-service').value);
+            const timelineVal = parseFloat(document.getElementById('calc-timeline').value);
+            const total = Math.round(serviceVal * timelineVal);
+            document.getElementById('calc-total').innerText = '$' + total.toLocaleString();
+        }
+
+        async function handleLogin() {
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            if(!email || !password) {
+                showToast('Please enter both email and password.');
+                return;
+            }
+            try {
+                await window.signInWithEmailAndPassword(window.auth, email, password);
+                showToast('Successfully signed in.');
+                checkAuthState();
+            } catch(e) {
+                showToast('Authentication error: ' + e.message);
+            }
+        }
+
+        async function handleSignup() {
+            const email = document.getElementById('auth-email').value;
+            const password = document.getElementById('auth-password').value;
+            if(!email || !password) {
+                showToast('Please enter both email and password.');
+                return;
+            }
+            try {
+                await window.createUserWithEmailAndPassword(window.auth, email, password);
+                showToast('Account created successfully.');
+                checkAuthState();
+            } catch(e) {
+                showToast('Registration error: ' + e.message);
+            }
+        }
+
+        async function handleGoogleLogin() {
+            try {
+                const provider = new window.GoogleAuthProvider();
+                await window.signInWithPopup(window.auth, provider);
+                showToast('Google authentication successful.');
+                checkAuthState();
+            } catch(e) {
+                showToast('Google auth error: ' + e.message);
+            }
+        }
+
+        async function handleLogout() {
+            try {
+                await window.signOut(window.auth);
+                showToast('Signed out successfully.');
+                checkAuthState();
+            } catch(e) {
+                showToast('Sign out error.');
+            }
+        }
+
+        function checkAuthState() {
+            setTimeout(() => {
+                if(window.auth && window.auth.currentUser) {
+                    document.getElementById('auth-form-container').style.display = 'none';
+                    document.getElementById('auth-user-view').style.display = 'block';
+                    document.getElementById('user-display-email').innerText = 'Authenticated User: ' + window.auth.currentUser.email;
+                } else {
+                    document.getElementById('auth-form-container').style.display = 'block';
+                    document.getElementById('auth-user-view').style.display = 'none';
+                }
+            }, 500);
+        }
+
+        async function sendClientMessage() {
+            const name = document.getElementById('msg-name').value;
+            const email = document.getElementById('msg-email').value;
+            const text = document.getElementById('msg-text').value;
+            if(!name || !email || !text) {
+                showToast('Please fill out all contact fields.');
+                return;
+            }
+            try {
+                await window.addDoc(window.collection(window.db, "client_inquiries"), {
+                    name: name,
+                    email: email,
+                    message: text,
+                    timestamp: window.serverTimestamp()
+                });
+                showToast('Secure inquiry dispatched successfully.');
+                document.getElementById('msg-name').value = '';
+                document.getElementById('msg-email').value = '';
+                document.getElementById('msg-text').value = '';
+            } catch(e) {
+                showToast('Transmission error. Stored locally.');
+            }
         }
 
         function toggleChatPopup() {
@@ -528,139 +531,73 @@
         }
 
         async function sendChatMessage() {
-            const input = document.getElementById('chatInputMessage');
+            const input = document.getElementById('chatInput');
             const msg = input.value.trim();
             if(!msg) return;
 
-            const body = document.getElementById('chatMessages');
-            const userBubble = document.createElement('div');
-            userBubble.style.cssText = "background:var(--primary); color:#000; padding:8px 12px; border-radius:12px; align-self:flex-end; max-width:85%; font-weight:600;";
-            userBubble.innerText = msg;
-            body.appendChild(userBubble);
+            const chatBody = document.getElementById('chatBody');
+            chatBody.innerHTML += `<div style="background:var(--primary); color:#000; padding:8px 12px; border-radius:12px; max-width:85%; align-self:flex-end; font-weight:600;">${msg}</div>`;
             input.value = '';
-            body.scrollTop = body.scrollHeight;
+            chatBody.scrollTop = chatBody.scrollHeight;
 
-            if(window.db && window.addDoc) {
-                try {
-                    await window.addDoc(window.collection(window.db, "agency_chats"), {
-                        message: msg,
-                        sender: 'Client User',
-                        timestamp: window.serverTimestamp()
-                    });
-                } catch(e) { console.error("Chat sync error", e); }
-            }
-
-            setTimeout(() => {
-                const aiBubble = document.createElement('div');
-                aiBubble.style.cssText = "background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; align-self:flex-start; max-width:85%;";
-                aiBubble.innerText = "Thank you for reaching out! Muhammad Nazim's automated support assistant has recorded your inquiry. We will get back to you shortly.";
-                body.appendChild(aiBubble);
-                body.scrollTop = body.scrollHeight;
-            }, 1000);
+            const responseText = await askVapiAIAssistant(msg);
+            chatBody.innerHTML += `<div style="background:var(--card-bg); padding:8px 12px; border-radius:12px; border:1px solid var(--border); max-width:85%; align-self:flex-start;">${responseText}</div>`;
+            chatBody.scrollTop = chatBody.scrollHeight;
         }
 
-        // Firebase Auth handlers
-        async function handleGoogleAuth() {
-            if(!window.auth) { showToast("Firebase loading..."); return; }
-            try {
-                const provider = new window.GoogleAuthProvider();
-                const result = await window.signInWithPopup(window.auth, provider);
-                updateAuthUI(result.user);
-                showToast("Authenticated successfully!");
-            } catch(e) { showToast("Authentication error: " + e.message); }
-        }
-
-        async function handleEmailAuth() {
-            const email = document.getElementById('auth-email').value;
-            const pass = document.getElementById('auth-password').value;
-            if(!email || !pass) { showToast("Please enter email and password."); return; }
-            try {
-                let res;
-                try {
-                    res = await window.signInWithEmailAndPassword(window.auth, email, pass);
-                } catch(err) {
-                    res = await window.createUserWithEmailAndPassword(window.auth, email, pass);
-                }
-                updateAuthUI(res.user);
-                showToast("Secure session established!");
-            } catch(e) { showToast("Auth error: " + e.message); }
-        }
-
-        async function handleSignOut() {
-            try {
-                await window.signOut(window.auth);
-                updateAuthUI(null);
-                showToast("Session terminated.");
-            } catch(e) { showToast("Sign out error"); }
-        }
-
-        function updateAuthUI(user) {
-            const form = document.getElementById('auth-form-container');
-            const info = document.getElementById('auth-user-info');
-            const emailDisp = document.getElementById('user-display-email');
-            if(user) {
-                form.style.display = 'none';
-                info.style.display = 'block';
-                emailDisp.innerText = "Active User: " + user.email;
-            } else {
-                form.style.display = 'block';
-                info.style.display = 'none';
-                emailDisp.innerText = "";
-            }
-        }
-
-        // Eagle Eye Secret Trigger on CEO PFP Click
-        let eagleClicks = 0;
+        let eagleClickCount = 0;
         document.getElementById('eagleLogo').addEventListener('click', () => {
-            eagleClicks++;
-            if(eagleClicks >= 5) {
-                eagleClicks = 0;
+            eagleClickCount++;
+            if(eagleClickCount >= 5) {
+                eagleClickCount = 0;
                 document.getElementById('eagle-eye-modal').style.display = 'flex';
             }
         });
 
         function closeEagleModal() {
             document.getElementById('eagle-eye-modal').style.display = 'none';
-            document.getElementById('adminPassInput').value = '';
+            document.getElementById('eaglePinInput').value = '';
         }
 
-        function verifyAdminPass() {
-            const pass = document.getElementById('adminPassInput').value;
-            if(pass === 'nazim073' || pass === 'admin123') {
+        function verifyEaglePin() {
+            const pin = document.getElementById('eaglePinInput').value;
+            if(pin === '0730' || pin === '7860') {
                 closeEagleModal();
-                openAdminPanel();
+                openAdminModal();
             } else {
-                showToast("Invalid executive passphrase.");
+                showToast('Invalid executive authorization pin.');
             }
         }
 
-        async function openAdminPanel() {
+        async function openAdminModal() {
             document.getElementById('admin-panel-modal').style.display = 'block';
-            const listContainer = document.getElementById('admin-data-list');
-            listContainer.innerHTML = '<p style="font-size:0.8rem; opacity:0.7;">Fetching real-time collection data...</p>';
-
-            if(window.db && window.collection) {
-                try {
-                    const q = window.query(window.collection(window.db, "agency_chats"), window.orderBy("timestamp", "desc"));
-                    const querySnapshot = await window.getDocs(q);
-                    let html = '<h4 style="color:var(--secondary); margin-bottom:10px; font-size:0.9rem;">Recent Live Chat & Telemetry Logs</h4>';
-                    querySnapshot.forEach((doc) => {
-                        const data = doc.data();
-                        html += `<div class="user-row-admin">
-                            <div><strong>${data.sender || 'User'}</strong>: ${data.message}</div>
-                            <span style="opacity:0.5; font-size:0.65rem;">Live Sync</span>
-                        </div>`;
-                    });
-                    listContainer.innerHTML = html;
-                } catch(e) {
-                    listContainer.innerHTML = `<p style="font-size:0.8rem; color:#ff5252;">Failed to fetch cloud records: ${e.message}</p>`;
+            const stream = document.getElementById('admin-data-stream');
+            stream.innerHTML = `<div style="font-size:0.75rem; opacity:0.5; text-align:center; padding:20px;">Fetching inquiries from Firestore...</div>`;
+            try {
+                const q = window.query(window.collection(window.db, "client_inquiries"), window.orderBy("timestamp", "desc"));
+                const querySnapshot = await window.getDocs(q);
+                stream.innerHTML = '';
+                if(querySnapshot.empty) {
+                    stream.innerHTML = `<div style="font-size:0.75rem; opacity:0.5; text-align:center; padding:20px;">No client inquiries logged yet.</div>`;
+                    return;
                 }
-            } else {
-                listContainer.innerHTML = '<p style="font-size:0.8rem; color:#ff5252;">Firebase DB not initialized.</p>';
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    stream.innerHTML += `
+                        <div class="user-row-admin">
+                            <div>
+                                <div style="font-weight:700; color:var(--primary);">${data.name || 'Anonymous'} (${data.email || 'No Email'})</div>
+                                <div style="opacity:0.8; margin-top:3px;">${data.message}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch(e) {
+                stream.innerHTML = `<div style="font-size:0.75rem; color:#ef4444; text-align:center; padding:20px;">Failed to retrieve telemetry stream.</div>`;
             }
         }
 
-        function closeAdminPanel() {
+        function closeAdminModal() {
             document.getElementById('admin-panel-modal').style.display = 'none';
         }
     </script>
