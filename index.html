@@ -59,6 +59,35 @@
       window.onSnapshot = onSnapshot;
     </script>
 
+    <!-- Vapi AI Web SDK Integration -->
+    <script>
+      var vapiInstance = null;
+      window.addEventListener('DOMContentLoaded', () => {
+        const vapiScript = document.createElement('script');
+        vapiScript.src = "https://cdn.jsdelivr.net/gh/VapiAI/html-script-tag@latest/dist/assets/index.js";
+        vapiScript.defer = true;
+        vapiScript.async = true;
+        vapiScript.onload = () => {
+          if (window.vapiSDK) {
+            vapiInstance = window.vapiSDK.run({
+              apiKey: "B1ec9c9e-09f9-4228-b908-f94e5dbc12e6", // Updated Public API Key
+              assistant: "156e6ed6-dbea-47ea-8330-3749879d06e2", // Updated Agent ID
+              config: {
+                position: "bottom-right",
+                offset: "40px",
+                width: "300px",
+                height: "400px",
+                title: "Prime Voice AI",
+                subtitle: "Talk to our Voice Agent",
+                color: "#00f2fe"
+              }
+            });
+          }
+        };
+        document.head.appendChild(vapiScript);
+      });
+    </script>
+
     <style>
         :root {
             --primary: #00f2fe; --secondary: #4facfe; --accent: #f093fb; --webhub: #6a1b9a;
@@ -289,7 +318,7 @@
                             <div class="timeline-item" id="t-step4">Final Deployment & SSL Handshake</div>
                         </div>
 
-                        <!-- New Feature: Client Milestone Feedback / Rating Widget -->
+                        <!-- Milestone Feedback / Rating Widget -->
                         <div style="margin-top: 15px; border-top: 1px solid var(--border); padding-top: 12px;">
                             <p style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 6px;">Submit Milestone Feedback / Rating:</p>
                             <input type="text" id="clientFeedbackInput" class="auth-input" placeholder="Type comments or review..." style="margin-bottom: 8px;">
@@ -394,18 +423,19 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- Interactive Live Firestore-Synced Chatbot Assistant -->
-    <div class="support-float" onclick="toggleChatPopup()" title="AI Chatbot Assistant">
+    <!-- Interactive Live Firestore-Synced Chatbot Assistant Button -->
+    <div class="support-float" onclick="toggleChatPopup()" title="Live Text Chat Assistant">
         <i class="fas fa-robot"></i>
     </div>
 
+    <!-- Text Chat Box Popup -->
     <div class="chat-box-popup" id="chatPopup">
         <div class="chat-header">
-            <span style="font-size: 0.8rem; font-weight: bold; color: var(--primary);"><i class="fas fa-robot"></i> Prime AI Assistant</span>
+            <span style="font-size: 0.8rem; font-weight: bold; color: var(--primary);"><i class="fas fa-robot"></i> Prime Live Chat</span>
             <i class="fas fa-times" style="cursor:pointer;" onclick="toggleChatPopup()"></i>
         </div>
         <div class="chat-body" id="chatBody">
-            <p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello sweetie! 👋 I am Prime AI. Ask me about pricing, services, or joining our WhatsApp group!</p>
+            <p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello! 👋 I am Prime AI. Ask me about pricing, services, or joining our WhatsApp group!</p>
         </div>
         <div class="chat-footer">
             <input type="text" id="chatInput" placeholder="Ask something..." onkeypress="handleChatEnter(event)">
@@ -512,7 +542,6 @@
             });
         }
 
-        // FAQ Toggle Logic with Fixed Selector
         function toggleFaq(element) {
             const answer = element.nextElementSibling;
             if (answer.style.display === 'block') {
@@ -575,7 +604,7 @@
             if(e.key === 'Enter') sendChatMessage();
         }
 
-        // Firestore Synced Live Chat
+        // Firestore Synced Live Text Chat
         async function sendChatMessage() {
             const input = document.getElementById('chatInput');
             const txt = input.value.trim();
@@ -599,7 +628,7 @@
             const q = window.query(window.collection(window.db, "agency_chats"), window.orderBy("timestamp", "asc"));
             window.onSnapshot(q, (snapshot) => {
                 const body = document.getElementById('chatBody');
-                let html = '<p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello sweetie! 👋 I am Prime AI. Ask me about pricing, services, or joining our WhatsApp group!</p>';
+                let html = '<p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello! 👋 I am Prime AI. Ask me about pricing, services, or joining our WhatsApp group!</p>';
                 snapshot.forEach((doc) => {
                     const data = doc.data();
                     html += `<p style="opacity:0.9; background:rgba(0,242,254,0.1); padding:6px 10px; border-radius:10px; font-size:0.75rem;"><strong>${data.sender}:</strong> ${data.message}</p>`;
