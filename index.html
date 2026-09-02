@@ -694,12 +694,35 @@
                 const senderUid = currentUser ? currentUser.uid : 'anonymous_visitor';
 
                 try {
+                    // 1. Save user message to Firestore
                     await window.addDoc(window.collection(window.db, "agency_chats"), {
                         message: txt,
                         sender: senderName,
                         uid: senderUid,
                         timestamp: window.serverTimestamp()
                     });
+
+                    // 2. Fetch past conversation history for context memory (last 5 messages)
+                    const q = window.query(window.collection(window.db, "agency_chats"), window.orderBy("timestamp", "desc"), window.limit(5));
+                    const querySnapshot = await window.getDocs(q);
+                    let chatHistory = [];
+                    querySnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        chatHistory.unshift({
+                            role: data.sender.includes("Prime AI") ? "assistant" : "user",
+                            content: data.message
+                        });
+                    });
+
+                    // 3. Detect and capture potential client leads automatically
+                    if (txt.toLowerCase().includes("project") || txt.toLowerCase().includes("quote") || txt.toLowerCase().includes("price") || txt.toLowerCase().includes("web") || txt.toLowerCase().includes("app")) {
+                        await window.addDoc(window.collection(window.db, "agency_chats_leads"), {
+                            lead_name: senderName,
+                            lead_uid: senderUid,
+                            interest: txt,
+                            timestamp: window.serverTimestamp()
+                        });
+                    }
 
                     const apiKey = "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";
                     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -713,12 +736,9 @@
                             messages: [
                                 { 
                                     role: "system", 
-                                    content: "You are Prime AI, the elite virtual assistant for 'Prime Solutions' (HQ: Karachi, Pakistan, CEO: Muhammad Nazim).\n\nSTRICT INSTRUCTIONS:\n1. Answer ONLY what the customer is asking. Never dump unnecessary details or long paragraphs.\n2. Keep every response sharp, highly engaging, professional, and extremely short (Maximum 1 to 2 sentences).\n3. If greeted, briefly say: 'Hello! 👋 Welcome to Prime Solutions, Karachi. How can I assist you today?'\n4. Official Contact Info (provide only if asked): Email: webhub262@gmail.com, WhatsApp: 0337 9827882, Phone: 0370 5519562.\n5. Pricing Policy: Custom quotes based on project requirements. Direct them to email or WhatsApp for estimates." 
+                                    content: "You are Prime AI, the elite enterprise sales assistant for 'Prime Solutions' (HQ: Karachi, Pakistan, CEO: Muhammad Nazim).\n\nCORE GUIDELINES:\n1. Maintain full conversation context using history. Never repeat boring welcome intros if the conversation is ongoing.\n2. Drive conversions like a top-tier closer: offer Free Demos, Free Quotes, and Free Estimates.\n3. Keep answers punchy, highly engaging, professional, and short (max 2-3 sentences).\n4. Agency Services: Custom web architectures, AI automation, secure Fintech systems, and mobile PWAs.\n5. Official Contacts: Email: webhub262@gmail.com, WhatsApp: 0337 9827882." 
                                 },
-                                { 
-                                    role: "user", 
-                                    content: txt 
-                                }
+                                ...chatHistory
                             ]
                         })
                     });
@@ -729,8 +749,11 @@
                         aiReply = data.choices[0].message.content;
                     }
 
+                    // Append Quick Action Buttons hint text dynamically if appropriate
+                    let finalReplyWithButtons = aiReply + "\n\n💡 *Quick Options:* [Get Free Quote] | [View Services] | [Contact WhatsApp]";
+
                     await window.addDoc(window.collection(window.db, "agency_chats"), {
-                        message: aiReply,
+                        message: finalReplyWithButtons,
                         sender: "Prime AI 🤖",
                         uid: senderUid,
                         timestamp: window.serverTimestamp()
@@ -740,7 +763,7 @@
                     showToast("AI response failed to load.");
                 }
             }
-       }
+        }
 
         function initLiveChatSync() {
             if(!window.db || !window.auth) return;
