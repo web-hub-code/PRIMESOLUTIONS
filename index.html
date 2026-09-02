@@ -4,8 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <title>Prime Solutions | Premier Web Architecture & IT Agency by M Nazim</title>
-    <meta name="description" content="Prime Solutions by Muhammad Nazim provides high-end web development, AI automation, and secure Fintech systems. Expert IT solutions for global enterprises.">
-    <meta name="keywords" content="Prime Solutions, Muhammad Nazim, Web Developer Pakistan, Software Agency, AI Automation, Fintech Development, Custom Web Architecture, IT Solutions">
+    <meta name="description" content="Prime Solutions by Muhammad Nazim provides high-end web development, AI automation, and secure Fintech systems. Expert IT solutions for global enterprises.[span_1](start_span)"[span_1](end_span)>
+    <meta name="keywords" content="Prime Solutions, Muhammad Nazim, Web Developer Pakistan, Software Agency, AI Automation, Fintech Development, Custom Web Architecture, IT Solutions[span_2](start_span)"[span_2](end_span)>
     <meta name="author" content="Muhammad Nazim">
     
     <meta property="og:title" content="Prime Solutions | Digital Excellence by M Nazim">
@@ -394,7 +394,7 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- Interactive Live Firestore-Synced Chatbot Assistant -->
+    <!-- Interactive Live Firestore-Synced Chatbot Assistant powered by Groq API -->
     <div class="support-float" onclick="toggleChatPopup()" title="AI Chatbot Assistant">
         <i class="fas fa-robot"></i>
     </div>
@@ -405,11 +405,11 @@
             <i class="fas fa-times" style="cursor:pointer;" onclick="toggleChatPopup()"></i>
         </div>
         <div class="chat-body" id="chatBody">
-            <p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello! 👋 I am Prime AI. Ask me about pricing, services, or joining our WhatsApp group!</p>
+            <p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello sweetie! 👋 I am Prime AI. Ask me about pricing, services, or joining our WhatsApp group!</p>
         </div>
         <div class="chat-footer">
             <input type="text" id="chatInput" placeholder="Ask something..." onkeypress="handleChatEnter(event)">
-            <button style="background:var(--primary); border:none; padding:8px 12px; border-radius:12px; cursor:pointer;" onclick="sendChatMessage()"><i class="fas fa-paper-plane" style="font-size:0.7rem; color:#000;"></i></button>
+            <button style="background:var(--primary); border:none; padding:8px 12px; border-radius:12px; cursor:pointer;" onclick="sendGroqMessage()"><i class="fas fa-paper-plane" style="font-size:0.7rem; color:#000;"></i></button>
         </div>
     </div>
 
@@ -512,6 +512,7 @@
             });
         }
 
+        // FAQ Toggle Logic with Fixed Selector
         function toggleFaq(element) {
             const answer = element.nextElementSibling;
             if (answer.style.display === 'block') {
@@ -521,6 +522,7 @@
             }
         }
 
+        // Currency Converter Logic for Estimator
         let currentCurrency = 'USD';
         function setCurrency(curr, btn) {
             currentCurrency = curr;
@@ -534,6 +536,7 @@
             }
         }
 
+        // Automated PDF Invoice Generator using jsPDF
         function generatePDFInvoice() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
@@ -569,70 +572,62 @@
         }
 
         function handleChatEnter(e) {
-            if(e.key === 'Enter') sendChatMessage();
+            if(e.key === 'Enter') sendGroqMessage();
         }
 
-        async function callGeminiAI(userMessage) {
-            const apiKey = "AQ.Ab8RN6ItE2FCtdiOIJv0s1EnjNnHJ3GQDM-2ni066toLH0UB1g"; 
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
-
-            try {
-                const response = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{
-                            parts: [{ 
-                                text: `You are Prime AI, an advanced AI assistant for 'Prime Solutions' (a global IT agency led by CEO Muhammad Nazim). Help users accurately with web development, pricing, services, or general queries. User question: ${userMessage}` 
-                            }]
-                        }]
-                    })
-                });
-
-                const data = await response.json();
-                console.log("Gemini API Response:", data);
-
-                let aiReply = "Maaf kijiye, main abhi iska jawab nahi de pa raha hoon.";
-                if (data.candidates && data.candidates.length > 0 && data.candidates[0].content?.parts?.[0]?.text) {
-                    aiReply = data.candidates[0].content.parts[0].text;
-                } else if (data.error) {
-                    aiReply = `API Error: ${data.error.message || 'Invalid Request'}`;
-                }
-
-                await window.addDoc(window.collection(window.db, "agency_chats"), {
-                    message: aiReply,
-                    sender: "Prime AI 🤖",
-                    timestamp: window.serverTimestamp()
-                });
-
-            } catch (error) {
-                console.error("AI Network Error:", error);
-                await window.addDoc(window.collection(window.db, "agency_chats"), {
-                    message: "Network error ki wajah se AI response nahi aa saka.",
-                    sender: "Prime AI 🤖",
-                    timestamp: window.serverTimestamp()
-                });
-            }
-        }
-
-        async function sendChatMessage() {
+        // Groq API Powered Chat Integration
+        async function sendGroqMessage() {
             const input = document.getElementById('chatInput');
             const txt = input.value.trim();
             if(txt !== '') {
+                input.value = '';
                 try {
-                    const senderName = window.auth.currentUser ? window.auth.currentUser.email : 'Visitor';
+                    // Save User message to Firebase
                     await window.addDoc(window.collection(window.db, "agency_chats"), {
                         message: txt,
-                        sender: senderName,
+                        sender: window.auth.currentUser ? window.auth.currentUser.email : 'Visitor',
                         timestamp: window.serverTimestamp()
                     });
-                    input.value = '';
 
-                    // Trigger Gemini AI Response
-                    await callGeminiAI(txt);
+                    // Call Groq API
+                    const apiKey = "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";
+                    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                        method: 'POST',
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${apiKey}`
+                        },
+                        body: JSON.stringify({
+                            model: "llama-3.3-70b-versatile",
+                            messages: [
+                                { 
+                                    role: "system", 
+                                    content: "You are Prime AI, an advanced AI assistant for 'Prime Solutions' (a global IT agency led by CEO Muhammad Nazim). Help users accurately with web development, pricing, services, or general queries." 
+                                },
+                                { 
+                                    role: "user", 
+                                    content: txt 
+                                }
+                            ]
+                        })
+                    });
+
+                    const data = await response.json();
+                    let aiReply = "Maaf kijiye, main abhi iska jawab nahi de pa raha hoon.";
+                    if (data.choices && data.choices.length > 0 && data.choices[0].message?.content) {
+                        aiReply = data.choices[0].message.content;
+                    }
+
+                    // Save AI response to Firebase so it updates in real time
+                    await window.addDoc(window.collection(window.db, "agency_chats"), {
+                        message: aiReply,
+                        sender: "Prime AI 🤖",
+                        timestamp: window.serverTimestamp()
+                    });
+
                 } catch(e) {
-                    console.error("Error sending chat", e);
-                    showToast("Failed to send message.");
+                    console.error("Groq/Network Error", e);
+                    showToast("AI response failed to load.");
                 }
             }
         }
@@ -642,7 +637,7 @@
             const q = window.query(window.collection(window.db, "agency_chats"), window.orderBy("timestamp", "asc"));
             window.onSnapshot(q, (snapshot) => {
                 const body = document.getElementById('chatBody');
-                let html = '<p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello! 👋 I am Prime AI. Ask me about pricing, services, or joining our WhatsApp group!</p>';
+                let html = '<p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello sweetie! 👋 I am Prime AI. Ask me about pricing, services, or joining our WhatsApp group!</p>';
                 snapshot.forEach((doc) => {
                     const data = doc.data();
                     html += `<p style="opacity:0.9; background:rgba(0,242,254,0.1); padding:6px 10px; border-radius:10px; font-size:0.75rem;"><strong>${data.sender}:</strong> ${data.message}</p>`;
@@ -652,6 +647,7 @@
             });
         }
 
+        // Client Milestone Feedback Submission
         async function submitClientFeedback() {
             const feedback = document.getElementById('clientFeedbackInput').value.trim();
             if(feedback !== "") {
@@ -675,6 +671,7 @@
             }
         }
 
+        // --- Hidden Multi-Tap Eagle Eye Security Logic (5 Taps on Logo) ---
         let tapCount = 0;
         let tapTimer = null;
         document.getElementById('eagleLogo').addEventListener('click', () => {
@@ -707,6 +704,7 @@
             document.getElementById('admin-panel-modal').style.display = 'none';
         }
 
+        // --- Firebase Auth & Database Handlers ---
         async function saveUserToFirestore(user) {
             try {
                 await window.setDoc(window.doc(window.db, "agency_users", user.uid), {
@@ -743,7 +741,7 @@
             try {
                 const res = await window.signInWithPopup(window.auth, provider);
                 await saveUserToFirestore(res.user);
-                showTest("Google Authentication successful!");
+                showToast("Google Authentication successful!");
             } catch(err) { showToast(err.message); }
         }
 
