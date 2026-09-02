@@ -577,59 +577,69 @@
 
         // Groq API Powered Chat Integration
         async function sendGroqMessage() {
-            const input = document.getElementById('chatInput');
-            const txt = input.value.trim();
-            if(txt !== '') {
-                input.value = '';
-                try {
-                    // Save User message to Firebase
-                    await window.addDoc(window.collection(window.db, "agency_chats"), {
-                        message: txt,
-                        sender: window.auth.currentUser ? window.auth.currentUser.email : 'Visitor',
-                        timestamp: window.serverTimestamp()
-                    });
+        async function sendGroqMessage() {
+    const input = document.getElementById('chatInput');
+    const txt = input.value.trim();
+    if(txt !== '') {
+        input.value = '';
+        try {
+            // Save User message to Firebase
+            await window.addDoc(window.collection(window.db, "agency_chats"), {
+                message: txt,
+                sender: window.auth.currentUser ? window.auth.currentUser.email : 'Visitor',
+                timestamp: window.serverTimestamp()
+            });
 
-                    // Call Groq API
-                    const apiKey = "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";
-                    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                        method: 'POST',
-                        headers: { 
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${apiKey}`
+            // Call Groq API
+            const apiKey = "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";
+            const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: "llama-3.3-70b-versatile",
+                    messages: [
+                        { 
+                            role: "system", 
+                            content: "You are Prime AI, an advanced AI assistant for 'Prime Solutions' (a global IT agency led by CEO Muhammad Nazim). Help users accurately with web development, pricing, services, or general queries." 
                         },
-                        body: JSON.stringify({
-                            model: "llama-3.3-70b-versatile",
-                            messages: [
-                                { 
-                                    role: "system", 
-                                    content: "You are Prime AI, an advanced AI assistant for 'Prime Solutions' (a global IT agency led by CEO Muhammad Nazim). Help users accurately with web development, pricing, services, or general queries." 
-                                },
-                                { 
-                                    role: "user", 
-                                    content: txt 
-                                }
-                            ]
-                        })
-                    });
+                        { 
+                            role: "user", 
+                            content: txt 
+                        }
+                    ]
+                })
+            });
 
-                    const data = await response.json();
-                    let aiReply = "Maaf kijiye, main abhi iska jawab nahi de pa raha hoon.";
-                    if (data.choices && data.choices.length > 0 && data.choices[0].message?.content) {
-                        aiReply = data.choices[0].message.content;
-                    }
+            const data = await response.json();
+            console.log("Groq API Response:", data); // Debugging ke liye
 
-                    // Save AI response to Firebase so it updates in real time
-                    await window.addDoc(window.collection(window.db, "agency_chats"), {
-                        message: aiReply,
-                        sender: "Prime AI 🤖",
-                        timestamp: window.serverTimestamp()
-                    });
-
-                } catch(e) {
-                    console.error("Groq/Network Error", e);
-                    showToast("AI response failed to load.");
-                }
+            let aiReply = "Maaf kijiye, main abhi iska jawab nahi de pa raha hoon.";
+            if (data.choices && data.choices.length > 0 && data.choices[0].message?.content) {
+                aiReply = data.choices[0].message.content;
+            } else if (data.error) {
+                aiReply = "API Error: " + data.error.message;
             }
+
+            // Save AI response to Firebase
+            await window.addDoc(window.collection(window.db, "agency_chats"), {
+                message: aiReply,
+                sender: "Prime AI 🤖",
+                timestamp: window.serverTimestamp()
+            });
+
+        } catch(e) {
+            console.error("Groq/Network Error", e);
+            showToast("AI response failed to load.");
+            await window.addDoc(window.collection(window.db, "agency_chats"), {
+                message: "Network error occurred while connecting to AI.",
+                sender: "Prime AI 🤖",
+                timestamp: window.serverTimestamp()
+            });
+        }
+    }
         }
 
         function initLiveChatSync() {
