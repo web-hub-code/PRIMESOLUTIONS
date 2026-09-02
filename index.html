@@ -5,7 +5,7 @@
     
     <title>Prime Solutions | Premier Web Architecture & IT Agency by M Nazim</title>
     <meta name="description" content="Prime Solutions by Muhammad Nazim provides high-end web development, AI automation, and secure Fintech systems. Expert IT solutions for global enterprises.">
-    <meta name="keywords" content="Prime Solutions, Muhammad Nazim, Web Developer Pakistan, Software Agency, AI Automation, Fintech Development, Custom Web Architecture, IT Solutions[span_1](start_span)"[span_1](end_span)>
+    <meta name="keywords" content="Prime Solutions, Muhammad Nazim, Web Developer Pakistan, Software Agency, AI Automation, Fintech Development, Custom Web Architecture, IT Solutions">
     <meta name="author" content="Muhammad Nazim">
     
     <meta property="og:title" content="Prime Solutions | Digital Excellence by M Nazim">
@@ -47,6 +47,7 @@
       window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
       window.signInWithEmailAndPassword = signInWithEmailAndPassword;
       window.signOut = signOut;
+      window.onAuthStateChanged = onAuthStateChanged;
       window.collection = collection;
       window.addDoc = addDoc;
       window.getDocs = getDocs;
@@ -125,19 +126,16 @@
         .contact-info { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 20px; border: 1px solid var(--border); }
         .contact-info i { color: var(--primary); font-size: 1.2rem; }
 
-        /* FAQ Styles */
         .faq-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 15px; margin-bottom: 10px; overflow: hidden; }
         .faq-question { padding: 14px 18px; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
         .faq-answer { padding: 0 18px 14px 18px; font-size: 0.75rem; opacity: 0.7; display: none; }
 
-        /* Project Tracker Timeline */
         .timeline { position: relative; padding-left: 20px; margin-top: 15px; border-left: 2px dashed var(--border); }
         .timeline-item { position: relative; margin-bottom: 15px; font-size: 0.75rem; }
         .timeline-item::before { content: ''; position: absolute; left: -25.5px; top: 3px; width: 9px; height: 9px; border-radius: 50%; background: var(--border); }
         .timeline-item.completed::before { background: var(--primary); box-shadow: 0 0 10px var(--primary); }
         .timeline-item.completed { color: var(--primary); font-weight: bold; }
 
-        /* Floating Buttons */
         .whatsapp-float { position: fixed; bottom: 100px; left: 20px; background: var(--whatsapp); color: #fff; width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.6rem; box-shadow: 0 5px 20px rgba(37,211,102,0.4); cursor: pointer; z-index: 9998; transition: 0.3s; text-decoration: none; }
         .whatsapp-float:hover { transform: scale(1.1); }
 
@@ -157,7 +155,6 @@
 
         .tag-badge { font-size: 0.65rem; background: var(--primary); color: #000; padding: 4px 10px; border-radius: 10px; font-weight: 800; display: inline-block; margin-bottom: 10px; }
 
-        /* Custom Toast Notification System */
         #toast-container { position: fixed; top: 20px; right: 20px; z-index: 100002; display: flex; flex-direction: column; gap: 10px; }
         .prime-toast { background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--primary); color: var(--text-color); padding: 12px 20px; border-radius: 15px; font-size: 0.8rem; box-shadow: 0 5px 20px rgba(0,0,0,0.4); animation: slideIn 0.3s ease; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
@@ -288,7 +285,7 @@
 
                     <!-- Direct Admin Broadcast Notice Banner for Client -->
                     <div id="clientBroadcastBanner" style="display:none; background:rgba(0,242,254,0.1); border:1px solid var(--primary); padding:12px; border-radius:15px; margin-bottom:15px; font-size:0.75rem;">
-                        <strong style="color:var(--primary);"><i class="fas id-bullhorn fa-bullhorn"></i> Notice from CEO:</strong> <span id="clientBroadcastText"></span>
+                        <strong style="color:var(--primary);"><i class="fas fa-bullhorn"></i> Notice from CEO:</strong> <span id="clientBroadcastText"></span>
                     </div>
 
                     <div style="background:rgba(0,0,0,0.2); padding:15px; border-radius:20px; border:1px solid var(--border); margin-bottom:15px;">
@@ -456,7 +453,7 @@
         </div>
     </div>
 
-    <!-- Eagle Eye Security Modal (Hidden Multi-Tap Trigger) -->
+    <!-- Eagle Eye Security Modal -->
     <div id="eagle-eye-modal">
         <div class="eagle-box">
             <h3 style="color: var(--primary); margin-bottom: 15px;"><i class="fas fa-shield-alt"></i> Eagle Eye Security</h3>
@@ -467,7 +464,7 @@
         </div>
     </div>
 
-    <!-- Admin Panel with Advanced Analytics, Broadcast & Milestone Management -->
+    <!-- Admin Panel Modal -->
     <div id="admin-panel-modal">
         <div style="max-width: 650px; margin: 40px auto; background: var(--card-bg); border: 1px solid var(--primary); padding: 25px; border-radius: 30px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -475,7 +472,6 @@
                 <i class="fas fa-times" style="cursor:pointer; font-size: 1.2rem;" onclick="closeAdminPanel()"></i>
             </div>
             
-            <!-- Advanced Analytics Dashboard Widget -->
             <div style="background:rgba(0,0,0,0.4); padding:15px; border-radius:15px; margin-bottom:15px; border:1px solid var(--primary);">
                 <h4 style="font-size:0.85rem; margin-bottom:10px; color:var(--primary);"><i class="fas fa-chart-line"></i> Advanced Analytics Dashboard</h4>
                 <div style="display:flex; justify-content:space-between; font-size:0.75rem; text-align:center;">
@@ -491,14 +487,12 @@
                 </div>
             </div>
 
-            <!-- Direct Client Broadcast Notice Card -->
             <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:15px; margin-bottom:15px; border:1px solid var(--border);">
                 <h4 style="font-size:0.85rem; margin-bottom:8px; color:var(--primary);">Direct Client Messaging / Broadcast</h4>
                 <input type="text" id="broadcastMsgInput" class="auth-input" placeholder="Type direct notice for client dashboards...">
                 <button class="btn-action" style="margin-top:0; padding:10px;" onclick="sendBroadcastNotice()">Send Global Broadcast</button>
             </div>
 
-            <!-- Dynamic Portfolio Management Card -->
             <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:15px; margin-bottom:15px; border:1px solid var(--border);">
                 <h4 style="font-size:0.85rem; margin-bottom:8px; color:var(--primary);"><i class="fas fa-folder-plus"></i> Add Portfolio Project</h4>
                 <input type="text" id="adminProjTitle" class="auth-input" placeholder="Project Title">
@@ -536,9 +530,17 @@
                 const icon = document.getElementById('theme-icon');
                 if(icon) icon.className = 'fas fa-sun';
             }
-            initLiveChatSync();
-            initPortfolioSync();
-            checkGlobalBroadcast();
+            
+            // Safe initialization once Firebase is fully loaded
+            const checkFirebaseReady = setInterval(() => {
+                if (window.auth && window.db) {
+                    clearInterval(checkFirebaseReady);
+                    initLiveChatSync();
+                    initPortfolioSync();
+                    checkGlobalBroadcast();
+                    setupAuthStateListener();
+                }
+            }, 100);
         });
 
         function showToast(message) {
@@ -576,7 +578,6 @@
             showToast("Accent Theme Updated!");
         }
 
-        // Multi-language Support Dictionary
         const translations = {
             en: {
                 subtitle: "GLOBAL IT ENTERPRISE AGENCY",
@@ -656,7 +657,6 @@
             if(e.key === 'Enter') sendGroqMessage();
         }
 
-        // Live File / Attachment Sharing Feature in Chat
         function handleFileAttachment(input) {
             if(input.files && input.files[0]) {
                 const file = input.files[0];
@@ -743,8 +743,8 @@
         }
 
         function initLiveChatSync() {
-            if(!window.db) return;
-            window.auth.onAuthStateChanged((user) => {
+            if(!window.db || !window.auth) return;
+            window.onAuthStateChanged(window.auth, (user) => {
                 const currentUid = user ? user.uid : 'anonymous_visitor';
                 const q = window.query(
                     window.collection(window.db, "agency_chats"), 
@@ -914,16 +914,19 @@
 
         let tapCount = 0;
         let tapTimer = null;
-        document.getElementById('eagleLogo').addEventListener('click', () => {
-            tapCount++;
-            clearTimeout(tapTimer);
-            if (tapCount >= 5) {
-                tapCount = 0;
-                document.getElementById('eagle-eye-modal').style.display = 'flex';
-            } else {
-                tapTimer = setTimeout(() => { tapCount = 0; }, 1000);
-            }
-        });
+        const eagleLogo = document.getElementById('eagleLogo');
+        if(eagleLogo) {
+            eagleLogo.addEventListener('click', () => {
+                tapCount++;
+                clearTimeout(tapTimer);
+                if (tapCount >= 5) {
+                    tapCount = 0;
+                    document.getElementById('eagle-eye-modal').style.display = 'flex';
+                } else {
+                    tapTimer = setTimeout(() => { tapCount = 0; }, 1000);
+                }
+            });
+        }
 
         function verifyEagleKey() {
             if(document.getElementById('eagleKeyInput').value === '5426') {
@@ -989,30 +992,33 @@
             showToast("Signed out successfully.");
         }
 
-        window.onAuthStateChanged(window.auth, async (user) => {
-            if (user) {
-                document.getElementById('loggedOutView').style.display = 'none';
-                document.getElementById('loggedInView').style.display = 'block';
-                document.getElementById('clientEmailDisplay').innerText = user.email;
+        function setupAuthStateListener() {
+            if(!window.auth || !window.db) return;
+            window.onAuthStateChanged(window.auth, async (user) => {
+                if (user) {
+                    document.getElementById('loggedOutView').style.display = 'none';
+                    document.getElementById('loggedInView').style.display = 'block';
+                    document.getElementById('clientEmailDisplay').innerText = user.email;
 
-                try {
-                    const userDoc = await window.getDoc(window.doc(window.db, "agency_users", user.uid));
-                    if(userDoc.exists()) {
-                        const data = userDoc.data();
-                        if(data.assignedProject) document.getElementById('clientProjectTitle').innerText = data.assignedProject;
-                        if(data.currentPhase) document.getElementById('clientCurrentPhase').innerText = data.currentPhase;
-                        if(data.invoiceStatus) {
-                            const badge = document.getElementById('clientInvoiceBadge');
-                            badge.innerText = "Invoice: " + data.invoiceStatus;
-                            badge.style.background = data.invoiceStatus === 'Paid' ? 'var(--whatsapp)' : (data.invoiceStatus === 'Processing' ? 'var(--secondary)' : 'var(--gold)');
+                    try {
+                        const userDoc = await window.getDoc(window.doc(window.db, "agency_users", user.uid));
+                        if(userDoc.exists()) {
+                            const data = userDoc.data();
+                            if(data.assignedProject) document.getElementById('clientProjectTitle').innerText = data.assignedProject;
+                            if(data.currentPhase) document.getElementById('clientCurrentPhase').innerText = data.currentPhase;
+                            if(data.invoiceStatus) {
+                                const badge = document.getElementById('clientInvoiceBadge');
+                                badge.innerText = "Invoice: " + data.invoiceStatus;
+                                badge.style.background = data.invoiceStatus === 'Paid' ? 'var(--whatsapp)' : (data.invoiceStatus === 'Processing' ? 'var(--secondary)' : 'var(--gold)');
+                            }
                         }
-                    }
-                } catch(e) { console.error(e); }
-            } else {
-                document.getElementById('loggedOutView').style.display = 'block';
-                document.getElementById('loggedInView').style.display = 'none';
-            }
-        });
+                    } catch(e) { console.error(e); }
+                } else {
+                    document.getElementById('loggedOutView').style.display = 'block';
+                    document.getElementById('loggedInView').style.display = 'none';
+                }
+            });
+        }
 
         async function loadAdminUserRecords() {
             const container = document.getElementById('adminUserListContainer');
