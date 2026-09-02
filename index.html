@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <title>Prime Solutions | Premier Web Architecture & IT Agency by M Nazim</title>
-    <meta name="description" content="Prime Solutions by Muhammad Nazim provides high-end web development, AI automation, and secure Fintech systems. Expert IT solutions for global enterprises.[span_0](start_span)"[span_0](end_span)>
+    <meta name="description" content="Prime Solutions by Muhammad Nazim provides high-end web development, AI automation, and secure Fintech systems. Expert IT solutions for global enterprises.">
     <meta name="keywords" content="Prime Solutions, Muhammad Nazim, Web Developer Pakistan, Software Agency, AI Automation, Fintech Development, Custom Web Architecture, IT Solutions[span_1](start_span)"[span_1](end_span)>
     <meta name="author" content="Muhammad Nazim">
     
@@ -24,7 +24,7 @@
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
       import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-      import { getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc, deleteDoc, serverTimestamp, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+      import { getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc, deleteDoc, serverTimestamp, query, orderBy, onSnapshot, where } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
       const firebaseConfig = {
         apiKey: "AIzaSyCMG6KG_oD8cjEk4YpbxXik-C5q8K5MDHk",
@@ -58,6 +58,7 @@
       window.query = query;
       window.orderBy = orderBy;
       window.onSnapshot = onSnapshot;
+      window.where = where;
     </script>
 
     <style>
@@ -145,8 +146,8 @@
         
         .chat-box-popup { display: none; position: fixed; bottom: 170px; right: 20px; width: 310px; background: var(--bg); border: 1px solid var(--primary); border-radius: 25px; z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden; }
         .chat-header { background: var(--card-bg); padding: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-        .chat-body { padding: 15px; font-size: 0.8rem; height: 200px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
-        .chat-footer { padding: 10px; border-top: 1px solid var(--border); display: flex; gap: 5px; }
+        .chat-body { padding: 15px; font-size: 0.8rem; height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .chat-footer { padding: 10px; border-top: 1px solid var(--border); display: flex; gap: 5px; align-items: center; }
         .chat-footer input { width: 100%; padding: 8px 12px; border-radius: 15px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text-color); font-size: 0.75rem; outline: none; }
 
         .bottom-nav { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 450px; background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(40px); border-radius: 50px; border: 1px solid var(--border); display: flex; justify-content: space-around; padding: 18px; z-index: 9997; }
@@ -183,14 +184,20 @@
                 <div class="color-dot" style="background:#10b981;" onclick="setThemeAccent('#10b981', '#059669')" title="Emerald Green"></div>
                 <div class="color-dot" style="background:#f43f5e;" onclick="setThemeAccent('#f43f5e', '#e11d48')" title="Crimson Rose"></div>
             </div>
-            <button class="control-btn" onclick="toggleTheme()"><i class="fas fa-adjust" id="theme-icon"></i> Theme</button>
+            
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <select id="langSelector" class="control-btn" style="background:var(--card-bg); padding: 6px 10px;" onchange="switchLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="ur">اردو</option>
+                </select>
+                <button class="control-btn" onclick="toggleTheme()"><i class="fas fa-adjust" id="theme-icon"></i></button>
+            </div>
         </div>
 
         <header class="agency-header" data-aos="zoom-in">
-            <!-- Logo with Hidden Multi-Tap Eagle Eye Trigger (5 Taps) -->
             <img src="Screenshot_2026-04-12-10-02-54-39.png" class="pfp-ceo" id="eagleLogo" alt="Muhammad Nazim CEO of Prime Solutions">
             <h1 class="brand-name">PRIME SOLUTIONS</h1>
-            <p style="opacity: 0.5; font-size: 0.75rem; letter-spacing: 2px;">GLOBAL IT ENTERPRISE AGENCY</p>
+            <p id="txt-subtitle" style="opacity: 0.5; font-size: 0.75rem; letter-spacing: 2px;">GLOBAL IT ENTERPRISE AGENCY</p>
             
             <div class="social-row">
                 <a href="https://chat.whatsapp.com/D6QqMvZFBqLE4Hu4MsYEL5?s=cl&p=a&ilr=1" target="_blank" class="social-link" style="color:var(--whatsapp);" title="Official WhatsApp Community"><i class="fab fa-whatsapp"></i></a>
@@ -214,14 +221,13 @@
             <div class="feature-card" data-aos="fade-up">
                 <span class="tag-badge">EXECUTIVE STATEMENT</span>
                 <h2 style="color:var(--primary); margin-bottom:15px; font-size: 1.5rem;">Leading the Digital Frontier</h2>
-                <p style="font-size: 0.85rem; opacity: 0.7; line-height: 1.8; margin-bottom: 15px;">
+                <p id="txt-vision-desc" style="font-size: 0.85rem; opacity: 0.7; line-height: 1.8; margin-bottom: 15px;">
                     Under the leadership of <strong>Muhammad Nazim</strong>, Prime Solutions has emerged as a premier <strong>Global IT Enterprise Agency</strong>. We specialize in building high-performance <strong>custom web architectures</strong>, AI-integrated systems, and scalable digital products for modern businesses.
                 </p>
                 <a href="https://chat.whatsapp.com/D6QqMvZFBqLE4Hu4MsYEL5?s=cl&p=a&ilr=1" target="_blank" class="btn-action" style="background:var(--whatsapp); color:#fff;"><i class="fab fa-whatsapp"></i> Join Official WhatsApp Group</a>
                 <a href="https://wa.me/923379827882" class="btn-action">Direct Strategy Call <i class="fab fa-whatsapp"></i></a>
             </div>
             
-            <!-- Live Currency & Crypto Rates Ticker -->
             <div class="feature-card" data-aos="fade-up" style="background: rgba(0,0,0,0.2);">
                 <span class="tag-badge" style="background:var(--secondary); color:#000;">MARKET TICKER</span>
                 <div style="display: flex; justify-content: space-between; font-size: 0.75rem; text-align: center; margin-top: 10px;">
@@ -231,7 +237,6 @@
                 </div>
             </div>
 
-            <!-- FAQ Section -->
             <div class="feature-card" data-aos="fade-up">
                 <span class="tag-badge">HELP & SUPPORT</span>
                 <h3 style="font-size: 1.2rem; margin-bottom: 15px;">Frequently Asked Questions</h3>
@@ -253,11 +258,11 @@
             </div>
         </section>
 
-        <!-- Client Portal & Live Project Progress Tracker with Dynamic Milestones -->
+        <!-- Client Portal & Live Project Progress Tracker with Invoice Status -->
         <section id="pane-auth" class="view-pane">
             <div class="feature-card" data-aos="fade-up">
                 <h2 style="font-size: 1.4rem; margin-bottom: 5px;">Client Hub & Tracker</h2>
-                <p style="font-size: 0.75rem; opacity: 0.6; margin-bottom: 20px;">Sign in to view real-time project milestones.</p>
+                <p style="font-size: 0.75rem; opacity: 0.6; margin-bottom: 20px;">Sign in to view real-time project milestones and invoice status.</p>
                 
                 <div id="loggedOutView">
                     <input type="email" id="userEmail" class="auth-input" placeholder="Official Email">
@@ -281,8 +286,17 @@
                         <p id="clientEmailDisplay" style="font-size:0.8rem; opacity:0.7;"></p>
                     </div>
 
+                    <!-- Direct Admin Broadcast Notice Banner for Client -->
+                    <div id="clientBroadcastBanner" style="display:none; background:rgba(0,242,254,0.1); border:1px solid var(--primary); padding:12px; border-radius:15px; margin-bottom:15px; font-size:0.75rem;">
+                        <strong style="color:var(--primary);"><i class="fas id-bullhorn fa-bullhorn"></i> Notice from CEO:</strong> <span id="clientBroadcastText"></span>
+                    </div>
+
                     <div style="background:rgba(0,0,0,0.2); padding:15px; border-radius:20px; border:1px solid var(--border); margin-bottom:15px;">
-                        <p style="font-size:0.7rem; opacity:0.5; margin-bottom:5px;">ACTIVE ASSIGNED PROJECT</p>
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                            <p style="font-size:0.7rem; opacity:0.5;">ACTIVE ASSIGNED PROJECT</p>
+                            <!-- Real-time Invoice Status Badge -->
+                            <span id="clientInvoiceBadge" class="tag-badge" style="background:var(--gold); color:#000; margin-bottom:0;">Invoice: Pending</span>
+                        </div>
                         <h4 id="clientProjectTitle" style="color:var(--primary); font-size:0.95rem; margin-bottom:10px;">Custom Enterprise Web Architecture</h4>
                         <p style="font-size:0.75rem; opacity:0.7; margin-bottom:10px;">Current Phase: <strong id="clientCurrentPhase" style="color:var(--primary);">Phase 2: Frontend Architecture & Firebase Core</strong></p>
                         
@@ -293,7 +307,6 @@
                             <div class="timeline-item" id="t-step4">Final Deployment & SSL Handshake</div>
                         </div>
 
-                        <!-- Client Milestone Feedback / Rating Widget -->
                         <div style="margin-top: 15px; border-top: 1px solid var(--border); padding-top: 12px;">
                             <p style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 6px;">Submit Milestone Feedback / Rating:</p>
                             <input type="text" id="clientFeedbackInput" class="auth-input" placeholder="Type comments or review..." style="margin-bottom: 8px;">
@@ -314,7 +327,6 @@
                 <div class="filter-btn" onclick="filterWorks('chat', this)">Chat Hub</div>
             </div>
 
-            <!-- Dynamic Portfolio Grid Container -->
             <div id="dynamicPortfolioContainer">
                 <div class="feature-card work-item" data-category="automation" style="border: 1px solid var(--webhub);" data-aos="fade-up">
                     <img src="Screenshot_2026-04-15-10-11-35-44.png" class="card-img" alt="WebHub">
@@ -359,7 +371,6 @@
             </div>
         </section>
 
-        <!-- Automated Service Booking / Consultation Form Section -->
         <section id="pane-booking" class="view-pane">
             <div class="feature-card" data-aos="fade-up">
                 <h2 style="font-size: 1.4rem; margin-bottom: 5px;"><i class="fas fa-calendar-check"></i> Service Booking</h2>
@@ -422,7 +433,7 @@
         <i class="fab fa-whatsapp"></i>
     </a>
 
-    <!-- Interactive Live Firestore-Synced Chatbot Assistant -->
+    <!-- Interactive Live Chatbot Assistant with Direct File/Attachment Sharing -->
     <div class="support-float" onclick="toggleChatPopup()" title="AI Chatbot Assistant">
         <i class="fas fa-robot"></i>
     </div>
@@ -433,9 +444,13 @@
             <i class="fas fa-times" style="cursor:pointer;" onclick="toggleChatPopup()"></i>
         </div>
         <div class="chat-body" id="chatBody">
-            <p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello sweetie! 👋 I am Prime AI. Ask me about pricing, services, or joining our WhatsApp group!</p>
+            <p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello! 👋 I am Prime AI. Ask me about pricing, services, or attach project files below!</p>
         </div>
         <div class="chat-footer">
+            <label style="cursor:pointer; color:var(--primary); font-size:0.9rem;" title="Attach File/Image">
+                <i class="fas fa-paperclip"></i>
+                <input type="file" id="chatFileInput" style="display:none;" onchange="handleFileAttachment(this)">
+            </label>
             <input type="text" id="chatInput" placeholder="Ask something..." onkeypress="handleChatEnter(event)">
             <button style="background:var(--primary); border:none; padding:8px 12px; border-radius:12px; cursor:pointer;" onclick="sendGroqMessage()"><i class="fas fa-paper-plane" style="font-size:0.7rem; color:#000;"></i></button>
         </div>
@@ -452,7 +467,7 @@
         </div>
     </div>
 
-    <!-- Admin Panel with Full User Tracking, Portfolio & Milestone Management -->
+    <!-- Admin Panel with Advanced Analytics, Broadcast & Milestone Management -->
     <div id="admin-panel-modal">
         <div style="max-width: 650px; margin: 40px auto; background: var(--card-bg); border: 1px solid var(--primary); padding: 25px; border-radius: 30px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
@@ -460,11 +475,26 @@
                 <i class="fas fa-times" style="cursor:pointer; font-size: 1.2rem;" onclick="closeAdminPanel()"></i>
             </div>
             
-            <!-- Broadcast Notice Card -->
+            <!-- Advanced Analytics Dashboard Widget -->
+            <div style="background:rgba(0,0,0,0.4); padding:15px; border-radius:15px; margin-bottom:15px; border:1px solid var(--primary);">
+                <h4 style="font-size:0.85rem; margin-bottom:10px; color:var(--primary);"><i class="fas fa-chart-line"></i> Advanced Analytics Dashboard</h4>
+                <div style="display:flex; justify-content:space-between; font-size:0.75rem; text-align:center;">
+                    <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:10px; width:32%;">
+                        <span style="opacity:0.5;">Total Visitors</span><br><strong id="analyticsVisitorCount" style="color:var(--primary); font-size:0.9rem;">0</strong>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:10px; width:32%;">
+                        <span style="opacity:0.5;">Active Projects</span><br><strong id="analyticsProjectCount" style="color:var(--gold); font-size:0.9rem;">0</strong>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:10px; width:32%;">
+                        <span style="opacity:0.5;">Est. Revenue</span><br><strong style="color:var(--accent); font-size:0.9rem;">$7.5k+</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Direct Client Broadcast Notice Card -->
             <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:15px; margin-bottom:15px; border:1px solid var(--border);">
-                <h4 style="font-size:0.85rem; margin-bottom:8px; color:var(--primary);">Visitor Analytics & Broadcast Notice</h4>
-                <p style="font-size:0.7rem; opacity:0.6; margin-bottom:10px;">Total unique recorded user sessions: <strong id="visitorCountDisplay" style="color:var(--text-color);">Loading...</strong></p>
-                <input type="text" id="broadcastMsgInput" class="auth-input" placeholder="Type broadcast announcement...">
+                <h4 style="font-size:0.85rem; margin-bottom:8px; color:var(--primary);">Direct Client Messaging / Broadcast</h4>
+                <input type="text" id="broadcastMsgInput" class="auth-input" placeholder="Type direct notice for client dashboards...">
                 <button class="btn-action" style="margin-top:0; padding:10px;" onclick="sendBroadcastNotice()">Send Global Broadcast</button>
             </div>
 
@@ -479,7 +509,7 @@
                 <button class="btn-action" style="margin-top:0; padding:10px;" onclick="adminAddPortfolioItem()">Add to Live Portfolio</button>
             </div>
 
-            <p style="font-size: 0.75rem; opacity: 0.6; margin-bottom: 10px;">Registered Clients List, Bookings & Milestones:</p>
+            <p style="font-size: 0.75rem; opacity: 0.6; margin-bottom: 10px;">Registered Clients List, Invoices & Milestone Control:</p>
             <div id="adminUserListContainer">
                 <p style="text-align: center; opacity: 0.5; font-size: 0.8rem;">Loading database records...</p>
             </div>
@@ -499,7 +529,6 @@
     <script>
         AOS.init({ duration: 800, once: true });
         
-        // Load Saved Theme Preference on Boot
         window.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('prime_theme');
             if (savedTheme === 'light') {
@@ -509,6 +538,7 @@
             }
             initLiveChatSync();
             initPortfolioSync();
+            checkGlobalBroadcast();
         });
 
         function showToast(message) {
@@ -546,6 +576,26 @@
             showToast("Accent Theme Updated!");
         }
 
+        // Multi-language Support Dictionary
+        const translations = {
+            en: {
+                subtitle: "GLOBAL IT ENTERPRISE AGENCY",
+                vision: "Under the leadership of <strong>Muhammad Nazim</strong>, Prime Solutions has emerged as a premier <strong>Global IT Enterprise Agency</strong>. We specialize in building high-performance <strong>custom web architectures</strong>, AI-integrated systems, and scalable digital products for modern businesses."
+            },
+            ur: {
+                subtitle: "عالمی آئی ٹی انٹرپرাইজ ایجنسی",
+                vision: "<strong>محمد ناظم</strong> کی قیادت میں، Prime Solutions ایک بہترین <strong>عالمی آئی ٹی ایجنسی</strong> کے طور پر ابھری ہے۔ ہم جدید کاروباری اداروں کے لیے ہائی پرفارمنس کسٹم ویب آرکیٹیکچر اور اے آئی سسٹمز تیار کرنے میں مہارت رکھتے ہیں۔"
+            }
+        };
+
+        function switchLanguage(lang) {
+            if(translations[lang]) {
+                document.getElementById('txt-subtitle').innerText = translations[lang].subtitle;
+                document.getElementById('txt-vision-desc').innerHTML = translations[lang].vision;
+                showToast(lang === 'ur' ? "اردو زبان منتخب کی گئی" : "Switched to English");
+            }
+        }
+
         function filterWorks(category, btn) {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             if(btn) btn.classList.add('active');
@@ -554,31 +604,20 @@
             });
         }
 
-        // FAQ Toggle Logic with Fixed Selector
         function toggleFaq(element) {
             const answer = element.nextElementSibling;
-            if (answer.style.display === 'block') {
-                answer.style.display = 'none';
-            } else {
-                answer.style.display = 'block';
-            }
+            answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
         }
 
-        // Currency Converter Logic for Estimator
         let currentCurrency = 'USD';
         function setCurrency(curr, btn) {
             currentCurrency = curr;
             document.querySelectorAll('.filter-btn').forEach(b => { if(b.innerText.includes('$') || b.innerText.includes('₨')) b.classList.remove('active'); });
             btn.classList.add('active');
             const display = document.getElementById('quote-display');
-            if(curr === 'USD') {
-                display.innerText = '$2,500.00';
-            } else {
-                display.innerText = '₨696,250.00';
-            }
+            display.innerText = curr === 'USD' ? '$2,500.00' : '₨696,250.00';
         }
 
-        // Automated PDF Invoice Generator using jsPDF
         function generatePDFInvoice() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
@@ -617,21 +656,51 @@
             if(e.key === 'Enter') sendGroqMessage();
         }
 
-        // Groq API Integrated Live Chat Assistant
+        // Live File / Attachment Sharing Feature in Chat
+        function handleFileAttachment(input) {
+            if(input.files && input.files[0]) {
+                const file = input.files[0];
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    const fileBase64 = e.target.result;
+                    const currentUser = window.auth.currentUser;
+                    const senderName = currentUser ? currentUser.email : 'Visitor';
+                    const senderUid = currentUser ? currentUser.uid : 'anonymous_visitor';
+
+                    try {
+                        await window.addDoc(window.collection(window.db, "agency_chats"), {
+                            message: `[Attachment: ${file.name}]`,
+                            fileUrl: fileBase64,
+                            sender: senderName,
+                            uid: senderUid,
+                            timestamp: window.serverTimestamp()
+                        });
+                        showToast("File attached and sent successfully!");
+                    } catch(err) {
+                        showToast("Failed to send attachment.");
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
         async function sendGroqMessage() {
             const input = document.getElementById('chatInput');
             const txt = input.value.trim();
             if(txt !== '') {
                 input.value = '';
+                const currentUser = window.auth.currentUser;
+                const senderName = currentUser ? currentUser.email : 'Visitor_' + Math.floor(Math.random() * 1000);
+                const senderUid = currentUser ? currentUser.uid : 'anonymous_visitor';
+
                 try {
-                    // Save User message to Firebase
                     await window.addDoc(window.collection(window.db, "agency_chats"), {
                         message: txt,
-                        sender: window.auth.currentUser ? window.auth.currentUser.email : 'Visitor',
+                        sender: senderName,
+                        uid: senderUid,
                         timestamp: window.serverTimestamp()
                     });
 
-                    // Call Groq API
                     const apiKey = "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";
                     const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                         method: 'POST',
@@ -644,7 +713,7 @@
                             messages: [
                                 { 
                                     role: "system", 
-                                    content: "You are Prime AI, an advanced AI assistant for 'Prime Solutions' (a global IT agency led by CEO Muhammad Nazim). Help users accurately with web development, pricing, services, or general queries." 
+                                    content: "You are Prime AI, the official AI assistant for 'Prime Solutions', a Global IT Enterprise Agency founded and led by CEO Muhammad Nazim. You specialize in custom web architectures, AI automation, and secure Fintech systems. Always provide accurate, professional information regarding agency pricing (starting from $2,500 USD / ₨696,250 PKR), services, and community links. Never hallucinate or give unrelated answers." 
                                 },
                                 { 
                                     role: "user", 
@@ -658,19 +727,16 @@
                     let aiReply = "Maaf kijiye, main abhi iska jawab nahi de pa raha hoon.";
                     if (data.choices && data.choices.length > 0 && data.choices[0].message?.content) {
                         aiReply = data.choices[0].message.content;
-                    } else if (data.error) {
-                        aiReply = "API Error: " + data.error.message;
                     }
 
-                    // Save AI response to Firebase
                     await window.addDoc(window.collection(window.db, "agency_chats"), {
                         message: aiReply,
                         sender: "Prime AI 🤖",
+                        uid: senderUid,
                         timestamp: window.serverTimestamp()
                     });
 
                 } catch(e) {
-                    console.error("Groq/Network Error", e);
                     showToast("AI response failed to load.");
                 }
             }
@@ -678,20 +744,28 @@
 
         function initLiveChatSync() {
             if(!window.db) return;
-            const q = window.query(window.collection(window.db, "agency_chats"), window.orderBy("timestamp", "asc"));
-            window.onSnapshot(q, (snapshot) => {
-                const body = document.getElementById('chatBody');
-                let html = '<p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello sweetie! 👋 I am Prime AI. Ask me about pricing, services, or joining our WhatsApp group!</p>';
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
-                    html += `<p style="opacity:0.9; background:rgba(0,242,254,0.1); padding:6px 10px; border-radius:10px; font-size:0.75rem;"><strong>${data.sender}:</strong> ${data.message}</p>`;
-                });
-                body.innerHTML = html;
-                body.scrollTop = body.scrollHeight;
+            window.auth.onAuthStateChanged((user) => {
+                const currentUid = user ? user.uid : 'anonymous_visitor';
+                const q = window.query(
+                    window.collection(window.db, "agency_chats"), 
+                    window.where("uid", "==", currentUid),
+                    window.orderBy("timestamp", "asc")
+                );
+
+                window.onSnapshot(q, (snapshot) => {
+                    const body = document.getElementById('chatBody');
+                    let html = '<p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello! 👋 I am Prime AI. Ask me about pricing, services, or attach project files below!</p>';
+                    snapshot.forEach((doc) => {
+                        const data = doc.data();
+                        let fileHtml = data.fileUrl ? `<br><a href="${data.fileUrl}" target="_blank" style="color:var(--primary); font-size:0.7rem;"><i class="fas fa-file-download"></i> View Attached File</a>` : '';
+                        html += `<p style="opacity:0.9; background:rgba(0,242,254,0.1); padding:6px 10px; border-radius:10px; font-size:0.75rem;"><strong>${data.sender}:</strong> ${data.message} ${fileHtml}</p>`;
+                    });
+                    body.innerHTML = html;
+                    body.scrollTop = body.scrollHeight;
+                }, (error) => { console.log("Chat sync waiting...", error); });
             });
         }
 
-        // Automated Service Booking Submission
         async function submitServiceBooking() {
             const name = document.getElementById('bookingName').value.trim();
             const email = document.getElementById('bookingEmail').value.trim();
@@ -718,7 +792,6 @@
             }
         }
 
-        // Client Milestone Feedback Submission
         async function submitClientFeedback() {
             const feedback = document.getElementById('clientFeedbackInput').value.trim();
             if(feedback !== "") {
@@ -742,7 +815,6 @@
             }
         }
 
-        // --- Dynamic Admin Portfolio Management ---
         async function adminAddPortfolioItem() {
             const title = document.getElementById('adminProjTitle').value.trim();
             const category = document.getElementById('adminProjCategory').value.trim().toLowerCase();
@@ -809,17 +881,18 @@
             });
         }
 
-        // --- Admin Milestone Update Functions ---
         async function adminUpdateMilestone(uid) {
             const newProject = prompt("Enter new Project Title:");
             const newPhase = prompt("Enter current Phase Description:");
+            const newInvoiceStatus = prompt("Enter Invoice Status (Paid / Pending / Processing):");
             if(newProject && newPhase) {
                 try {
                     await window.setDoc(window.doc(window.db, "agency_users", uid), {
                         assignedProject: newProject,
-                        currentPhase: newPhase
+                        currentPhase: newPhase,
+                        invoiceStatus: newInvoiceStatus || 'Pending'
                     }, { merge: true });
-                    showToast("Client milestone updated successfully!");
+                    showToast("Client milestone & invoice status updated!");
                     loadAdminUserRecords();
                 } catch(e) {
                     showToast("Failed to update milestone.");
@@ -828,7 +901,7 @@
         }
 
         async function adminDeleteUser(uid) {
-            if(confirm("Are you sure you want to remove this user record?")) {
+            if(confirm("Remove this user record?")) {
                 try {
                     await window.deleteDoc(window.doc(window.db, "agency_users", uid));
                     showToast("User record removed.");
@@ -839,7 +912,6 @@
             }
         }
 
-        // --- Hidden Multi-Tap Eagle Eye Security Logic (5 Taps on Logo) ---
         let tapCount = 0;
         let tapTimer = null;
         document.getElementById('eagleLogo').addEventListener('click', () => {
@@ -854,8 +926,7 @@
         });
 
         function verifyEagleKey() {
-            const key = document.getElementById('eagleKeyInput').value;
-            if(key === '5426') {
+            if(document.getElementById('eagleKeyInput').value === '5426') {
                 document.getElementById('eagle-eye-modal').style.display = 'none';
                 document.getElementById('admin-panel-modal').style.display = 'block';
                 loadAdminUserRecords();
@@ -864,15 +935,9 @@
             }
         }
         
-        function closeEagleModal() {
-            document.getElementById('eagle-eye-modal').style.display = 'none';
-        }
+        function closeEagleModal() { document.getElementById('eagle-eye-modal').style.display = 'none'; }
+        function closeAdminPanel() { document.getElementById('admin-panel-modal').style.display = 'none'; }
 
-        function closeAdminPanel() {
-            document.getElementById('admin-panel-modal').style.display = 'none';
-        }
-
-        // --- Firebase Auth & Database Handlers ---
         async function saveUserToFirestore(user) {
             try {
                 const userRef = window.doc(window.db, "agency_users", user.uid);
@@ -881,13 +946,13 @@
                     await window.setDoc(userRef, {
                         email: user.email,
                         uid: user.uid,
-                        provider: user.providerData[0]?.providerId || 'password',
                         assignedProject: 'Custom Enterprise Web Architecture',
                         currentPhase: 'Phase 2: Frontend Architecture & Firebase Core',
+                        invoiceStatus: 'Pending',
                         loginTime: window.serverTimestamp()
                     }, { merge: true });
                 }
-            } catch(e) { console.error("Error saving user record", e); }
+            } catch(e) { console.error(e); }
         }
 
         async function handleEmailRegister() {
@@ -896,7 +961,7 @@
             try {
                 const res = await window.createUserWithEmailAndPassword(window.auth, email, pass);
                 await saveUserToFirestore(res.user);
-                showToast("Account created and registered successfully!");
+                showToast("Account created successfully!");
             } catch(err) { showToast(err.message); }
         }
 
@@ -930,15 +995,19 @@
                 document.getElementById('loggedInView').style.display = 'block';
                 document.getElementById('clientEmailDisplay').innerText = user.email;
 
-                // Fetch specific client milestone details from Firestore
                 try {
                     const userDoc = await window.getDoc(window.doc(window.db, "agency_users", user.uid));
                     if(userDoc.exists()) {
                         const data = userDoc.data();
                         if(data.assignedProject) document.getElementById('clientProjectTitle').innerText = data.assignedProject;
                         if(data.currentPhase) document.getElementById('clientCurrentPhase').innerText = data.currentPhase;
+                        if(data.invoiceStatus) {
+                            const badge = document.getElementById('clientInvoiceBadge');
+                            badge.innerText = "Invoice: " + data.invoiceStatus;
+                            badge.style.background = data.invoiceStatus === 'Paid' ? 'var(--whatsapp)' : (data.invoiceStatus === 'Processing' ? 'var(--secondary)' : 'var(--gold)');
+                        }
                     }
-                } catch(e) { console.error("Error loading client data", e); }
+                } catch(e) { console.error(e); }
             } else {
                 document.getElementById('loggedOutView').style.display = 'block';
                 document.getElementById('loggedInView').style.display = 'none';
@@ -947,7 +1016,6 @@
 
         async function loadAdminUserRecords() {
             const container = document.getElementById('adminUserListContainer');
-            container.innerHTML = '<p style="text-align: center; opacity: 0.5; font-size: 0.8rem;">Fetching records from Firestore...</p>';
             try {
                 const querySnapshot = await window.getDocs(window.collection(window.db, "agency_users"));
                 let html = '';
@@ -959,43 +1027,59 @@
                         <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
                             <strong>Email:</strong> ${data.email || 'N/A'} 
                             <div>
-                                <button class="filter-btn" style="padding:4px 8px; font-size:0.65rem; background:var(--primary); color:#000;" onclick="adminUpdateMilestone('${docSnap.id}')">Update Milestone</button>
+                                <button class="filter-btn" style="padding:4px 8px; font-size:0.65rem; background:var(--primary); color:#000;" onclick="adminUpdateMilestone('${docSnap.id}')">Manage</button>
                                 <button class="filter-btn" style="padding:4px 8px; font-size:0.65rem; background:#ff4757; color:#fff;" onclick="adminDeleteUser('${docSnap.id}')">Remove</button>
                             </div>
                         </div>
                         <div style="font-size:0.7rem; opacity:0.8;">
                             <strong>Project:</strong> ${data.assignedProject || 'Standard'}<br>
-                            <strong>Phase:</strong> ${data.currentPhase || 'In Progress'}<br>
+                            <strong>Invoice Status:</strong> <span style="color:var(--gold);">${data.invoiceStatus || 'Pending'}</span><br>
                             ${data.lastFeedback ? '<strong style="color:var(--primary);">Feedback: ' + data.lastFeedback + '</strong>' : ''}
                         </div>
                     </div>`;
                 });
 
-                // Also fetch bookings
-                const bookingSnapshot = await window.getDocs(window.collection(window.db, "agency_bookings"));
-                bookingSnapshot.forEach((bDoc) => {
-                    const bData = bDoc.data();
-                    html += `<div class="user-row-admin" style="background:rgba(0,242,254,0.05); border-color:var(--primary);">
-                        <div><strong>[Booking]</strong> ${bData.name} (${bData.service})<br><span style="opacity:0.6;">Date: ${bData.date} | Email: ${bData.email}</span></div>
-                        <div style="color:var(--primary);">Confirmed</div>
-                    </div>`;
-                });
-
-                document.getElementById('visitorCountDisplay').innerText = count + " Registered Clients";
-                container.innerHTML = html || '<p style="text-align: center; opacity: 0.5; font-size: 0.8rem;">No user records found yet.</p>';
+                document.getElementById('analyticsVisitorCount').innerText = count + " Clients";
+                document.getElementById('analyticsProjectCount').innerText = count;
+                container.innerHTML = html || '<p style="text-align: center; opacity: 0.5; font-size: 0.8rem;">No user records found.</p>';
             } catch(e) {
-                container.innerHTML = '<p style="text-align: center; color: #ff4757; font-size: 0.8rem;">Failed to load records.</p>';
+                container.innerHTML = '<p style="text-align: center; color: #ff4757; font-size: 0.8rem;">Failed to load analytics.</p>';
             }
         }
 
-        function sendBroadcastNotice() {
+        async function sendBroadcastNotice() {
             const msg = document.getElementById('broadcastMsgInput').value.trim();
             if(msg !== "") {
-                showToast("Broadcast notification successfully dispatched to all active connected clients!");
-                document.getElementById('broadcastMsgInput').value = "";
+                try {
+                    await window.setDoc(window.doc(window.db, "agency_settings", "broadcast"), {
+                        message: msg,
+                        timestamp: window.serverTimestamp()
+                    });
+                    showToast("Direct broadcast notice sent to all client portals!");
+                    document.getElementById('broadcastMsgInput').value = "";
+                } catch(e) {
+                    showToast("Failed to send broadcast.");
+                }
             } else {
-                showToast("Please enter a valid message text.");
+                showToast("Please enter message text.");
             }
+        }
+
+        function checkGlobalBroadcast() {
+            if(!window.db) return;
+            window.onSnapshot(window.doc(window.db, "agency_settings", "broadcast"), (docSnap) => {
+                if(docSnap.exists()) {
+                    const data = docSnap.data();
+                    if(data.message) {
+                        const banner = document.getElementById('clientBroadcastBanner');
+                        const txt = document.getElementById('clientBroadcastText');
+                        if(banner && txt) {
+                            txt.innerText = data.message;
+                            banner.style.display = 'block';
+                        }
+                    }
+                }
+            });
         }
     </script>
 </body>
