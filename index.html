@@ -4,8 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <title>Prime Solutions | Premier Web Architecture & IT Agency by M Nazim</title>
-    <meta name="description" content="Prime Solutions by Muhammad Nazim provides high-end web development, AI automation, and secure Fintech systems. Expert IT solutions for global enterprises.[span_1](start_span)"[span_1](end_span)>
-    <meta name="keywords" content="Prime Solutions, Muhammad Nazim, Web Developer Pakistan, Software Agency, AI Automation, Fintech Development, Custom Web Architecture, IT Solutions[span_2](start_span)"[span_2](end_span)>
+    <meta name="description" content="Prime Solutions by Muhammad Nazim provides high-end web development, AI automation, and secure Fintech systems. Expert IT solutions for global enterprises.[span_0](start_span)"[span_0](end_span)>
+    <meta name="keywords" content="Prime Solutions, Muhammad Nazim, Web Developer Pakistan, Software Agency, AI Automation, Fintech Development, Custom Web Architecture, IT Solutions[span_1](start_span)"[span_1](end_span)>
     <meta name="author" content="Muhammad Nazim">
     
     <meta property="og:title" content="Prime Solutions | Digital Excellence by M Nazim">
@@ -24,7 +24,7 @@
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
       import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-      import { getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc, serverTimestamp, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+      import { getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc, deleteDoc, serverTimestamp, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
       const firebaseConfig = {
         apiKey: "AIzaSyCMG6KG_oD8cjEk4YpbxXik-C5q8K5MDHk",
@@ -53,6 +53,7 @@
       window.doc = doc;
       window.getDoc = getDoc;
       window.setDoc = setDoc;
+      window.deleteDoc = deleteDoc;
       window.serverTimestamp = serverTimestamp;
       window.query = query;
       window.orderBy = orderBy;
@@ -116,8 +117,9 @@
         .btn-action { background: linear-gradient(45deg, var(--primary), var(--secondary)); color: #000; padding: 16px; border-radius: 18px; width: 100%; border: none; font-weight: 800; cursor: pointer; font-size: 0.9rem; text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 10px; transition: 0.3s; }
         .btn-action:hover { transform: scale(1.02); box-shadow: 0 5px 15px rgba(0,242,254,0.3); }
 
-        .auth-input { width: 100%; padding: 12px 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 15px; color: var(--text-color); font-size: 0.85rem; margin-bottom: 12px; outline: none; }
-        .auth-input:focus { border-color: var(--primary); }
+        .auth-input, .auth-select { width: 100%; padding: 12px 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 15px; color: var(--text-color); font-size: 0.85rem; margin-bottom: 12px; outline: none; }
+        .auth-input:focus, .auth-select:focus { border-color: var(--primary); }
+        .auth-select option { background: var(--bg); color: var(--text-color); }
 
         .contact-info { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 20px; border: 1px solid var(--border); }
         .contact-info i { color: var(--primary); font-size: 1.2rem; }
@@ -204,6 +206,7 @@
             <div class="tab-trigger" onclick="navTo('works', this)">Portfolio</div>
             <div class="tab-trigger" onclick="navTo('auth', this)">Client Portal</div>
             <div class="tab-trigger" onclick="navTo('calculator', this)">Estimator</div>
+            <div class="tab-trigger" onclick="navTo('booking', this)">Book Service</div>
             <div class="tab-trigger" onclick="navTo('contact', this)">Contact</div>
         </div>
 
@@ -250,7 +253,7 @@
             </div>
         </section>
 
-        <!-- Client Portal & Live Project Progress Tracker with Milestone Feedback -->
+        <!-- Client Portal & Live Project Progress Tracker with Dynamic Milestones -->
         <section id="pane-auth" class="view-pane">
             <div class="feature-card" data-aos="fade-up">
                 <h2 style="font-size: 1.4rem; margin-bottom: 5px;">Client Hub & Tracker</h2>
@@ -280,16 +283,17 @@
 
                     <div style="background:rgba(0,0,0,0.2); padding:15px; border-radius:20px; border:1px solid var(--border); margin-bottom:15px;">
                         <p style="font-size:0.7rem; opacity:0.5; margin-bottom:5px;">ACTIVE ASSIGNED PROJECT</p>
-                        <h4 style="color:var(--primary); font-size:0.95rem; margin-bottom:10px;">Custom Enterprise Web Architecture</h4>
+                        <h4 id="clientProjectTitle" style="color:var(--primary); font-size:0.95rem; margin-bottom:10px;">Custom Enterprise Web Architecture</h4>
+                        <p style="font-size:0.75rem; opacity:0.7; margin-bottom:10px;">Current Phase: <strong id="clientCurrentPhase" style="color:var(--primary);">Phase 2: Frontend Architecture & Firebase Core</strong></p>
                         
-                        <div class="timeline">
+                        <div class="timeline" id="clientTimelineContainer">
                             <div class="timeline-item completed">UI/UX Wireframing & Design Approved</div>
                             <div class="timeline-item completed">Frontend Architecture & Firebase Core</div>
                             <div class="timeline-item" id="t-step3">Secure Payment & API Integration (In Progress)</div>
                             <div class="timeline-item" id="t-step4">Final Deployment & SSL Handshake</div>
                         </div>
 
-                        <!-- New Feature: Client Milestone Feedback / Rating Widget -->
+                        <!-- Client Milestone Feedback / Rating Widget -->
                         <div style="margin-top: 15px; border-top: 1px solid var(--border); padding-top: 12px;">
                             <p style="font-size: 0.7rem; opacity: 0.7; margin-bottom: 6px;">Submit Milestone Feedback / Rating:</p>
                             <input type="text" id="clientFeedbackInput" class="auth-input" placeholder="Type comments or review..." style="margin-bottom: 8px;">
@@ -310,25 +314,28 @@
                 <div class="filter-btn" onclick="filterWorks('chat', this)">Chat Hub</div>
             </div>
 
-            <div class="feature-card work-item" data-category="automation" style="border: 1px solid var(--webhub);" data-aos="fade-up">
-                <img src="Screenshot_2026-04-15-10-11-35-44.png" class="card-img" alt="WebHub">
-                <h3 style="color:var(--webhub)">WebHub Command Center</h3>
-                <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">Centralized enterprise dashboard for asset monitoring with real-time API sync.</p>
-                <a href="https://web-hub-code.github.io/Web-hub/" target="_blank" class="btn-action">Explore WebHub</a>
-            </div>
+            <!-- Dynamic Portfolio Grid Container -->
+            <div id="dynamicPortfolioContainer">
+                <div class="feature-card work-item" data-category="automation" style="border: 1px solid var(--webhub);" data-aos="fade-up">
+                    <img src="Screenshot_2026-04-15-10-11-35-44.png" class="card-img" alt="WebHub">
+                    <h3 style="color:var(--webhub)">WebHub Command Center</h3>
+                    <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">Centralized enterprise dashboard for asset monitoring with real-time API sync.</p>
+                    <a href="https://web-hub-code.github.io/Web-hub/" target="_blank" class="btn-action">Explore WebHub</a>
+                </div>
 
-            <div class="feature-card work-item" data-category="fintech" style="border-bottom: 4px solid var(--gold);" data-aos="fade-up">
-                <img src="Screenshot_2026-04-15-10-04-08-81.png" class="card-img" alt="MintCrestGold">
-                <h3 style="color:var(--gold)">MintCrestGold Platform</h3>
-                <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">Luxury-grade investment vault system with automated ROI dividend tracking.</p>
-                <a href="https://gtv140.github.io/investment/" target="_blank" class="btn-action" style="background:linear-gradient(45deg,var(--gold),#b8860b)">Access Vault</a>
-            </div>
+                <div class="feature-card work-item" data-category="fintech" style="border-bottom: 4px solid var(--gold);" data-aos="fade-up">
+                    <img src="Screenshot_2026-04-15-10-04-08-81.png" class="card-img" alt="MintCrestGold">
+                    <h3 style="color:var(--gold)">MintCrestGold Platform</h3>
+                    <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">Luxury-grade investment vault system with automated ROI dividend tracking.</p>
+                    <a href="https://gtv140.github.io/investment/" target="_blank" class="btn-action" style="background:linear-gradient(45deg,var(--gold),#b8860b)">Access Vault</a>
+                </div>
 
-            <div class="feature-card work-item" data-category="chat" style="border-bottom: 4px solid var(--secondary);" data-aos="fade-up">
-                <img src="Screenshot_2026-04-15-09-59-25-00.png" class="card-img" alt="Live Connect">
-                <h3 style="color:var(--secondary)">Live Connect Suite</h3>
-                <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">Zero-latency WebSocket communication system built for corporate networking.</p>
-                <a href="https://gtv140.github.io/Live-chat/" target="_blank" class="btn-action">Join Network</a>
+                <div class="feature-card work-item" data-category="chat" style="border-bottom: 4px solid var(--secondary);" data-aos="fade-up">
+                    <img src="Screenshot_2026-04-15-09-59-25-00.png" class="card-img" alt="Live Connect">
+                    <h3 style="color:var(--secondary)">Live Connect Suite</h3>
+                    <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">Zero-latency WebSocket communication system built for corporate networking.</p>
+                    <a href="https://gtv140.github.io/Live-chat/" target="_blank" class="btn-action">Join Network</a>
+                </div>
             </div>
         </section>
 
@@ -349,6 +356,27 @@
                 </div>
                 
                 <button class="btn-action" onclick="generatePDFInvoice()"><i class="fas fa-file-pdf"></i> Download Official PDF Quote</button>
+            </div>
+        </section>
+
+        <!-- Automated Service Booking / Consultation Form Section -->
+        <section id="pane-booking" class="view-pane">
+            <div class="feature-card" data-aos="fade-up">
+                <h2 style="font-size: 1.4rem; margin-bottom: 5px;"><i class="fas fa-calendar-check"></i> Service Booking</h2>
+                <p style="font-size: 0.75rem; opacity: 0.6; margin-bottom: 20px;">Schedule your consultation or custom project consultation directly with our agency.</p>
+                
+                <input type="text" id="bookingName" class="auth-input" placeholder="Your Full Name">
+                <input type="email" id="bookingEmail" class="auth-input" placeholder="Email Address">
+                <select id="bookingService" class="auth-select">
+                    <option value="Web Architecture & Development">Web Architecture & Development</option>
+                    <option value="AI Automation Systems">AI Automation Systems</option>
+                    <option value="Secure Fintech Platform">Secure Fintech Platform</option>
+                    <option value="Mobile PWA Development">Mobile PWA Development</option>
+                </select>
+                <input type="date" id="bookingDate" class="auth-input">
+                <textarea id="bookingNotes" class="auth-input" placeholder="Project details or special requirements..." style="height:80px; resize:none;"></textarea>
+                
+                <button class="btn-action" onclick="submitServiceBooking()">Confirm Appointment Booking</button>
             </div>
         </section>
 
@@ -405,7 +433,7 @@
             <i class="fas fa-times" style="cursor:pointer;" onclick="toggleChatPopup()"></i>
         </div>
         <div class="chat-body" id="chatBody">
-            <p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello! 👋 I am Prime AI. Ask me about pricing, services, or joining our WhatsApp group!</p>
+            <p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello sweetie! 👋 I am Prime AI. Ask me about pricing, services, or joining our WhatsApp group!</p>
         </div>
         <div class="chat-footer">
             <input type="text" id="chatInput" placeholder="Ask something..." onkeypress="handleChatEnter(event)">
@@ -424,22 +452,34 @@
         </div>
     </div>
 
-    <!-- Admin Panel with Full User Tracking Details & Broadcast Hub -->
+    <!-- Admin Panel with Full User Tracking, Portfolio & Milestone Management -->
     <div id="admin-panel-modal">
-        <div style="max-width: 600px; margin: 40px auto; background: var(--card-bg); border: 1px solid var(--primary); padding: 25px; border-radius: 30px;">
+        <div style="max-width: 650px; margin: 40px auto; background: var(--card-bg); border: 1px solid var(--primary); padding: 25px; border-radius: 30px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2 style="color: var(--primary); font-size: 1.2rem;"><i class="fas fa-users-cog"></i> Admin Hub & Broadcast</h2>
+                <h2 style="color: var(--primary); font-size: 1.2rem;"><i class="fas fa-users-cog"></i> Admin Hub & Management</h2>
                 <i class="fas fa-times" style="cursor:pointer; font-size: 1.2rem;" onclick="closeAdminPanel()"></i>
             </div>
             
-            <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:15px; margin-bottom:20px; border:1px solid var(--border);">
+            <!-- Broadcast Notice Card -->
+            <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:15px; margin-bottom:15px; border:1px solid var(--border);">
                 <h4 style="font-size:0.85rem; margin-bottom:8px; color:var(--primary);">Visitor Analytics & Broadcast Notice</h4>
                 <p style="font-size:0.7rem; opacity:0.6; margin-bottom:10px;">Total unique recorded user sessions: <strong id="visitorCountDisplay" style="color:var(--text-color);">Loading...</strong></p>
                 <input type="text" id="broadcastMsgInput" class="auth-input" placeholder="Type broadcast announcement...">
                 <button class="btn-action" style="margin-top:0; padding:10px;" onclick="sendBroadcastNotice()">Send Global Broadcast</button>
             </div>
 
-            <p style="font-size: 0.75rem; opacity: 0.6; margin-bottom: 10px;">Registered Clients List & Client Feedbacks:</p>
+            <!-- Dynamic Portfolio Management Card -->
+            <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:15px; margin-bottom:15px; border:1px solid var(--border);">
+                <h4 style="font-size:0.85rem; margin-bottom:8px; color:var(--primary);"><i class="fas fa-folder-plus"></i> Add Portfolio Project</h4>
+                <input type="text" id="adminProjTitle" class="auth-input" placeholder="Project Title">
+                <input type="text" id="adminProjCategory" class="auth-input" placeholder="Category (automation, fintech, chat)">
+                <input type="text" id="adminProjImg" class="auth-input" placeholder="Image Filename or URL">
+                <input type="text" id="adminProjLink" class="auth-input" placeholder="Live Project URL">
+                <textarea id="adminProjDesc" class="auth-input" placeholder="Project description..." style="height:60px; resize:none;"></textarea>
+                <button class="btn-action" style="margin-top:0; padding:10px;" onclick="adminAddPortfolioItem()">Add to Live Portfolio</button>
+            </div>
+
+            <p style="font-size: 0.75rem; opacity: 0.6; margin-bottom: 10px;">Registered Clients List, Bookings & Milestones:</p>
             <div id="adminUserListContainer">
                 <p style="text-align: center; opacity: 0.5; font-size: 0.8rem;">Loading database records...</p>
             </div>
@@ -451,6 +491,7 @@
         <div class="nav-icon" onclick="navTo('works', this)" title="Portfolio"><i class="fas fa-briefcase"></i></div>
         <div class="nav-icon" onclick="navTo('auth', this)" title="Portal"><i class="fas fa-user-shield"></i></div>
         <div class="nav-icon" onclick="navTo('calculator', this)" title="Estimator"><i class="fas fa-calculator"></i></div>
+        <div class="nav-icon" onclick="navTo('booking', this)" title="Book"><i class="fas fa-calendar-check"></i></div>
         <div class="nav-icon" onclick="navTo('contact', this)" title="Contact"><i class="fas fa-address-book"></i></div>
     </nav>
 
@@ -467,6 +508,7 @@
                 if(icon) icon.className = 'fas fa-sun';
             }
             initLiveChatSync();
+            initPortfolioSync();
         });
 
         function showToast(message) {
@@ -639,7 +681,7 @@
             const q = window.query(window.collection(window.db, "agency_chats"), window.orderBy("timestamp", "asc"));
             window.onSnapshot(q, (snapshot) => {
                 const body = document.getElementById('chatBody');
-                let html = '<p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello! 👋 I am Prime AI. Ask me about pricing, services, or joining our WhatsApp group!</p>';
+                let html = '<p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello sweetie! 👋 I am Prime AI. Ask me about pricing, services, or joining our WhatsApp group!</p>';
                 snapshot.forEach((doc) => {
                     const data = doc.data();
                     html += `<p style="opacity:0.9; background:rgba(0,242,254,0.1); padding:6px 10px; border-radius:10px; font-size:0.75rem;"><strong>${data.sender}:</strong> ${data.message}</p>`;
@@ -647,6 +689,33 @@
                 body.innerHTML = html;
                 body.scrollTop = body.scrollHeight;
             });
+        }
+
+        // Automated Service Booking Submission
+        async function submitServiceBooking() {
+            const name = document.getElementById('bookingName').value.trim();
+            const email = document.getElementById('bookingEmail').value.trim();
+            const service = document.getElementById('bookingService').value;
+            const date = document.getElementById('bookingDate').value;
+            const notes = document.getElementById('bookingNotes').value.trim();
+
+            if(name && email && date) {
+                try {
+                    await window.addDoc(window.collection(window.db, "agency_bookings"), {
+                        name, email, service, date, notes,
+                        timestamp: window.serverTimestamp()
+                    });
+                    showToast("Appointment booking confirmed successfully!");
+                    document.getElementById('bookingName').value = "";
+                    document.getElementById('bookingEmail').value = "";
+                    document.getElementById('bookingDate').value = "";
+                    document.getElementById('bookingNotes').value = "";
+                } catch(e) {
+                    showToast("Error saving booking. Please try again.");
+                }
+            } else {
+                showToast("Please fill in all required booking fields.");
+            }
         }
 
         // Client Milestone Feedback Submission
@@ -670,6 +739,103 @@
                 }
             } else {
                 showToast("Please enter feedback text.");
+            }
+        }
+
+        // --- Dynamic Admin Portfolio Management ---
+        async function adminAddPortfolioItem() {
+            const title = document.getElementById('adminProjTitle').value.trim();
+            const category = document.getElementById('adminProjCategory').value.trim().toLowerCase();
+            const image = document.getElementById('adminProjImg').value.trim();
+            const link = document.getElementById('adminProjLink').value.trim();
+            const description = document.getElementById('adminProjDesc').value.trim();
+
+            if(title && category && link) {
+                try {
+                    await window.addDoc(window.collection(window.db, "agency_portfolio"), {
+                        title, category, image: image || 'Screenshot_2026-04-15-10-11-35-44.png', link, description,
+                        timestamp: window.serverTimestamp()
+                    });
+                    showToast("Portfolio project added successfully!");
+                    document.getElementById('adminProjTitle').value = "";
+                    document.getElementById('adminProjCategory').value = "";
+                    document.getElementById('adminProjImg').value = "";
+                    document.getElementById('adminProjLink').value = "";
+                    document.getElementById('adminProjDesc').value = "";
+                } catch(e) {
+                    showToast("Failed to add portfolio item.");
+                }
+            } else {
+                showToast("Please fill in title, category, and link.");
+            }
+        }
+
+        function initPortfolioSync() {
+            if(!window.db) return;
+            window.onSnapshot(window.collection(window.db, "agency_portfolio"), (snapshot) => {
+                const container = document.getElementById('dynamicPortfolioContainer');
+                let html = `
+                    <div class="feature-card work-item" data-category="automation" style="border: 1px solid var(--webhub);" data-aos="fade-up">
+                        <img src="Screenshot_2026-04-15-10-11-35-44.png" class="card-img" alt="WebHub">
+                        <h3 style="color:var(--webhub)">WebHub Command Center</h3>
+                        <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">Centralized enterprise dashboard for asset monitoring with real-time API sync.</p>
+                        <a href="https://web-hub-code.github.io/Web-hub/" target="_blank" class="btn-action">Explore WebHub</a>
+                    </div>
+                    <div class="feature-card work-item" data-category="fintech" style="border-bottom: 4px solid var(--gold);" data-aos="fade-up">
+                        <img src="Screenshot_2026-04-15-10-04-08-81.png" class="card-img" alt="MintCrestGold">
+                        <h3 style="color:var(--gold)">MintCrestGold Platform</h3>
+                        <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">Luxury-grade investment vault system with automated ROI dividend tracking.</p>
+                        <a href="https://gtv140.github.io/investment/" target="_blank" class="btn-action" style="background:linear-gradient(45deg,var(--gold),#b8860b)">Access Vault</a>
+                    </div>
+                    <div class="feature-card work-item" data-category="chat" style="border-bottom: 4px solid var(--secondary);" data-aos="fade-up">
+                        <img src="Screenshot_2026-04-15-09-59-25-00.png" class="card-img" alt="Live Connect">
+                        <h3 style="color:var(--secondary)">Live Connect Suite</h3>
+                        <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">Zero-latency WebSocket communication system built for corporate networking.</p>
+                        <a href="https://gtv140.github.io/Live-chat/" target="_blank" class="btn-action">Join Network</a>
+                    </div>
+                `;
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    html += `
+                        <div class="feature-card work-item" data-category="${data.category}" style="border: 1px solid var(--primary);" data-aos="fade-up">
+                            <img src="${data.image}" class="card-img" alt="${data.title}">
+                            <h3 style="color:var(--primary)">${data.title}</h3>
+                            <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">${data.description || 'Custom agency deployment.'}</p>
+                            <a href="${data.link}" target="_blank" class="btn-action">Explore Project</a>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            });
+        }
+
+        // --- Admin Milestone Update Functions ---
+        async function adminUpdateMilestone(uid) {
+            const newProject = prompt("Enter new Project Title:");
+            const newPhase = prompt("Enter current Phase Description:");
+            if(newProject && newPhase) {
+                try {
+                    await window.setDoc(window.doc(window.db, "agency_users", uid), {
+                        assignedProject: newProject,
+                        currentPhase: newPhase
+                    }, { merge: true });
+                    showToast("Client milestone updated successfully!");
+                    loadAdminUserRecords();
+                } catch(e) {
+                    showToast("Failed to update milestone.");
+                }
+            }
+        }
+
+        async function adminDeleteUser(uid) {
+            if(confirm("Are you sure you want to remove this user record?")) {
+                try {
+                    await window.deleteDoc(window.doc(window.db, "agency_users", uid));
+                    showToast("User record removed.");
+                    loadAdminUserRecords();
+                } catch(e) {
+                    showToast("Failed to delete record.");
+                }
             }
         }
 
@@ -709,12 +875,18 @@
         // --- Firebase Auth & Database Handlers ---
         async function saveUserToFirestore(user) {
             try {
-                await window.setDoc(window.doc(window.db, "agency_users", user.uid), {
-                    email: user.email,
-                    uid: user.uid,
-                    provider: user.providerData[0]?.providerId || 'password',
-                    loginTime: window.serverTimestamp()
-                }, { merge: true });
+                const userRef = window.doc(window.db, "agency_users", user.uid);
+                const userSnap = await window.getDoc(userRef);
+                if (!userSnap.exists()) {
+                    await window.setDoc(userRef, {
+                        email: user.email,
+                        uid: user.uid,
+                        provider: user.providerData[0]?.providerId || 'password',
+                        assignedProject: 'Custom Enterprise Web Architecture',
+                        currentPhase: 'Phase 2: Frontend Architecture & Firebase Core',
+                        loginTime: window.serverTimestamp()
+                    }, { merge: true });
+                }
             } catch(e) { console.error("Error saving user record", e); }
         }
 
@@ -752,11 +924,21 @@
             showToast("Signed out successfully.");
         }
 
-        window.onAuthStateChanged(window.auth, (user) => {
+        window.onAuthStateChanged(window.auth, async (user) => {
             if (user) {
                 document.getElementById('loggedOutView').style.display = 'none';
                 document.getElementById('loggedInView').style.display = 'block';
                 document.getElementById('clientEmailDisplay').innerText = user.email;
+
+                // Fetch specific client milestone details from Firestore
+                try {
+                    const userDoc = await window.getDoc(window.doc(window.db, "agency_users", user.uid));
+                    if(userDoc.exists()) {
+                        const data = userDoc.data();
+                        if(data.assignedProject) document.getElementById('clientProjectTitle').innerText = data.assignedProject;
+                        if(data.currentPhase) document.getElementById('clientCurrentPhase').innerText = data.currentPhase;
+                    }
+                } catch(e) { console.error("Error loading client data", e); }
             } else {
                 document.getElementById('loggedOutView').style.display = 'block';
                 document.getElementById('loggedInView').style.display = 'none';
@@ -770,14 +952,35 @@
                 const querySnapshot = await window.getDocs(window.collection(window.db, "agency_users"));
                 let html = '';
                 let count = 0;
-                querySnapshot.forEach((doc) => {
+                querySnapshot.forEach((docSnap) => {
                     count++;
-                    const data = doc.data();
-                    html += `<div class="user-row-admin">
-                        <div><strong>Email:</strong> ${data.email || 'N/A'} <br><span style="opacity:0.5;">Provider: ${data.provider}</span> ${data.lastFeedback ? '<br><strong style="color:var(--primary);">Feedback: ' + data.lastFeedback + '</strong>' : ''}</div>
-                        <div><i class="fas fa-check-circle" style="color:var(--primary);"></i> Active</div>
+                    const data = docSnap.data();
+                    html += `<div class="user-row-admin" style="flex-direction:column; align-items:flex-start; gap:8px;">
+                        <div style="width:100%; display:flex; justify-content:space-between; align-items:center;">
+                            <strong>Email:</strong> ${data.email || 'N/A'} 
+                            <div>
+                                <button class="filter-btn" style="padding:4px 8px; font-size:0.65rem; background:var(--primary); color:#000;" onclick="adminUpdateMilestone('${docSnap.id}')">Update Milestone</button>
+                                <button class="filter-btn" style="padding:4px 8px; font-size:0.65rem; background:#ff4757; color:#fff;" onclick="adminDeleteUser('${docSnap.id}')">Remove</button>
+                            </div>
+                        </div>
+                        <div style="font-size:0.7rem; opacity:0.8;">
+                            <strong>Project:</strong> ${data.assignedProject || 'Standard'}<br>
+                            <strong>Phase:</strong> ${data.currentPhase || 'In Progress'}<br>
+                            ${data.lastFeedback ? '<strong style="color:var(--primary);">Feedback: ' + data.lastFeedback + '</strong>' : ''}
+                        </div>
                     </div>`;
                 });
+
+                // Also fetch bookings
+                const bookingSnapshot = await window.getDocs(window.collection(window.db, "agency_bookings"));
+                bookingSnapshot.forEach((bDoc) => {
+                    const bData = bDoc.data();
+                    html += `<div class="user-row-admin" style="background:rgba(0,242,254,0.05); border-color:var(--primary);">
+                        <div><strong>[Booking]</strong> ${bData.name} (${bData.service})<br><span style="opacity:0.6;">Date: ${bData.date} | Email: ${bData.email}</span></div>
+                        <div style="color:var(--primary);">Confirmed</div>
+                    </div>`;
+                });
+
                 document.getElementById('visitorCountDisplay').innerText = count + " Registered Clients";
                 container.innerHTML = html || '<p style="text-align: center; opacity: 0.5; font-size: 0.8rem;">No user records found yet.</p>';
             } catch(e) {
