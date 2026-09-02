@@ -842,45 +842,43 @@
             }
         }
 
-        function initPortfolioSync() {
-            if(!window.db) return;
-            window.onSnapshot(window.collection(window.db, "agency_portfolio"), (snapshot) => {
-                const container = document.getElementById('dynamicPortfolioContainer');
-                let html = `
-                    <div class="feature-card work-item" data-category="automation" style="border: 1px solid var(--webhub);" data-aos="fade-up">
-                        <img src="Screenshot_2026-04-15-10-11-35-44.png" class="card-img" alt="WebHub">
-                        <h3 style="color:var(--webhub)">WebHub Command Center</h3>
-                        <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">Centralized enterprise dashboard for asset monitoring with real-time API sync.</p>
-                        <a href="https://web-hub-code.github.io/Web-hub/" target="_blank" class="btn-action">Explore WebHub</a>
-                    </div>
-                    <div class="feature-card work-item" data-category="fintech" style="border-bottom: 4px solid var(--gold);" data-aos="fade-up">
-                        <img src="Screenshot_2026-04-15-10-04-08-81.png" class="card-img" alt="MintCrestGold">
-                        <h3 style="color:var(--gold)">MintCrestGold Platform</h3>
-                        <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">Luxury-grade investment vault system with automated ROI dividend tracking.</p>
-                        <a href="https://gtv140.github.io/investment/" target="_blank" class="btn-action" style="background:linear-gradient(45deg,var(--gold),#b8860b)">Access Vault</a>
-                    </div>
-                    <div class="feature-card work-item" data-category="chat" style="border-bottom: 4px solid var(--secondary);" data-aos="fade-up">
-                        <img src="Screenshot_2026-04-15-09-59-25-00.png" class="card-img" alt="Live Connect">
-                        <h3 style="color:var(--secondary)">Live Connect Suite</h3>
-                        <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">Zero-latency WebSocket communication system built for corporate networking.</p>
-                        <a href="https://gtv140.github.io/Live-chat/" target="_blank" class="btn-action">Join Network</a>
-                    </div>
-                `;
-                snapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    html += `
-                        <div class="feature-card work-item" data-category="${data.category}" style="border: 1px solid var(--primary);" data-aos="fade-up">
-                            <img src="${data.image}" class="card-img" alt="${data.title}">
-                            <h3 style="color:var(--primary)">${data.title}</h3>
-                            <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">${data.description || 'Custom agency deployment.'}</p>
-                            <a href="${data.link}" target="_blank" class="btn-action">Explore Project</a>
-                        </div>
-                    `;
-                });
-                container.innerHTML = html;
-            });
-        }
+        function initLiveChatSync() {
+    if(!window.db || !window.auth) return;
+    window.onAuthStateChanged(window.auth, (user) => {
+        const currentUid = user ? user.uid : 'anonymous_visitor';
+        
+        // Removed orderBy from query to prevent missing composite index errors
+        const q = window.query(
+            window.collection(window.db, "agency_chats"), 
+            window.where("uid", "==", currentUid)
+        );
 
+        window.onSnapshot(q, (snapshot) => {
+            const body = document.getElementById('chatBody');
+            let html = '<p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello! 👋 I am Prime AI. Ask me about pricing, services, or attach project files below!</p>';
+            
+            // Collect docs and sort client-side by timestamp
+            let docsArray = [];
+            snapshot.forEach((docSnap) => {
+                docsArray.push({ id: docSnap.id, ...docSnap.data() });
+            });
+            
+            docsArray.sort((a, b) => {
+                const t1 = a.timestamp?.toMillis ? a.timestamp.toMillis() : 0;
+                const t2 = b.timestamp?.toMillis ? b.timestamp.toMillis() : 0;
+                return t1 - t2;
+            });
+
+            docsArray.forEach((data) => {
+                let fileHtml = data.fileUrl ? `<br><a href="${data.fileUrl}" target="_blank" style="color:var(--primary); font-size:0.7rem;"><i class="fas fa-file-download"></i> View Attached File</a>` : '';
+                html += `<p style="opacity:0.9; background:rgba(0,242,254,0.1); padding:6px 10px; border-radius:10px; font-size:0.75rem;"><strong>${data.sender}:</strong> ${data.message} ${fileHtml}</p>`;
+            });
+            body.innerHTML = html;
+            body.scrollTop = body.scrollHeight;
+        }, (error) => { console.log("Chat sync waiting...", error); });
+    });
+        }
+        
         async function adminUpdateMilestone(uid) {
             const newProject = prompt("Enter new Project Title:");
             const newPhase = prompt("Enter current Phase Description:");
