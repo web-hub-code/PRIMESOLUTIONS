@@ -4,8 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <title>Prime Solutions | Premier Web Architecture & IT Agency by M Nazim</title>
-    <meta name="description" content="Prime Solutions by Muhammad Nazim provides high-end web development, AI automation, and secure Fintech systems. Expert IT solutions for global enterprises.[span_1](start_span)"[span_1](end_span)>
-    <meta name="keywords" content="Prime Solutions, Muhammad Nazim, Web Developer Pakistan, Software Agency, AI Automation, Fintech Development, Custom Web Architecture, IT Solutions[span_2](start_span)"[span_2](end_span)>
+    <meta name="description" content="Prime Solutions by Muhammad Nazim provides high-end web development, AI automation, and secure Fintech systems. Expert IT solutions for global enterprises.">
+    <meta name="keywords" content="Prime Solutions, Muhammad Nazim, Web Developer Pakistan, Software Agency, AI Automation, Fintech Development, Custom Web Architecture, IT Solutions">
     <meta name="author" content="Muhammad Nazim">
     
     <meta property="og:title" content="Prime Solutions | Digital Excellence by M Nazim">
@@ -405,7 +405,7 @@
             <i class="fas fa-times" style="cursor:pointer;" onclick="toggleChatPopup()"></i>
         </div>
         <div class="chat-body" id="chatBody">
-            <p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello sweetie! 👋 I am Prime AI. Ask me about pricing, services, or joining our WhatsApp group!</p>
+            <p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello! 👋 I am Prime AI. Ask me about pricing, services, or joining our WhatsApp group!</p>
         </div>
         <div class="chat-footer">
             <input type="text" id="chatInput" placeholder="Ask something..." onkeypress="handleChatEnter(event)">
@@ -512,7 +512,6 @@
             });
         }
 
-        // FAQ Toggle Logic with Fixed Selector
         function toggleFaq(element) {
             const answer = element.nextElementSibling;
             if (answer.style.display === 'block') {
@@ -522,7 +521,6 @@
             }
         }
 
-        // Currency Converter Logic for Estimator
         let currentCurrency = 'USD';
         function setCurrency(curr, btn) {
             currentCurrency = curr;
@@ -536,7 +534,6 @@
             }
         }
 
-        // Automated PDF Invoice Generator using jsPDF
         function generatePDFInvoice() {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF();
@@ -575,7 +572,6 @@
             if(e.key === 'Enter') sendChatMessage();
         }
 
-        // Gemini AI Integration for Prime Solutions Chat Assistant
         async function callGeminiAI(userMessage) {
             const apiKey = "AQ.Ab8RN6ItE2FCtdiOIJv0s1EnjNnHJ3GQDM-2ni066toLH0UB1g"; 
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
@@ -594,9 +590,15 @@
                 });
 
                 const data = await response.json();
-                const aiReply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Maaf kijiye sweetie, main abhi iska jawab nahi de pa raha hoon.";
+                console.log("Gemini API Response:", data);
 
-                // Real-time Firestore database mein AI ka response save karna taake sabko live dikhe
+                let aiReply = "Maaf kijiye, main abhi iska jawab nahi de pa raha hoon.";
+                if (data.candidates && data.candidates.length > 0 && data.candidates[0].content?.parts?.[0]?.text) {
+                    aiReply = data.candidates[0].content.parts[0].text;
+                } else if (data.error) {
+                    aiReply = `API Error: ${data.error.message || 'Invalid Request'}`;
+                }
+
                 await window.addDoc(window.collection(window.db, "agency_chats"), {
                     message: aiReply,
                     sender: "Prime AI 🤖",
@@ -604,29 +606,29 @@
                 });
 
             } catch (error) {
-                console.error("AI Error:", error);
+                console.error("AI Network Error:", error);
                 await window.addDoc(window.collection(window.db, "agency_chats"), {
-                    message: "Network error ki wajah se AI response nahi aa saka sweetie.",
+                    message: "Network error ki wajah se AI response nahi aa saka.",
                     sender: "Prime AI 🤖",
                     timestamp: window.serverTimestamp()
                 });
             }
         }
 
-        // Firestore Synced Live Chat with Gemini Auto-Reply
         async function sendChatMessage() {
             const input = document.getElementById('chatInput');
             const txt = input.value.trim();
             if(txt !== '') {
                 try {
+                    const senderName = window.auth.currentUser ? window.auth.currentUser.email : 'Visitor';
                     await window.addDoc(window.collection(window.db, "agency_chats"), {
                         message: txt,
-                        sender: window.auth.currentUser ? window.auth.currentUser.email : 'Anonymous Visitor',
+                        sender: senderName,
                         timestamp: window.serverTimestamp()
                     });
                     input.value = '';
-                    
-                    // Trigger Gemini AI response
+
+                    // Trigger Gemini AI Response
                     await callGeminiAI(txt);
                 } catch(e) {
                     console.error("Error sending chat", e);
@@ -640,7 +642,7 @@
             const q = window.query(window.collection(window.db, "agency_chats"), window.orderBy("timestamp", "asc"));
             window.onSnapshot(q, (snapshot) => {
                 const body = document.getElementById('chatBody');
-                let html = '<p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello sweetie! 👋 I am Prime AI. Ask me about pricing, services, or joining our WhatsApp group!</p>';
+                let html = '<p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello! 👋 I am Prime AI. Ask me about pricing, services, or joining our WhatsApp group!</p>';
                 snapshot.forEach((doc) => {
                     const data = doc.data();
                     html += `<p style="opacity:0.9; background:rgba(0,242,254,0.1); padding:6px 10px; border-radius:10px; font-size:0.75rem;"><strong>${data.sender}:</strong> ${data.message}</p>`;
@@ -650,7 +652,6 @@
             });
         }
 
-        // Client Milestone Feedback Submission
         async function submitClientFeedback() {
             const feedback = document.getElementById('clientFeedbackInput').value.trim();
             if(feedback !== "") {
@@ -674,7 +675,6 @@
             }
         }
 
-        // --- Hidden Multi-Tap Eagle Eye Security Logic (5 Taps on Logo) ---
         let tapCount = 0;
         let tapTimer = null;
         document.getElementById('eagleLogo').addEventListener('click', () => {
@@ -707,7 +707,6 @@
             document.getElementById('admin-panel-modal').style.display = 'none';
         }
 
-        // --- Firebase Auth & Database Handlers ---
         async function saveUserToFirestore(user) {
             try {
                 await window.setDoc(window.doc(window.db, "agency_users", user.uid), {
@@ -744,7 +743,7 @@
             try {
                 const res = await window.signInWithPopup(window.auth, provider);
                 await saveUserToFirestore(res.user);
-                showToast("Google Authentication successful!");
+                showTest("Google Authentication successful!");
             } catch(err) { showToast(err.message); }
         }
 
