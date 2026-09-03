@@ -722,12 +722,12 @@
             querySnapshot.forEach((doc) => {
                 const data = doc.data();
                 chatHistory.unshift({
-                    role: data.sender.includes("Prime AI") ? "assistant" : "user",
+                    role: data.sender.includes("Zara") ? "assistant" : "user",
                     content: data.message
                 });
             });
 
-            if (txt.toLowerCase().includes("project") || txt.toLowerCase().includes("quote") || txt.toLowerCase().includes("price") || txt.toLowerCase().includes("web") || txt.toLowerCase().includes("app")) {
+            if (txt.toLowerCase().includes("project") || txt.toLowerCase().includes("quote") || txt.toLowerCase().includes("price") || txt.toLowerCase().includes("web") || txt.toLowerCase().includes("app") || txt.toLowerCase().includes("demo")) {
                 await window.addDoc(window.collection(window.db, "agency_chats_leads"), {
                     lead_name: senderName,
                     lead_uid: senderUid,
@@ -748,7 +748,7 @@
                     messages: [
                         { 
                             role: "system", 
-                            content: "You are Prime AI, elite enterprise sales assistant for 'Prime Solutions' (HQ: Astore, Gilgit-Baltistan, Pakistan, Founder & CEO: Muhammad Nazim, also known as Muhammad Nazim Zeeshan). If customers ask about the owner, founder, or who runs the agency, proudly state that Prime Solutions is founded and led by Muhammad Nazim as a freelance web developer and digital expert. Keep answers punchy, helpful, and professional (max 2-3 sentences). Do not include repetitive quick options or buttons text in your replies." 
+                            content: "You are Zara, the elite prime AI assistant for 'Prime Solutions' (Global HQ: Karachi, Pakistan; Regional Office: Islamabad, Pakistan). Founder & CEO: Muhammad Nazim. Official Website: https://web-hub-code.github.io/primesolutions/ | Contact: 03379827882 (WhatsApp) | Email: webhub262@gmail.com. We operate as a worldwide registered LLC company offering custom web development, apps, and digital solutions with pricing ranging from PKR 5,000 to PKR 100,000+ depending on project requirements, plus we offer free demos and free quotes. When qualified leads show interest in services, gracefully capture their real name, email address, and WhatsApp number. Keep responses punchy, highly professional, welcoming, and concise (max 2-3 sentences). Do not use repetitive quick options or buttons text." 
                         },
                         ...chatHistory
                     ]
@@ -756,23 +756,23 @@
             });
 
             const data = await response.json();
-            let aiReply = "Maaf kijiye, main abhi iska jawab nahi de pa raha hoon.";
+            let aiReply = "Maaf kijiye, main abhi iska jawab nahi de pa rahi hoon.";
             if (data.choices && data.choices.length > 0 && data.choices[0].message?.content) {
                 aiReply = data.choices[0].message.content;
             }
 
             await window.addDoc(window.collection(window.db, "agency_chats"), {
                 message: aiReply,
-                sender: "Prime AI 🤖",
+                sender: "Zara (Prime AI) 🤖",
                 uid: senderUid,
                 timestamp: window.serverTimestamp()
             });
 
         } catch(e) {
             showToast("AI response failed to load.");
-         }
-      }
-  }
+        }
+    }
+ }
         function initLiveChatSync() {
             if(!window.db || !window.auth) return;
             window.onAuthStateChanged(window.auth, (user) => {
