@@ -700,82 +700,79 @@
         }
 
         async function sendGroqMessage() {
-            const input = document.getElementById('chatInput');
-            const txt = input.value.trim();
-            if(txt !== '') {
-                input.value = '';
-                const currentUser = window.auth.currentUser;
-                const senderName = currentUser ? currentUser.email : 'Visitor_' + Math.floor(Math.random() * 1000);
-                const senderUid = currentUser ? currentUser.uid : 'anonymous_visitor';
+    const input = document.getElementById('chatInput');
+    const txt = input.value.trim();
+    if(txt !== '') {
+        input.value = '';
+        const currentUser = window.auth.currentUser;
+        const senderName = currentUser ? currentUser.email : 'Visitor_' + Math.floor(Math.random() * 1000);
+        const senderUid = currentUser ? currentUser.uid : 'anonymous_visitor';
 
-                try {
-                    await window.addDoc(window.collection(window.db, "agency_chats"), {
-                        message: txt,
-                        sender: senderName,
-                        uid: senderUid,
-                        timestamp: window.serverTimestamp()
-                    });
+        try {
+            await window.addDoc(window.collection(window.db, "agency_chats"), {
+                message: txt,
+                sender: senderName,
+                uid: senderUid,
+                timestamp: window.serverTimestamp()
+            });
 
-                    const q = window.query(window.collection(window.db, "agency_chats"), window.orderBy("timestamp", "desc"), window.limit(5));
-                    const querySnapshot = await window.getDocs(q);
-                    let chatHistory = [];
-                    querySnapshot.forEach((doc) => {
-                        const data = doc.data();
-                        chatHistory.unshift({
-                            role: data.sender.includes("Prime AI") ? "assistant" : "user",
-                            content: data.message
-                        });
-                    });
+            const q = window.query(window.collection(window.db, "agency_chats"), window.orderBy("timestamp", "desc"), window.limit(5));
+            const querySnapshot = await window.getDocs(q);
+            let chatHistory = [];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                chatHistory.unshift({
+                    role: data.sender.includes("Prime AI") ? "assistant" : "user",
+                    content: data.message
+                });
+            });
 
-                    if (txt.toLowerCase().includes("project") || txt.toLowerCase().includes("quote") || txt.toLowerCase().includes("price") || txt.toLowerCase().includes("web") || txt.toLowerCase().includes("app")) {
-                        await window.addDoc(window.collection(window.db, "agency_chats_leads"), {
-                            lead_name: senderName,
-                            lead_uid: senderUid,
-                            interest: txt,
-                            timestamp: window.serverTimestamp()
-                        });
-                    }
-
-                    const apiKey = "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";
-                    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                        method: 'POST',
-                        headers: { 
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${apiKey}`
-                        },
-                        body: JSON.stringify({
-                            model: "openai/gpt-oss-120b",
-                            messages: [
-                                { 
-                                    role: "system", 
-                                    content: "You are Prime AI, elite enterprise sales assistant for 'Prime Solutions' (HQ: Karachi, Pakistan, CEO: Muhammad Nazim). Keep answers punchy, helpful, and professional (max 2-3 sentences)." 
-                                },
-                                ...chatHistory
-                            ]
-                        })
-                    });
-
-                    const data = await response.json();
-                    let aiReply = "Maaf kijiye, main abhi iska jawab nahi de pa raha hoon.";
-                    if (data.choices && data.choices.length > 0 && data.choices[0].message?.content) {
-                        aiReply = data.choices[0].message.content;
-                    }
-
-                    let finalReplyWithButtons = aiReply + "\n\n💡 *Quick Options:* [Get Free Quote] | [View Services] | [Contact WhatsApp]";
-
-                    await window.addDoc(window.collection(window.db, "agency_chats"), {
-                        message: finalReplyWithButtons,
-                        sender: "Prime AI 🤖",
-                        uid: senderUid,
-                        timestamp: window.serverTimestamp()
-                    });
-
-                } catch(e) {
-                    showToast("AI response failed to load.");
-                }
+            if (txt.toLowerCase().includes("project") || txt.toLowerCase().includes("quote") || txt.toLowerCase().includes("price") || txt.toLowerCase().includes("web") || txt.toLowerCase().includes("app")) {
+                await window.addDoc(window.collection(window.db, "agency_chats_leads"), {
+                    lead_name: senderName,
+                    lead_uid: senderUid,
+                    interest: txt,
+                    timestamp: window.serverTimestamp()
+                });
             }
-        }
 
+            const apiKey = "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";
+            const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: "openai/gpt-oss-120b",
+                    messages: [
+                        { 
+                            role: "system", 
+                            content: "You are Prime AI, elite enterprise sales assistant for 'Prime Solutions' (HQ: Astore, Gilgit-Baltistan, Pakistan, Founder & CEO: Muhammad Nazim, also known as Muhammad Nazim Zeeshan). If customers ask about the owner, founder, or who runs the agency, proudly state that Prime Solutions is founded and led by Muhammad Nazim as a freelance web developer and digital expert. Keep answers punchy, helpful, and professional (max 2-3 sentences). Do not include repetitive quick options or buttons text in your replies." 
+                        },
+                        ...chatHistory
+                    ]
+                })
+            });
+
+            const data = await response.json();
+            let aiReply = "Maaf kijiye, main abhi iska jawab nahi de pa raha hoon.";
+            if (data.choices && data.choices.length > 0 && data.choices[0].message?.content) {
+                aiReply = data.choices[0].message.content;
+            }
+
+            await window.addDoc(window.collection(window.db, "agency_chats"), {
+                message: aiReply,
+                sender: "Prime AI 🤖",
+                uid: senderUid,
+                timestamp: window.serverTimestamp()
+            });
+
+        } catch(e) {
+            showToast("AI response failed to load.");
+         }
+      }
+  }
         function initLiveChatSync() {
             if(!window.db || !window.auth) return;
             window.onAuthStateChanged(window.auth, (user) => {
