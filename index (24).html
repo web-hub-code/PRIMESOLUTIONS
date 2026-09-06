@@ -1,0 +1,1167 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <title>Prime Solutions | Premier Web Architecture & IT Agency by M Nazim</title>
+    <meta name="description" content="Prime Solutions by Muhammad Nazim provides high-end web development, AI automation, and secure Fintech systems. Expert IT solutions for global enterprises.">
+    <meta name="keywords" content="Prime Solutions, Muhammad Nazim, Web Developer Pakistan, Software Agency, AI Automation, Fintech Development, Custom Web Architecture, IT Solutions">
+    <meta name="author" content="Muhammad Nazim">
+    
+    <meta property="og:title" content="Prime Solutions | Digital Excellence by M Nazim">
+    <meta property="og:description" content="Transforming complex ideas into scalable digital realities. Explore our portfolio.">
+    <meta property="og:url" content="https://web-hub-code.github.io/primesolutions/">
+    <meta property="og:image" content="Screenshot_2026-04-12-10-02-54-39.png">
+    <meta property="og:type" content="website">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Firebase SDKs Integration -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
+      import { getAuth, signInWithPopup, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+      import { getFirestore, collection, addDoc, getDocs, doc, getDoc, setDoc, deleteDoc, serverTimestamp, query, orderBy, onSnapshot, where, limit } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCMG6KG_oD8cjEk4YpbxXik-C5q8K5MDHk",
+        authDomain: "dark-web-9.firebaseapp.com",
+        databaseURL: "https://dark-web-9-default-rtdb.firebaseio.com",
+        projectId: "dark-web-9",
+        storageBucket: "dark-web-9.firebasestorage.app",
+        messagingSenderId: "564328425161",
+        appId: "1:564328425161:web:eb109ab77356dafe7f4f18"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+      
+      window.auth = auth;
+      window.db = db;
+      window.GoogleAuthProvider = GoogleAuthProvider;
+      window.signInWithPopup = signInWithPopup;
+      window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+      window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+      window.signOut = signOut;
+      window.onAuthStateChanged = onAuthStateChanged;
+      window.collection = collection;
+      window.addDoc = addDoc;
+      window.getDocs = getDocs;
+      window.doc = doc;
+      window.getDoc = getDoc;
+      window.setDoc = setDoc;
+      window.deleteDoc = deleteDoc;
+      window.serverTimestamp = serverTimestamp;
+      window.query = query;
+      window.orderBy = orderBy;
+      window.onSnapshot = onSnapshot;
+      window.where = where;
+      window.limit = limit;
+    </script>
+
+    <style>
+        :root {
+            --primary: #00f2fe; --secondary: #4facfe; --accent: #f093fb; --webhub: #6a1b9a;
+            --bg: #010204; --card-bg: rgba(255, 255, 255, 0.03); --border: rgba(255, 255, 255, 0.08);
+            --text-color: #ffffff; --gold: #ffd700; --whatsapp: #25d366;
+        }
+
+        .light-mode {
+            --primary: #0077b6; --secondary: #00b4d8; --accent: #7209b7; --webhub: #480ca8;
+            --bg: #f8f9fa; --card-bg: rgba(0, 0, 0, 0.03); --border: rgba(0, 0, 0, 0.08);
+            --text-color: #1a1a1a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Outfit', sans-serif; scroll-behavior: smooth; }
+        body { background: var(--bg); color: var(--text-color); overflow-x: hidden; line-height: 1.6; transition: background 0.3s, color 0.3s; }
+
+        .agency-aura { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: radial-gradient(circle at 50% 50%, rgba(0, 31, 36, 0.2) 0%, var(--bg) 100%); }
+        .glow { position: absolute; width: 400px; height: 400px; background: var(--primary); filter: blur(180px); opacity: 0.1; border-radius: 50%; animation: move 20s infinite alternate; }
+        @keyframes move { from { transform: translate(-10%, -10%); } to { transform: translate(50%, 50%); } }
+
+        .container { width: 100%; max-width: 550px; margin: 0 auto; padding: 10px 15px 160px; }
+
+        .top-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .theme-selector-group { display: flex; gap: 6px; align-items: center; }
+        .color-dot { width: 18px; height: 18px; border-radius: 50%; cursor: pointer; border: 2px solid rgba(255,255,255,0.5); transition: 0.2s; }
+        .color-dot:hover { transform: scale(1.2); }
+
+        .control-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text-color); padding: 8px 12px; border-radius: 20px; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: 0.3s; }
+        .control-btn:hover { border-color: var(--primary); }
+
+        .agency-header { background: var(--card-bg); backdrop-filter: blur(40px); border: 1px solid var(--border); border-radius: 45px; padding: 40px 20px; text-align: center; margin-bottom: 25px; border-bottom: 5px solid var(--primary); }
+        .pfp-ceo { width: 130px; height: 130px; border-radius: 50%; border: 3px solid var(--primary); padding: 5px; box-shadow: 0 0 30px rgba(0, 242, 254, 0.2); margin-bottom: 15px; object-fit: cover; cursor: pointer; transition: 0.3s; user-select: none; }
+        .pfp-ceo:active { transform: scale(0.95); }
+        .brand-name { font-size: 2.5rem; font-weight: 800; background: linear-gradient(45deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px; margin-bottom: 5px; }
+        
+        .social-row { display: flex; justify-content: center; gap: 20px; margin-top: 15px; }
+        .social-link { color: var(--text-color); font-size: 1.2rem; opacity: 0.5; transition: 0.3s; }
+        .social-link:hover { opacity: 1; color: var(--primary); transform: translateY(-3px); }
+
+        .tabs-container { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; margin-bottom: 25px; }
+        .tab-trigger { background: var(--card-bg); border: 1px solid var(--border); padding: 12px 20px; border-radius: 25px; color: var(--text-color); cursor: pointer; white-space: nowrap; font-size: 0.8rem; transition: 0.3s; font-weight: 600; }
+        .tab-trigger.active { background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 15px rgba(0,242,254,0.3); }
+
+        .view-pane { display: none; }
+        .view-pane.active { display: block; animation: fadeInUp 0.5s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .feature-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 30px; padding: 25px; margin-bottom: 15px; transition: 0.3s; overflow: hidden; }
+        .card-img { width: 100%; height: 210px; object-fit: cover; border-radius: 20px; margin-bottom: 15px; border: 1px solid var(--border); }
+        
+        .filter-row { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+        .filter-btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text-color); padding: 6px 14px; border-radius: 15px; font-size: 0.7rem; cursor: pointer; font-weight: 600; transition: 0.3s; white-space: nowrap; }
+        .filter-btn.active { background: var(--primary); color: #000; border-color: var(--primary); }
+
+        .btn-action { background: linear-gradient(45deg, var(--primary), var(--secondary)); color: #000; padding: 16px; border-radius: 18px; width: 100%; border: none; font-weight: 800; cursor: pointer; font-size: 0.9rem; text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 10px; transition: 0.3s; }
+        .btn-action:hover { transform: scale(1.02); box-shadow: 0 5px 15px rgba(0,242,254,0.3); }
+
+        .auth-input, .auth-select { width: 100%; padding: 12px 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 15px; color: var(--text-color); font-size: 0.85rem; margin-bottom: 12px; outline: none; }
+        .auth-input:focus, .auth-select:focus { border-color: var(--primary); }
+        .auth-select option { background: var(--bg); color: var(--text-color); }
+
+        .contact-info { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 20px; border: 1px solid var(--border); }
+        .contact-info i { color: var(--primary); font-size: 1.2rem; }
+
+        .faq-item { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 15px; margin-bottom: 10px; overflow: hidden; }
+        .faq-question { padding: 14px 18px; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .faq-answer { padding: 0 18px 14px 18px; font-size: 0.75rem; opacity: 0.7; display: none; }
+
+        .timeline { position: relative; padding-left: 20px; margin-top: 15px; border-left: 2px dashed var(--border); }
+        .timeline-item { position: relative; margin-bottom: 15px; font-size: 0.75rem; }
+        .timeline-item::before { content: ''; position: absolute; left: -25.5px; top: 3px; width: 9px; height: 9px; border-radius: 50%; background: var(--border); }
+        .timeline-item.completed::before { background: var(--primary); box-shadow: 0 0 10px var(--primary); }
+        .timeline-item.completed { color: var(--primary); font-weight: bold; }
+
+        .whatsapp-float { position: fixed; bottom: 100px; left: 20px; background: var(--whatsapp); color: #fff; width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.6rem; box-shadow: 0 5px 20px rgba(37,211,102,0.4); cursor: pointer; z-index: 9998; transition: 0.3s; text-decoration: none; }
+        .whatsapp-float:hover { transform: scale(1.1); }
+
+        .support-float { position: fixed; bottom: 100px; right: 20px; background: linear-gradient(45deg, var(--primary), var(--secondary)); color: #000; width: 55px; height: 55px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 1.5rem; box-shadow: 0 5px 20px rgba(0,242,254,0.4); cursor: pointer; z-index: 9998; transition: 0.3s; }
+        .support-float:hover { transform: scale(1.1); }
+        
+        .chat-box-popup { display: none; position: fixed; bottom: 170px; right: 20px; width: 310px; background: var(--bg); border: 1px solid var(--primary); border-radius: 25px; z-index: 9999; box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden; }
+        .chat-header { background: var(--card-bg); padding: 15px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .chat-body { padding: 15px; font-size: 0.8rem; height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+        .chat-footer { padding: 10px; border-top: 1px solid var(--border); display: flex; gap: 5px; align-items: center; }
+        .chat-footer input { width: 100%; padding: 8px 12px; border-radius: 15px; border: 1px solid var(--border); background: var(--card-bg); color: var(--text-color); font-size: 0.75rem; outline: none; }
+
+        .bottom-nav { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 450px; background: rgba(5, 5, 5, 0.98); backdrop-filter: blur(40px); border-radius: 50px; border: 1px solid var(--border); display: flex; justify-content: space-around; padding: 18px; z-index: 9997; }
+        .light-mode .bottom-nav { background: rgba(240, 240, 240, 0.98); }
+        .nav-icon { color: var(--text-color); opacity: 0.3; font-size: 1.4rem; cursor: pointer; transition: 0.4s; }
+        .nav-icon.active { opacity: 1; color: var(--primary); transform: translateY(-8px); }
+
+        .tag-badge { font-size: 0.65rem; background: var(--primary); color: #000; padding: 4px 10px; border-radius: 10px; font-weight: 800; display: inline-block; margin-bottom: 10px; }
+
+        #toast-container { position: fixed; top: 20px; right: 20px; z-index: 100002; display: flex; flex-direction: column; gap: 10px; }
+        .prime-toast { background: var(--card-bg); backdrop-filter: blur(20px); border: 1px solid var(--primary); color: var(--text-color); padding: 12px 20px; border-radius: 15px; font-size: 0.8rem; box-shadow: 0 5px 20px rgba(0,0,0,0.4); animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        #eagle-eye-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(1,2,4,0.95); z-index: 100000; justify-content: center; align-items: center; backdrop-filter: blur(20px); }
+        .eagle-box { background: var(--card-bg); border: 1px solid var(--primary); padding: 30px; border-radius: 30px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 0 40px rgba(0,242,254,0.2); }
+        .eagle-box input { width: 100%; padding: 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 15px; color: var(--text-color); font-size: 1.2rem; text-align: center; margin-bottom: 15px; outline: none; }
+
+        #admin-panel-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(1,2,4,0.98); z-index: 100001; padding: 20px; overflow-y: auto; }
+        .user-row-admin { background: rgba(255,255,255,0.03); border: 1px solid var(--border); padding: 12px; border-radius: 12px; margin-bottom: 8px; font-size: 0.75rem; display: flex; justify-content: space-between; align-items: center; }
+    </style>
+</head>
+<body>
+
+    <div id="toast-container"></div>
+    <div class="agency-aura"><div class="glow"></div></div>
+
+    <div class="container">
+        
+        <div class="top-controls">
+            <div class="theme-selector-group">
+                <div class="color-dot" style="background:#00f2fe;" onclick="setThemeAccent('#00f2fe', '#4facfe')" title="Cyan Neon"></div>
+                <div class="color-dot" style="background:#ffd700;" onclick="setThemeAccent('#ffd700', '#ffa500')" title="Royal Gold"></div>
+                <div class="color-dot" style="background:#10b981;" onclick="setThemeAccent('#10b981', '#059669')" title="Emerald Green"></div>
+                <div class="color-dot" style="background:#f43f5e;" onclick="setThemeAccent('#f43f5e', '#e11d48')" title="Crimson Rose"></div>
+            </div>
+            
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <select id="langSelector" class="control-btn" style="background:var(--card-bg); padding: 6px 10px;" onchange="switchLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="ur">اردو</option>
+                </select>
+                <button class="control-btn" onclick="toggleTheme()"><i class="fas fa-adjust" id="theme-icon"></i></button>
+            </div>
+        </div>
+
+        <header class="agency-header" data-aos="zoom-in">
+            <img src="Screenshot_2026-04-12-10-02-54-39.png" class="pfp-ceo" id="eagleLogo" alt="Muhammad Nazim CEO of Prime Solutions">
+            <h1 class="brand-name">PRIME SOLUTIONS</h1>
+            <p id="txt-subtitle" style="opacity: 0.5; font-size: 0.75rem; letter-spacing: 2px;">GLOBAL IT ENTERPRISE AGENCY</p>
+            
+            <div class="social-row">
+                <a href="https://chat.whatsapp.com/D6QqMvZFBqLE4Hu4MsYEL5?s=cl&p=a&ilr=1" target="_blank" class="social-link" style="color:var(--whatsapp);" title="Official WhatsApp Community"><i class="fab fa-whatsapp"></i></a>
+                <a href="https://www.facebook.com/profile.php?id=61590925586953" target="_blank" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/mr_nazim073?igsh=MXd4d2hmcWNvNjVsdQ==" target="_blank" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/in/muhammad-nazim-7401b6310" target="_blank" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://youtube.com/@crazykhantv" target="_blank" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            </div>
+        </header>
+
+        <div class="tabs-container">
+            <div class="tab-trigger active" onclick="navTo('home', this)">Vision</div>
+            <div class="tab-trigger" onclick="navTo('works', this)">Portfolio</div>
+            <div class="tab-trigger" onclick="navTo('auth', this)">Client Portal</div>
+            <div class="tab-trigger" onclick="navTo('calculator', this)">Estimator</div>
+            <div class="tab-trigger" onclick="navTo('booking', this)">Book Service</div>
+            <div class="tab-trigger" onclick="navTo('contact', this)">Contact</div>
+        </div>
+
+        <section id="pane-home" class="view-pane active">
+            <div class="feature-card" data-aos="fade-up">
+                <span class="tag-badge">EXECUTIVE STATEMENT</span>
+                <h2 style="color:var(--primary); margin-bottom:15px; font-size: 1.5rem;">Leading the Digital Frontier</h2>
+                <p id="txt-vision-desc" style="font-size: 0.85rem; opacity: 0.7; line-height: 1.8; margin-bottom: 15px;">
+                    Under the leadership of <strong>Muhammad Nazim</strong>, Prime Solutions has emerged as a premier <strong>Global IT Enterprise Agency</strong>. We specialize in building high-performance <strong>custom web architectures</strong>, AI-integrated systems, and scalable digital products for modern businesses.
+                </p>
+                <a href="https://chat.whatsapp.com/D6QqMvZFBqLE4Hu4MsYEL5?s=cl&p=a&ilr=1" target="_blank" class="btn-action" style="background:var(--whatsapp); color:#fff;"><i class="fab fa-whatsapp"></i> Join Official WhatsApp Group</a>
+                <a href="https://wa.me/923379827882" class="btn-action">Direct Strategy Call <i class="fab fa-whatsapp"></i></a>
+            </div>
+            
+            <div class="feature-card" data-aos="fade-up" style="background: rgba(0,0,0,0.2);">
+                <span class="tag-badge" style="background:var(--secondary); color:#000;">MARKET TICKER</span>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; text-align: center; margin-top: 10px;">
+                    <div><span style="opacity:0.5;">USD/PKR</span><br><strong id="rate-usd-pkr">278.50</strong></div>
+                    <div><span style="opacity:0.5;">BTC/USD</span><br><strong style="color:var(--gold);" id="rate-btc">67,400</strong></div>
+                    <div><span style="opacity:0.5;">ETH/USD</span><br><strong style="color:var(--accent);">3,420</strong></div>
+                </div>
+            </div>
+
+            <div class="feature-card" data-aos="fade-up">
+                <span class="tag-badge">HELP & SUPPORT</span>
+                <h3 style="font-size: 1.2rem; margin-bottom: 15px;">Frequently Asked Questions</h3>
+                
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">How long does a custom web project take? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer">Most enterprise web architectures and portals are successfully deployed within 1 to 3 weeks depending on functional complexity.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">How can I join the official community? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer">You can click the WhatsApp floating button or the join group CTA button on this page to enter our official WhatsApp group instantly.</div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">Who leads Prime Solutions? <i class="fas fa-chevron-down"></i></div>
+                    <div class="faq-answer">Prime Solutions is founded and led by Muhammad Nazim as the Chief Executive Officer and Lead Developer.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Standard Client Portal -->
+        <section id="pane-auth" class="view-pane">
+            <div class="feature-card" data-aos="fade-up">
+                <h2 style="font-size: 1.4rem; margin-bottom: 5px;">Client Hub & Profile</h2>
+                <p style="font-size: 0.75rem; opacity: 0.6; margin-bottom: 20px;">Sign in to view your profile and tracking timeline.</p>
+                
+                <div id="loggedOutView">
+                    <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--border); padding: 20px; border-radius: 20px;">
+                        <input type="email" id="userEmail" class="auth-input" placeholder="Official Email Address">
+                        <input type="password" id="userPassword" class="auth-input" placeholder="Secure Password">
+                        
+                        <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                            <button class="btn-action" style="margin-top:0;" onclick="handleEmailLogin()">Sign In</button>
+                            <button class="btn-action" style="margin-top:0; background:var(--card-bg); border:1px solid var(--border); color:var(--text-color);" onclick="handleEmailRegister()">Register Account</button>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align:center; margin: 15px 0; font-size: 0.7rem; opacity: 0.5;">OR SECURE SIGN IN WITH</div>
+                    
+                    <button class="btn-action" style="background:#db4437; color:#fff;" onclick="handleGoogleLogin()">
+                        <i class="fab fa-google"></i> Continue with Google Auth
+                    </button>
+                </div>
+
+                <div id="loggedInView" style="display:none;">
+                    <div style="background:rgba(0,242,254,0.05); padding:20px; border-radius:20px; border:1px solid var(--primary); margin-bottom:20px; text-align:center;">
+                        <div style="width:70px; height:70px; border-radius:50%; background:var(--primary); color:#000; display:flex; align-items:center; justify-content:center; font-size:1.8rem; font-weight:bold; margin:0 auto 10px auto;" id="clientAvatarInitial">P</div>
+                        <h3 style="margin-bottom:2px; font-size:1.1rem;">Client Profile</h3>
+                        <p id="clientEmailDisplay" style="font-size:0.8rem; opacity:0.8; margin-bottom:10px;"></p>
+                        <span class="tag-badge" style="background:var(--whatsapp); color:#fff; margin-bottom:0;">Verified Account Active</span>
+                    </div>
+
+                    <div id="clientBroadcastBanner" style="display:none; background:rgba(0,242,254,0.1); border:1px solid var(--primary); padding:12px; border-radius:15px; margin-bottom:15px; font-size:0.75rem;">
+                        <strong style="color:var(--primary);"><i class="fas fa-bullhorn"></i> Notice from CEO:</strong> <span id="clientBroadcastText"></span>
+                    </div>
+
+                    <div style="background:rgba(0,0,0,0.2); padding:15px; border-radius:20px; border:1px solid var(--border); margin-bottom:15px;">
+                        <h4 id="clientProjectTitle" style="color:var(--primary); font-size:0.95rem; margin-bottom:10px;">Custom Enterprise Web Architecture</h4>
+                        <p style="font-size:0.75rem; opacity:0.7; margin-bottom:10px;">Current Phase: <strong id="clientCurrentPhase" style="color:var(--primary);">Phase 2: Frontend Architecture & Firebase Core</strong></p>
+                        
+                        <div class="timeline">
+                            <div class="timeline-item completed">UI/UX Wireframing & Design Approved</div>
+                            <div class="timeline-item completed">Frontend Architecture & Firebase Core</div>
+                            <div class="timeline-item">Secure Payment & API Integration (In Progress)</div>
+                            <div class="timeline-item">Final Deployment & SSL Handshake</div>
+                        </div>
+                    </div>
+
+                    <button class="btn-action" style="background:#ff4757; color:#fff;" onclick="handleLogout()"><i class="fas fa-sign-out-alt"></i> Sign Out Securely</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="pane-works" class="view-pane">
+            <div class="filter-row">
+                <div class="filter-btn active" onclick="filterWorks('all', this)">All Projects</div>
+                <div class="filter-btn" onclick="filterWorks('automation', this)">Automation</div>
+                <div class="filter-btn" onclick="filterWorks('fintech', this)">Fintech</div>
+                <div class="filter-btn" onclick="filterWorks('chat', this)">Chat Hub</div>
+            </div>
+
+            <div id="dynamicPortfolioContainer">
+                <div class="feature-card work-item" data-category="automation" style="border: 1px solid var(--webhub);" data-aos="fade-up">
+                    <img src="Screenshot_2026-04-15-10-11-35-44.png" class="card-img" alt="WebHub">
+                    <h3 style="color:var(--webhub)">WebHub Command Center</h3>
+                    <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">Centralized enterprise dashboard for asset monitoring with real-time API sync.</p>
+                    <a href="https://web-hub-code.github.io/Web-hub/" target="_blank" class="btn-action">Explore WebHub</a>
+                </div>
+
+                <div class="feature-card work-item" data-category="fintech" style="border-bottom: 4px solid var(--gold);" data-aos="fade-up">
+                    <img src="Screenshot_2026-04-15-10-04-08-81.png" class="card-img" alt="MintCrestGold">
+                    <h3 style="color:var(--gold)">MintCrestGold Platform</h3>
+                    <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">Luxury-grade investment vault system with automated ROI dividend tracking.</p>
+                    <a href="https://gtv140.github.io/investment/" target="_blank" class="btn-action" style="background:linear-gradient(45deg,var(--gold),#b8860b)">Access Vault</a>
+                </div>
+
+                <div class="feature-card work-item" data-category="chat" style="border-bottom: 4px solid var(--secondary);" data-aos="fade-up">
+                    <img src="Screenshot_2026-04-15-09-59-25-00.png" class="card-img" alt="Live Connect">
+                    <h3 style="color:var(--secondary)">Live Connect Suite</h3>
+                    <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">Zero-latency WebSocket communication system built for corporate networking.</p>
+                    <a href="https://gtv140.github.io/Live-chat/" target="_blank" class="btn-action">Join Network</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="pane-calculator" class="view-pane">
+            <div class="feature-card" data-aos="fade-up">
+                <h2 style="font-size: 1.4rem; margin-bottom: 5px;">Project Value Estimator</h2>
+                <p style="font-size: 0.7rem; opacity: 0.5; margin-bottom: 15px;">Instant AI-calculated baseline with PDF quote generation.</p>
+                
+                <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 15px;">
+                    <button class="filter-btn active" onclick="setCurrency('USD', this)">USD ($)</button>
+                    <button class="filter-btn" onclick="setCurrency('PKR', this)">PKR (₨)</button>
+                </div>
+
+                <div style="background:rgba(0,242,254,0.05); border:1px dashed var(--primary); padding:25px; border-radius:20px; text-align:center; margin-bottom:15px;">
+                    <p style="font-size: 0.6rem; letter-spacing: 2px; opacity: 0.5;">ESTIMATED STARTING COST</p>
+                    <p id="quote-display" style="font-size:2rem; font-weight:800; color:var(--primary);">$2,500.00</p>
+                </div>
+                
+                <button class="btn-action" onclick="generatePDFInvoice()"><i class="fas fa-file-pdf"></i> Download Official PDF Quote</button>
+            </div>
+        </section>
+
+        <section id="pane-booking" class="view-pane">
+            <div class="feature-card" data-aos="fade-up">
+                <h2 style="font-size: 1.4rem; margin-bottom: 5px;"><i class="fas fa-calendar-check"></i> Service Booking</h2>
+                <p style="font-size: 0.75rem; opacity: 0.6; margin-bottom: 20px;">Schedule your consultation or custom project consultation directly with our agency.</p>
+                
+                <input type="text" id="bookingName" class="auth-input" placeholder="Your Full Name">
+                <input type="email" id="bookingEmail" class="auth-input" placeholder="Email Address">
+                <select id="bookingService" class="auth-select">
+                    <option value="Web Architecture & Development">Web Architecture & Development</option>
+                    <option value="AI Automation Systems">AI Automation Systems</option>
+                    <option value="Secure Fintech Platform">Secure Fintech Platform</option>
+                    <option value="Mobile PWA Development">Mobile PWA Development</option>
+                </select>
+                <input type="date" id="bookingDate" class="auth-input">
+                <textarea id="bookingNotes" class="auth-input" placeholder="Project details or special requirements..." style="height:80px; resize:none;"></textarea>
+                
+                <button class="btn-action" onclick="submitServiceBooking()">Confirm Appointment Booking</button>
+            </div>
+        </section>
+
+        <section id="pane-contact" class="view-pane">
+            <div class="feature-card" data-aos="fade-up">
+                <h2 style="margin-bottom:20px; font-size: 1.4rem;">Corporate Channels</h2>
+                
+                <div class="contact-info">
+                    <i class="fas fa-phone-alt"></i>
+                    <div>
+                        <p style="font-size:0.6rem; opacity:0.5;">EXECUTIVE LINE</p>
+                        <a href="tel:03705519562" style="color:var(--text-color); text-decoration:none; font-weight:600;">0370 5519562</a>
+                    </div>
+                </div>
+
+                <div class="contact-info">
+                    <i class="fab fa-whatsapp"></i>
+                    <div>
+                        <p style="font-size:0.6rem; opacity:0.5;">WHATSAPP SUPPORT</p>
+                        <a href="https://wa.me/923379827882" style="color:var(--text-color); text-decoration:none; font-weight:600;">0337 9827882</a>
+                    </div>
+                </div>
+
+                <div class="contact-info">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <p style="font-size:0.6rem; opacity:0.5;">OFFICIAL EMAIL</p>
+                        <a href="mailto:webhub262@gmail.com" style="color:var(--text-color); text-decoration:none; font-weight:600;">webhub262@gmail.com</a>
+                    </div>
+                </div>
+
+                <button class="btn-action" onclick="window.location.href='mailto:webhub262@gmail.com'">Email Headquarters</button>
+            </div>
+        </section>
+
+        <footer style="text-align: center; margin-top: 40px; opacity: 0.2; font-size: 0.6rem; letter-spacing: 1px;">
+            PRIME SOLUTIONS GLOBAL &copy; 2026 | DESIGNED BY M NAZIM ENTERPRISE
+        </footer>
+    </div>
+
+    <a href="https://chat.whatsapp.com/D6QqMvZFBqLE4Hu4MsYEL5?s=cl&p=a&ilr=1" target="_blank" class="whatsapp-float" title="Join Official WhatsApp Group">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <div class="support-float" onclick="toggleChatPopup()" title="AI Chatbot Assistant">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <div class="chat-box-popup" id="chatPopup">
+        <div class="chat-header">
+            <span style="font-size: 0.8rem; font-weight: bold; color: var(--primary);"><i class="fas fa-robot"></i> Prime AI Assistant</span>
+            <i class="fas fa-times" style="cursor:pointer;" onclick="toggleChatPopup()"></i>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello! 👋 I am Prime AI. Ask me about pricing or services!</p>
+        </div>
+        <div class="chat-footer">
+            <label style="cursor:pointer; color:var(--primary); font-size:0.9rem;" title="Attach File/Image">
+                <i class="fas fa-paperclip"></i>
+                <input type="file" id="chatFileInput" style="display:none;" onchange="handleFileAttachment(this)">
+            </label>
+            <input type="text" id="chatInput" placeholder="Ask something..." onkeypress="handleChatEnter(event)">
+            <button style="background:var(--primary); border:none; padding:8px 12px; border-radius:12px; cursor:pointer;" onclick="sendGroqMessage()"><i class="fas fa-paper-plane" style="font-size:0.7rem; color:#000;"></i></button>
+        </div>
+    </div>
+
+    <!-- Eagle Eye Security Modal -->
+    <div id="eagle-eye-modal">
+        <div class="eagle-box">
+            <h3 style="color: var(--primary); margin-bottom: 15px;"><i class="fas fa-shield-alt"></i> Eagle Eye Security</h3>
+            <p style="font-size: 0.75rem; opacity: 0.6; margin-bottom: 15px;">Enter Access Key to Open Admin Panel</p>
+            <input type="password" id="eagleKeyInput" placeholder="Enter Key" maxlength="4">
+            <button class="btn-action" onclick="verifyEagleKey()">Authorize Access</button>
+            <button style="background:transparent; border:none; color:var(--text-color); opacity:0.5; margin-top:15px; cursor:pointer;" onclick="closeEagleModal()">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Ultimate Modern Admin Control Hub & CRM Modal -->
+    <div id="admin-panel-modal">
+        <div style="max-width: 750px; margin: 30px auto; background: var(--card-bg); border: 1px solid var(--primary); padding: 25px; border-radius: 30px; box-shadow: 0 0 50px rgba(0,242,254,0.2);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="color: var(--primary); font-size: 1.2rem;"><i class="fas fa-users-cog"></i> Ultimate Admin CRM & Command Hub</h2>
+                <i class="fas fa-times" style="cursor:pointer; font-size: 1.2rem;" onclick="closeAdminPanel()"></i>
+            </div>
+            
+            <!-- Analytics Overview -->
+            <div style="background:rgba(0,0,0,0.4); padding:15px; border-radius:15px; margin-bottom:15px; border:1px solid var(--primary);">
+                <h4 style="font-size:0.85rem; margin-bottom:10px; color:var(--primary);"><i class="fas fa-chart-line"></i> Live Agency Statistics</h4>
+                <div style="display:flex; justify-content:space-between; font-size:0.75rem; text-align:center;">
+                    <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:10px; width:32%;">
+                        <span style="opacity:0.5;">Total Visitors</span><br><strong id="analyticsVisitorCount" style="color:var(--primary); font-size:0.9rem;">0</strong>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:10px; width:32%;">
+                        <span style="opacity:0.5;">Active Clients</span><br><strong id="analyticsProjectCount" style="color:var(--gold); font-size:0.9rem;">0</strong>
+                    </div>
+                    <div style="background:rgba(255,255,255,0.03); padding:10px; border-radius:10px; width:32%;">
+                        <span style="opacity:0.5;">Est. Agency Rev</span><br><strong style="color:var(--accent); font-size:0.9rem;">$8.5k+</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Global Broadcast Notice -->
+            <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:15px; margin-bottom:15px; border:1px solid var(--border);">
+                <h4 style="font-size:0.85rem; margin-bottom:8px; color:var(--primary);"><i class="fas fa-bullhorn"></i> Push Global Broadcast to All Client Portals</h4>
+                <input type="text" id="broadcastMsgInput" class="auth-input" placeholder="Type notice message...">
+                <button class="btn-action" style="margin-top:0; padding:10px;" onclick="sendBroadcastNotice()">Send Global Notice</button>
+            </div>
+
+            <!-- Dynamic Portfolio Manager -->
+            <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:15px; margin-bottom:15px; border:1px solid var(--border);">
+                <h4 style="font-size:0.85rem; margin-bottom:8px; color:var(--primary);"><i class="fas fa-folder-plus"></i> Portfolio Manager (Add/Remove Live)</h4>
+                <input type="text" id="adminProjTitle" class="auth-input" placeholder="Project Title">
+                <input type="text" id="adminProjCategory" class="auth-input" placeholder="Category (automation, fintech, chat)">
+                <input type="text" id="adminProjImg" class="auth-input" placeholder="Image Filename or URL">
+                <input type="text" id="adminProjLink" class="auth-input" placeholder="Live Project URL">
+                <textarea id="adminProjDesc" class="auth-input" placeholder="Project description..." style="height:60px; resize:none;"></textarea>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn-action" style="margin-top:0; padding:10px; flex:1;" onclick="adminAddPortfolioItem()">Add Project</button>
+                    <button class="btn-action" style="margin-top:0; padding:10px; flex:1; background:#ff4757; color:#fff;" onclick="adminRemoveLastPortfolioItem()">Remove Last</button>
+                </div>
+            </div>
+
+            <!-- Chatbot Leads CRM -->
+            <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:15px; margin-bottom:15px; border:1px solid var(--border);">
+                <h4 style="font-size:0.85rem; margin-bottom:8px; color:var(--primary);"><i class="fas fa-headset"></i> Chatbot Leads CRM Pipeline</h4>
+                <div id="adminLeadsListContainer" style="max-height: 120px; overflow-y: auto; font-size: 0.75rem;">
+                    <p style="opacity: 0.5;">Loading chatbot leads...</p>
+                </div>
+            </div>
+
+            <!-- Direct Admin-Client Chat & Messages Manager -->
+            <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:15px; margin-bottom:15px; border:1px solid var(--border);">
+                <h4 style="font-size:0.85rem; margin-bottom:8px; color:var(--primary);"><i class="fas fa-comments"></i> Live Client Chat & Message Center</h4>
+                <div id="adminChatLogsContainer" style="max-height: 140px; overflow-y: auto; font-size: 0.75rem; background:rgba(0,0,0,0.2); padding:10px; border-radius:10px; margin-bottom:10px;">
+                    <p style="opacity:0.5;">Loading client chats...</p>
+                </div>
+                <div style="display:flex; gap:8px;">
+                    <input type="text" id="adminReplyInput" class="auth-input" placeholder="Type direct admin reply..." style="margin-bottom:0;">
+                    <button class="btn-action" style="margin-top:0; width:120px; padding:8px;" onclick="sendAdminDirectReply()">Reply</button>
+                </div>
+            </div>
+
+            <p style="font-size: 0.75rem; opacity: 0.6; margin-bottom: 10px;">Registered Client Accounts & Controls:</p>
+            <div id="adminUserListContainer">
+                <p style="text-align: center; opacity: 0.5; font-size: 0.8rem;">Loading database records...</p>
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-icon active" onclick="navTo('home', this)" title="Vision"><i class="fas fa-university"></i></div>
+        <div class="nav-icon" onclick="navTo('works', this)" title="Portfolio"><i class="fas fa-briefcase"></i></div>
+        <div class="nav-icon" onclick="navTo('auth', this)" title="Portal"><i class="fas fa-user-shield"></i></div>
+        <div class="nav-icon" onclick="navTo('calculator', this)" title="Estimator"><i class="fas fa-calculator"></i></div>
+        <div class="nav-icon" onclick="navTo('booking', this)" title="Book"><i class="fas fa-calendar-check"></i></div>
+        <div class="nav-icon" onclick="navTo('contact', this)" title="Contact"><i class="fas fa-address-book"></i></div>
+    </nav>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ duration: 800, once: true });
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('prime_theme');
+            if (savedTheme === 'light') {
+                document.body.classList.add('light-mode');
+                const icon = document.getElementById('theme-icon');
+                if(icon) icon.className = 'fas fa-sun';
+            }
+            
+            const checkFirebaseReady = setInterval(() => {
+                if (window.auth && window.db) {
+                    clearInterval(checkFirebaseReady);
+                    initLiveChatSync();
+                    initPortfolioSync();
+                    checkGlobalBroadcast();
+                    setupAuthStateListener();
+                }
+            }, 100);
+        });
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'prime-toast';
+            toast.innerText = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        function navTo(paneId, btn) {
+            document.querySelectorAll('.view-pane').forEach(p => p.classList.remove('active'));
+            document.getElementById('pane-' + paneId).classList.add('active');
+            document.querySelectorAll('.tab-trigger, .nav-icon').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('prime_theme', isLight ? 'light' : 'dark');
+            const icon = document.getElementById('theme-icon');
+            if(icon) icon.className = isLight ? 'fas fa-sun' : 'fas fa-adjust';
+            showToast(isLight ? "Switched to Light Mode" : "Switched to Dark Mode");
+        }
+
+        function setThemeAccent(primaryColor, secondaryColor) {
+            document.documentElement.style.setProperty('--primary', primaryColor);
+            document.documentElement.style.setProperty('--secondary', secondaryColor);
+            showToast("Accent Theme Updated!");
+        }
+
+        const translations = {
+            en: {
+                subtitle: "GLOBAL IT ENTERPRISE AGENCY",
+                vision: "Under the leadership of <strong>Muhammad Nazim</strong>, Prime Solutions has emerged as a premier <strong>Global IT Enterprise Agency</strong>. We specialize in building high-performance <strong>custom web architectures</strong>, AI-integrated systems, and scalable digital products for modern businesses."
+            },
+            ur: {
+                subtitle: "عالمی آئی ٹی انٹرپرائز ایجنسی",
+                vision: "<strong>محمد ناظم</strong> کی قیادت میں، Prime Solutions ایک بہترین <strong>عالمی آئی ٹی ایجنسی</strong> کے طور پر ابھری ہے۔ ہم جدید کاروباری اداروں کے لیے ہائی پرفارمنس کسٹم ویب آرکیٹیکچر اور اے آئی سسٹمز تیار کرنے میں مہارت رکھتے ہیں۔"
+            }
+        };
+
+        function switchLanguage(lang) {
+            if(translations[lang]) {
+                document.getElementById('txt-subtitle').innerText = translations[lang].subtitle;
+                document.getElementById('txt-vision-desc').innerHTML = translations[lang].vision;
+                showToast(lang === 'ur' ? "اردو زبان منتخب کی گئی" : "Switched to English");
+            }
+        }
+
+        function filterWorks(category, btn) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            document.querySelectorAll('.work-item').forEach(item => {
+                item.style.display = (category === 'all' || item.getAttribute('data-category') === category) ? 'block' : 'none';
+            });
+        }
+
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
+        }
+
+        let currentCurrency = 'USD';
+        function setCurrency(curr, btn) {
+            currentCurrency = curr;
+            document.querySelectorAll('.filter-btn').forEach(b => { if(b.innerText.includes('$') || b.innerText.includes('₨')) b.classList.remove('active'); });
+            btn.classList.add('active');
+            const display = document.getElementById('quote-display');
+            display.innerText = curr === 'USD' ? '$2,500.00' : '₨696,250.00';
+        }
+
+        async function generatePDFInvoice() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            doc.setFillColor(1, 2, 4);
+            doc.rect(0, 0, 210, 297, "F");
+            
+            doc.setTextColor(0, 242, 254);
+            doc.setFontSize(22);
+            doc.text("PRIME SOLUTIONS GLOBAL", 20, 30);
+            
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(12);
+            doc.text("Official Project Estimate & Invoice", 20, 40);
+            doc.text("CEO: Muhammad Nazim", 20, 48);
+            
+            doc.setDrawColor(0, 242, 254);
+            doc.line(20, 55, 190, 55);
+            
+            const costText = currentCurrency === 'USD' ? '$2,500.00 USD' : '₨696,250.00 PKR';
+            doc.setFontSize(10);
+            doc.text("Description: Custom Enterprise Web Architecture & AI Integration", 20, 70);
+            doc.text("Estimated Starting Cost: " + costText, 20, 80);
+            doc.text("Date: " + new Date().toLocaleDateString(), 20, 90);
+            doc.text("Status: Verified & Approved Baseline", 20, 100);
+            
+            doc.text("Thank you for choosing Prime Solutions!", 20, 130);
+            doc.save("Prime_Solutions_Quote.pdf");
+            showToast("PDF Quote Downloaded Successfully!");
+        }
+
+        function toggleChatPopup() {
+            const popup = document.getElementById('chatPopup');
+            popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function handleChatEnter(e) {
+            if(e.key === 'Enter') sendGroqMessage();
+        }
+
+        function handleFileAttachment(input) {
+            if(input.files && input.files[0]) {
+                const file = input.files[0];
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    const fileBase64 = e.target.result;
+                    const currentUser = window.auth.currentUser;
+                    const senderName = currentUser ? currentUser.email : 'Visitor';
+                    const senderUid = currentUser ? currentUser.uid : 'anonymous_visitor';
+
+                    try {
+                        await window.addDoc(window.collection(window.db, "agency_chats"), {
+                            message: `[Attachment: ${file.name}]`,
+                            fileUrl: fileBase64,
+                            sender: senderName,
+                            uid: senderUid,
+                            timestamp: window.serverTimestamp()
+                        });
+                        showToast("File attached and sent successfully!");
+                    } catch(err) {
+                        showToast("Failed to send attachment.");
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        async function sendGroqMessage() {
+    const input = document.getElementById('chatInput');
+    const txt = input.value.trim();
+    if(txt !== '') {
+        input.value = '';
+        const currentUser = window.auth.currentUser;
+        const senderName = currentUser ? currentUser.email : 'Visitor_' + Math.floor(Math.random() * 1000);
+        const senderUid = currentUser ? currentUser.uid : 'anonymous_visitor';
+
+        try {
+            await window.addDoc(window.collection(window.db, "agency_chats"), {
+                message: txt,
+                sender: senderName,
+                uid: senderUid,
+                timestamp: window.serverTimestamp()
+            });
+
+            const q = window.query(window.collection(window.db, "agency_chats"), window.orderBy("timestamp", "desc"), window.limit(5));
+            const querySnapshot = await window.getDocs(q);
+            let chatHistory = [];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                chatHistory.unshift({
+                    role: data.sender.includes("Zara") ? "assistant" : "user",
+                    content: data.message
+                });
+            });
+
+            if (txt.toLowerCase().includes("project") || txt.toLowerCase().includes("quote") || txt.toLowerCase().includes("price") || txt.toLowerCase().includes("web") || txt.toLowerCase().includes("app") || txt.toLowerCase().includes("demo")) {
+                await window.addDoc(window.collection(window.db, "agency_chats_leads"), {
+                    lead_name: senderName,
+                    lead_uid: senderUid,
+                    interest: txt,
+                    timestamp: window.serverTimestamp()
+                });
+            }
+
+            const apiKey = "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";
+            const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: "openai/gpt-oss-120b",
+                    messages: [
+                        { 
+                            role: "system", 
+                            content: "You are Zara, the elite prime AI assistant for 'Prime Solutions' (Global HQ: Karachi, Pakistan; Regional Office: Islamabad, Pakistan). Founder & CEO: Muhammad Nazim. Official Website: https://web-hub-code.github.io/primesolutions/ | Contact: 03379827882 (WhatsApp) | Email: webhub262@gmail.com. We operate as a worldwide registered LLC company offering custom web development, apps, and digital solutions with pricing ranging from PKR 5,000 to PKR 100,000+ depending on project requirements, plus we offer free demos and free quotes. When qualified leads show interest in services, gracefully capture their real name, email address, and WhatsApp number. Keep responses punchy, highly professional, welcoming, and concise (max 2-3 sentences). Do not use repetitive quick options or buttons text." 
+                        },
+                        ...chatHistory
+                    ]
+                })
+            });
+
+            const data = await response.json();
+            let aiReply = "Maaf kijiye, main abhi iska jawab nahi de pa rahi hoon.";
+            if (data.choices && data.choices.length > 0 && data.choices[0].message?.content) {
+                aiReply = data.choices[0].message.content;
+            }
+
+            await window.addDoc(window.collection(window.db, "agency_chats"), {
+                message: aiReply,
+                sender: "Zara (Prime AI) 🤖",
+                uid: senderUid,
+                timestamp: window.serverTimestamp()
+            });
+
+        } catch(e) {
+            showToast("AI response failed to load.");
+        }
+    }
+ }
+        function initLiveChatSync() {
+            if(!window.db || !window.auth) return;
+            window.onAuthStateChanged(window.auth, (user) => {
+                const currentUid = user ? user.uid : 'anonymous_visitor';
+                const q = window.query(
+                    window.collection(window.db, "agency_chats"), 
+                    window.where("uid", "==", currentUid)
+                );
+
+                window.onSnapshot(q, (snapshot) => {
+                    const body = document.getElementById('chatBody');
+                    let html = '<p style="opacity: 0.8; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:12px; font-size:0.75rem;">Hello! 👋 I am Prime AI. Ask me about pricing or services!</p>';
+                    
+                    let docsArray = [];
+                    snapshot.forEach((docSnap) => {
+                        docsArray.push({ id: docSnap.id, ...docSnap.data() });
+                    });
+                    
+                    docsArray.sort((a, b) => {
+                        const t1 = a.timestamp?.toMillis ? a.timestamp.toMillis() : 0;
+                        const t2 = b.timestamp?.toMillis ? b.timestamp.toMillis() : 0;
+                        return t1 - t2;
+                    });
+
+                    docsArray.forEach((data) => {
+                        let fileHtml = data.fileUrl ? `<br><a href="${data.fileUrl}" target="_blank" style="color:var(--primary); font-size:0.7rem;"><i class="fas fa-file-download"></i> View Attached File</a>` : '';
+                        html += `<p style="opacity:0.9; background:rgba(0,242,254,0.1); padding:6px 10px; border-radius:10px; font-size:0.75rem;"><strong>${data.sender}:</strong> ${data.message} ${fileHtml}</p>`;
+                    });
+                    body.innerHTML = html;
+                    body.scrollTop = body.scrollHeight;
+                }, (error) => { console.log("Chat sync waiting...", error); });
+            });
+        }
+
+        async function submitServiceBooking() {
+            const name = document.getElementById('bookingName').value.trim();
+            const email = document.getElementById('bookingEmail').value.trim();
+            const service = document.getElementById('bookingService').value;
+            const date = document.getElementById('bookingDate').value;
+            const notes = document.getElementById('bookingNotes').value.trim();
+
+            if(name && email && date) {
+                try {
+                    await window.addDoc(window.collection(window.db, "agency_bookings"), {
+                        name, email, service, date, notes,
+                        timestamp: window.serverTimestamp()
+                    });
+                    showToast("Appointment booking confirmed successfully!");
+                    document.getElementById('bookingName').value = "";
+                    document.getElementById('bookingEmail').value = "";
+                    document.getElementById('bookingDate').value = "";
+                    document.getElementById('bookingNotes').value = "";
+                } catch(e) {
+                    showToast("Error saving booking. Please try again.");
+                }
+            } else {
+                showToast("Please fill in all required booking fields.");
+            }
+        }
+
+        async function initPortfolioSync() {
+            if(!window.db) return;
+            window.onSnapshot(window.collection(window.db, "agency_portfolio"), (snapshot) => {
+                const container = document.getElementById('dynamicPortfolioContainer');
+                if(!container) return;
+                
+                let defaultHtml = `
+                    <div class="feature-card work-item" data-category="automation" style="border: 1px solid var(--webhub);" data-aos="fade-up">
+                        <img src="Screenshot_2026-04-15-10-11-35-44.png" class="card-img" alt="WebHub">
+                        <h3 style="color:var(--webhub)">WebHub Command Center</h3>
+                        <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">Centralized enterprise dashboard for asset monitoring with real-time API sync.</p>
+                        <a href="https://web-hub-code.github.io/Web-hub/" target="_blank" class="btn-action">Explore WebHub</a>
+                    </div>
+                    <div class="feature-card work-item" data-category="fintech" style="border-bottom: 4px solid var(--gold);" data-aos="fade-up">
+                        <img src="Screenshot_2026-04-15-10-04-08-81.png" class="card-img" alt="MintCrestGold">
+                        <h3 style="color:var(--gold)">MintCrestGold Platform</h3>
+                        <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">Luxury-grade investment vault system with automated ROI dividend tracking.</p>
+                        <a href="https://gtv140.github.io/investment/" target="_blank" class="btn-action" style="background:linear-gradient(45deg,var(--gold),#b8860b)">Access Vault</a>
+                    </div>
+                    <div class="feature-card work-item" data-category="chat" style="border-bottom: 4px solid var(--secondary);" data-aos="fade-up">
+                        <img src="Screenshot_2026-04-15-09-59-25-00.png" class="card-img" alt="Live Connect">
+                        <h3 style="color:var(--secondary)">Live Connect Suite</h3>
+                        <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">Zero-latency WebSocket communication system built for corporate networking.</p>
+                        <a href="https://gtv140.github.io/Live-chat/" target="_blank" class="btn-action">Join Network</a>
+                    </div>
+                `;
+
+                snapshot.forEach(docSnap => {
+                    const data = docSnap.data();
+                    defaultHtml += `
+                        <div class="feature-card work-item" data-category="${data.category}" style="border: 1px solid var(--primary);" data-aos="fade-up">
+                            <img src="${data.image}" class="card-img" alt="${data.title}">
+                            <h3 style="color:var(--primary)">${data.title}</h3>
+                            <p style="font-size:0.75rem; opacity:0.6; margin-bottom:15px;">${data.description || 'Custom professional agency deployment.'}</p>
+                            <a href="${data.link}" target="_blank" class="btn-action">Launch Project</a>
+                        </div>
+                    `;
+                });
+                container.innerHTML = defaultHtml;
+            });
+        }
+
+        async function adminAddPortfolioItem() {
+            const title = document.getElementById('adminProjTitle').value.trim();
+            const category = document.getElementById('adminProjCategory').value.trim().toLowerCase();
+            const image = document.getElementById('adminProjImg').value.trim();
+            const link = document.getElementById('adminProjLink').value.trim();
+            const description = document.getElementById('adminProjDesc').value.trim();
+
+            if(title && category && link) {
+                try {
+                    await window.addDoc(window.collection(window.db, "agency_portfolio"), {
+                        title, category, image: image || 'Screenshot_2026-04-15-10-11-35-44.png', link, description,
+                        timestamp: window.serverTimestamp()
+                    });
+                    showToast("Portfolio project added successfully!");
+                    document.getElementById('adminProjTitle').value = "";
+                    document.getElementById('adminProjCategory').value = "";
+                    document.getElementById('adminProjImg').value = "";
+                    document.getElementById('adminProjLink').value = "";
+                    document.getElementById('adminProjDesc').value = "";
+                } catch(e) {
+                    showToast("Failed to add portfolio item.");
+                }
+            } else {
+                showToast("Please fill in title, category, and link.");
+            }
+        }
+
+        async function adminRemoveLastPortfolioItem() {
+            try {
+                const snap = await window.getDocs(window.collection(window.db, "agency_portfolio"));
+                let lastDocId = null;
+                snap.forEach(d => { lastDocId = d.id; });
+                if(lastDocId) {
+                    await window.deleteDoc(window.doc(window.db, "agency_portfolio", lastDocId));
+                    showToast("Last custom portfolio item removed!");
+                } else {
+                    showToast("No custom items found to remove.");
+                }
+            } catch(e) { showToast("Failed to remove item."); }
+        }
+        
+        async function adminUpdateMilestone(uid) {
+            const newProject = prompt("Enter new Project Title:");
+            const newPhase = prompt("Enter current Phase Description:");
+            if(newProject && newPhase) {
+                try {
+                    await window.setDoc(window.doc(window.db, "agency_users", uid), {
+                        assignedProject: newProject,
+                        currentPhase: newPhase
+                    }, { merge: true });
+                    showToast("Client milestone updated!");
+                    loadAdminData();
+                } catch(e) {
+                    showToast("Failed to update milestone.");
+                }
+            }
+        }
+
+        async function adminDeleteUser(uid) {
+            if(confirm("Remove this user record?")) {
+                try {
+                    await window.deleteDoc(window.doc(window.db, "agency_users", uid));
+                    showToast("User record removed.");
+                    loadAdminData();
+                } catch(e) {
+                    showToast("Failed to delete record.");
+                }
+            }
+        }
+
+        let tapCount = 0;
+        let tapTimer = null;
+        const eagleLogo = document.getElementById('eagleLogo');
+        if(eagleLogo) {
+            eagleLogo.addEventListener('click', () => {
+                tapCount++;
+                clearTimeout(tapTimer);
+                if (tapCount >= 5) {
+                    tapCount = 0;
+                    document.getElementById('eagle-eye-modal').style.display = 'flex';
+                } else {
+                    tapTimer = setTimeout(() => { tapCount = 0; }, 1000);
+                }
+            });
+        }
+
+        function verifyEagleKey() {
+            if(document.getElementById('eagleKeyInput').value === '5426') {
+                document.getElementById('eagle-eye-modal').style.display = 'none';
+                document.getElementById('admin-panel-modal').style.display = 'block';
+                loadAdminData();
+            } else {
+                showToast('Invalid Access Key!');
+            }
+        }
+        
+        function closeEagleModal() { document.getElementById('eagle-eye-modal').style.display = 'none'; }
+        function closeAdminPanel() { document.getElementById('admin-panel-modal').style.display = 'none'; }
+
+        async function saveUserToFirestore(user) {
+            try {
+                const userRef = window.doc(window.db, "agency_users", user.uid);
+                const userSnap = await window.getDoc(userRef);
+                if (!userSnap.exists()) {
+                    await window.setDoc(userRef, {
+                        email: user.email,
+                        uid: user.uid,
+                        assignedProject: 'Custom Enterprise Web Architecture',
+                        currentPhase: 'Phase 2: Frontend Architecture & Firebase Core',
+                        loginTime: window.serverTimestamp()
+                    }, { merge: true });
+                }
+            } catch(e) { console.error(e); }
+        }
+
+        async function handleEmailRegister() {
+            const email = document.getElementById('userEmail').value;
+            const pass = document.getElementById('userPassword').value;
+            if(!email || !pass) {
+                showToast("Please enter email and password.");
+                return;
+            }
+            try {
+                const res = await window.createUserWithEmailAndPassword(window.auth, email, pass);
+                await saveUserToFirestore(res.user);
+                showToast("Account created successfully!");
+            } catch(err) { showToast(err.message); }
+        }
+
+        async function handleEmailLogin() {
+            const email = document.getElementById('userEmail').value;
+            const pass = document.getElementById('userPassword').value;
+            if(!email || !pass) {
+                showToast("Please enter email and password.");
+                return;
+            }
+            try {
+                const res = await window.signInWithEmailAndPassword(window.auth, email, pass);
+                await saveUserToFirestore(res.user);
+                showToast("Successfully logged in!");
+            } catch(err) { showToast(err.message); }
+        }
+
+        async function handleGoogleLogin() {
+            const provider = new window.GoogleAuthProvider();
+            try {
+                const res = await window.signInWithPopup(window.auth, provider);
+                await saveUserToFirestore(res.user);
+                showToast("Google Authentication successful!");
+            } catch(err) { showToast(err.message); }
+        }
+
+        async function handleLogout() {
+            await window.signOut(window.auth);
+            showToast("Signed out successfully.");
+        }
+
+        function setupAuthStateListener() {
+            if(!window.auth || !window.db) return;
+            window.onAuthStateChanged(window.auth, async (user) => {
+                if (user) {
+                    document.getElementById('loggedOutView').style.display = 'none';
+                    document.getElementById('loggedInView').style.display = 'block';
+                    document.getElementById('clientEmailDisplay').innerText = user.email;
+                    document.getElementById('clientAvatarInitial').innerText = user.email ? user.email.charAt(0).toUpperCase() : 'U';
+
+                    try {
+                        const userDoc = await window.getDoc(window.doc(window.db, "agency_users", user.uid));
+                        if(userDoc.exists()) {
+                            const data = userDoc.data();
+                            if(data.assignedProject) document.getElementById('clientProjectTitle').innerText = data.assignedProject;
+                            if(data.currentPhase) document.getElementById('clientCurrentPhase').innerText = data.currentPhase;
+                        }
+                    } catch(e) { console.error(e); }
+                } else {
+                    document.getElementById('loggedOutView').style.display = 'block';
+                    document.getElementById('loggedInView').style.display = 'none';
+                }
+            });
+        }
+
+        async function loadAdminData() {
+            const container = document.getElementById('adminUserListContainer');
+            const leadsContainer = document.getElementById('adminLeadsListContainer');
+            const chatLogsContainer = document.getElementById('adminChatLogsContainer');
+            
+            try {
+                // Load Users
+                const querySnapshot = await window.getDocs(window.collection(window.db, "agency_users"));
+                let html = '';
+                let count = 0;
+                querySnapshot.forEach((docSnap) => {
+                    count++;
+                    const data = docSnap.data();
+                    html += `<div class="user-row-admin">
+                        <span><strong>${data.email || 'N/A'}</strong><br><small style="opacity:0.6;">Project: ${data.assignedProject || 'Standard'}</small></span>
+                        <div>
+                            <button class="filter-btn" style="padding:4px 8px; font-size:0.65rem; background:var(--primary); color:#000;" onclick="adminUpdateMilestone('${docSnap.id}')">Manage</button>
+                            <button class="filter-btn" style="padding:4px 8px; font-size:0.65rem; background:#ff4757; color:#fff;" onclick="adminDeleteUser('${docSnap.id}')">Remove</button>
+                        </div>
+                    </div>`;
+                });
+
+                document.getElementById('analyticsVisitorCount').innerText = count + " Clients";
+                document.getElementById('analyticsProjectCount').innerText = count;
+                container.innerHTML = html || '<p style="text-align: center; opacity: 0.5; font-size: 0.8rem;">No user records found.</p>';
+
+                // Load Chat Leads CRM
+                const leadsSnapshot = await window.getDocs(window.collection(window.db, "agency_chats_leads"));
+                let leadsHtml = '';
+                leadsSnapshot.forEach(leadDoc => {
+                    const lData = leadDoc.data();
+                    leadsHtml += `<div style="padding:6px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                        <strong>${lData.lead_name}:</strong> ${lData.interest}
+                    </div>`;
+                });
+                leadsContainer.innerHTML = leadsHtml || '<p style="opacity:0.5;">No leads recorded yet.</p>';
+
+                // Load Live Client Chat Logs for Admin
+                const chatsSnapshot = await window.getDocs(window.collection(window.db, "agency_chats"));
+                let chatsHtml = '';
+                chatsSnapshot.forEach(cDoc => {
+                    const cData = cDoc.data();
+                    chatsHtml += `<div style="padding:4px 0; border-bottom:1px solid rgba(255,255,255,0.05);">
+                        <strong>${cData.sender}:</strong> ${cData.message}
+                    </div>`;
+                });
+                chatLogsContainer.innerHTML = chatsHtml || '<p style="opacity:0.5;">No active chat logs.</p>';
+
+            } catch(e) {
+                container.innerHTML = '<p style="text-align: center; color: #ff4757; font-size: 0.8rem;">Failed to load analytics.</p>';
+            }
+        }
+
+        async function sendAdminDirectReply() {
+            const replyText = document.getElementById('adminReplyInput').value.trim();
+            if(replyText !== "") {
+                try {
+                    await window.addDoc(window.collection(window.db, "agency_chats"), {
+                        message: replyText,
+                        sender: "Admin (Muhammad Nazim) 👑",
+                        uid: "anonymous_visitor",
+                        timestamp: window.serverTimestamp()
+                    });
+                    showToast("Direct reply sent successfully!");
+                    document.getElementById('adminReplyInput').value = "";
+                    loadAdminData();
+                } catch(e) {
+                    showToast("Failed to send admin reply.");
+                }
+            }
+        }
+
+        async function sendBroadcastNotice() {
+            const msg = document.getElementById('broadcastMsgInput').value.trim();
+            if(msg !== "") {
+                try {
+                    await window.setDoc(window.doc(window.db, "agency_settings", "broadcast"), {
+                        message: msg,
+                        timestamp: window.serverTimestamp()
+                    });
+                    showToast("Global broadcast notice sent!");
+                    document.getElementById('broadcastMsgInput').value = "";
+                } catch(e) {
+                    showToast("Failed to send broadcast.");
+                }
+            } else {
+                showToast("Please enter message text.");
+            }
+        }
+
+        function checkGlobalBroadcast() {
+            if(!window.db) return;
+            window.onSnapshot(window.doc(window.db, "agency_settings", "broadcast"), (docSnap) => {
+                if(docSnap.exists()) {
+                    const data = docSnap.data();
+                    if(data.message) {
+                        const banner = document.getElementById('clientBroadcastBanner');
+                        const txt = document.getElementById('clientBroadcastText');
+                        if(banner && txt) {
+                            txt.innerText = data.message;
+                            banner.style.display = 'block';
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
